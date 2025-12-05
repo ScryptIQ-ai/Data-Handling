@@ -46,7 +46,7 @@ jobs:
           
           # List what we copied for debugging
           echo "Copied files:"
-          ls -la about-us.html create_homepage.py
+          ls -la create_homepage.py
       
       - name: Generate homepage
         run: |
@@ -68,7 +68,7 @@ jobs:
           if git diff --staged --quiet; then
               echo "No changes to commit"
             else
-              git commit -m "Update assets, about-us.html, and generate homepage from parchmentIQ [skip ci]"
+              git commit -m "Update assets, and generate homepage from parchmentIQ [skip ci]"
               git push origin main
             fi
 
