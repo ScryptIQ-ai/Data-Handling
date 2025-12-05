@@ -1,0 +1,848 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <!-- Pyodide and CodeMirror -->
+    <script src="https://cdn.jsdelivr.net/pyodide/v0.24.1/full/pyodide.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/codemirror.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/theme/pastel-on-dark.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/codemirror.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/mode/python/python.min.js"></script>
+    
+    <!-- Favicons -->
+    <link rel="icon" type="image/x-icon" href="../assets/favicon.ico">
+    <link rel="icon" type="image/png" sizes="32x32" href="../assets/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="../assets/favicon-16x16.png">
+    <link rel="apple-touch-icon" sizes="192x192" href="../assets/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="192x192" href="../assets/android-chrome-192x192.png">
+    <link rel="icon" type="image/png" sizes="512x512" href="../assets/android-chrome-512x512.png">
+    
+    <!-- Core Stylesheets -->
+    <link rel="stylesheet" href=../assets/colours-l2d.css>
+    <link rel="stylesheet" href="../assets/shared-styles.css">
+    <link rel="stylesheet" href="../assets/nav-bar.css">
+    <link rel="stylesheet" href="../assets/module_card.css">
+    <link rel="stylesheet" href="../assets/learning_outcomes.css">
+    <link rel="stylesheet" href="../assets/learning_lists.css">
+    <link rel="stylesheet" href="../assets/box_styles.css">
+    <link rel="stylesheet" href="../assets/code_styles.css">
+
+    <!-- Meta Tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>L2D - DH1 - Pandas</title>
+    
+    <!-- File URLs for this lesson -->
+    <script>
+        window.LESSON_FILES = [
+            {url: "https://raw.githubusercontent.com/ScryptIQ-ai/lesson-data/refs/heads/main/dh/everleys_data.csv", filename: "everleys_data.csv"},
+            {url: "https://raw.githubusercontent.com/ScryptIQ-ai/lesson-data/refs/heads/main/dh/loan_data.csv", filename: "loan_data.csv"}
+        ];
+        window.LESSON_PACKAGES = ['pandas'];
+    </script>
+        
+</head>
+<body>
+    
+    <!-- Sidebar Navigation -->
+    <div id="sidebar" class="sidebar">
+        <div class="sidebar-header">
+            <a href="../homepage.html" style="text-decoration: none; display: inline-block;">
+                <img src="../assets/l2d-brain-logo.png" alt="scryptIQ Logo" class="sidebar-logo">
+            </a>
+        </div>
+
+        <h3>Content</h3>
+        <ul>
+            <li><a href="./introduction.html" class="">Introduction</a></li>
+            <li>
+                <div class="nav-toggle active" data-target="expandable-section-1">
+                    Pandas
+                    <span class="toggle-icon">▼</span>
+                </div>
+                <ul class="nested-nav expanded" id="expandable-section-1"><li><a href="#introduction">Introduction</a></li><li><a href="#the-diabetes-dataset">The diabetes dataset</a></li><li><a href="#reading-data-into-a-pandas-dataframe">Reading data into a Pandas DataFrame</a></li><li><a href="#viewing-your-data">Viewing your data</a></li><li><a href="#accessing-data-in-a-dataframe">Accessing data in a DataFrame</a></li><li><a href="#indexing-and-slicing-using--loc">Indexing and slicing using .loc</a></li><li><a href="#summary">Summary</a></li>
+                </ul>
+            </li><li><a href="./data-features.html">Data features</a></li><li><a href="./data-visualisation.html">Visualisation of data</a></li><li><a href="./diabetes-dataset.html">Diabetes Dataset</a></li><li><a href="./assignment.html">Assignment</a></li><li><a href="./feedback.html">Feedback</a></li>
+        </ul>
+
+        <h3 class="collapsible-header collapsed">
+            Resources
+            <span class="collapse-icon">►</span>
+        </h3>
+        <div class="collapsible-content collapsed">
+            <ul>
+                <li><a href="./glossary.html">Glossary</a></li><li><a href="./downloads.html">Downloads</a></li><li><a href="../HB/introduction.html">Handbook</a></li>
+            </ul>
+        </div>
+
+        <h3>
+            <li><a href="./report-issue.html">Report an Issue</a></li>
+        </h3>
+    </div>
+    
+    <!-- Sidebar Toggle Button -->
+    <button id="sidebar-toggle" class="sidebar-toggle">❮</button>
+    
+    <!-- Main Content Area -->
+    <div id="main-content" class="main-content">
+        <!-- Top Navigation Bar -->
+        <div class="top-navbar">
+            <h1 class="page-title">Data Handling 1</h1>
+            <div class="nav-actions">
+                <a href="../homepage.html" class="text-button" title="Materials homepage">
+                    Homepage
+                </a>
+                <a href="https://learntodiscover.ai/my-cohorts/" class="text-button" title="Find out more about us">
+                    Learn to Discover
+                </a>
+            </div>
+        </div>
+
+        
+            <div class="module-card" id="introduction">
+                <div class="module-header">
+                    Pandas <span class="module-tag">DH1</span>
+                </div>
+                <div class="module-body">
+                    <h3>Learning Objectives</h3>
+                    <div class="learning-outcomes">
+                        <div class="outcome-item">
+                    <span class="outcome-number">1</span>
+                    <span class="outcome-text">Learn about the diabetes dataset</span>
+                </div>
+<div class="outcome-item">
+                    <span class="outcome-number">2</span>
+                    <span class="outcome-text">Import a dataset as a Pandas Dataframe</span>
+                </div>
+<div class="outcome-item">
+                    <span class="outcome-number">3</span>
+                    <span class="outcome-text">Inspect and view a Dataframe</span>
+                </div>
+<div class="outcome-item">
+                    <span class="outcome-number">4</span>
+                    <span class="outcome-text">Access data with indexing and slicing</span>
+                </div>
+                    </div>
+                    <h3>Introduction</h3>
+                    <p>Pandas is a</p>
+                </div>
+            </div>
+            
+            <div class="module-card" id="the-diabetes-dataset">
+                <div class="module-body">
+                    <div class="module-section">
+                        <h3>The diabetes dataset</h3>
+                        <p>Here is a screenshot of a diabetes dataset. It is taken from <a href="https://www4.stat.ncsu.edu/~boos/var.select/diabetes.tab.txt">this webpage</a>, and is one of the <a href="https://scikit-learn.org/stable/modules/generated/sklearn.datasets.load_diabetes.html">example datasets</a> used to illustrate machine learning functionality in scikit-learn (we&#x27;ll revisit this in the Machine Learning Module).<br><br>We&#x27;ll explore the basics of pandas, data visualisation, and univariate/bivariate data analysis in this lesson and the next (<strong>DH2</strong>), coming back to at the end of this lesson to put into practice what we&#x27;ve taught.<br></p><p><img src="./images/diabetes_data_screenshot.png" alt="The diabetes dataset" class="notebook-image"></p><p>This figure captures only the top part of the data. On the webpage, you will need to scroll down considerably to view all of it. Thus, our first data science task, will be to obtain an overview of this dataset.</p><p>This lesson:<ul class="nested-list"><li>Introduces code to read and inspect the data</li><br><li>Works with a specific Dataframe and explains methods used to get an overview of the data</li><br><li>Discusses the concept of &#x27;distribution&#x27; as a way of summarising data within a single figure</li></ul></p><p>To familiarise yourself with a dataset you need to:<ul class="nested-list"><li>Access the data</li><br><li>Check the content</li><br><li>Produce a summary of basic properties</li></ul></p><p>In this lesson we will look solely at univariate features, where each data column is studied independently of the others in the datasets. Further properties and bivariate features will be the topic of the next lesson.</p>
+        <div class="info-box key-terms-box">
+            <div class="box-title">
+                <span class="box-icon"></span>
+                KEY TERMS
+            </div>
+            <div class="box-content">
+                <p><strong>Pandas</strong>:<br><br><strong>DataFrame</strong>:</p>
+            </div>
+        </div>
+        
+                    </div>
+                </div>
+            </div>
+            
+            <div class="module-card" id="reading-data-into-a-pandas-dataframe">
+                <div class="module-body">
+                    <div class="module-section">
+                        <h3>Reading data into a Pandas DataFrame</h3>
+                        <p>The small practice data file for this section is called &#x27;everleys_data.csv&#x27;, and can be downloaded using the link given above in <a href="index.html#setup">Summary and Setup</a> for this Lesson. To start, please create a subfolder called &#x27;data&#x27; in the current directory and put the data file in it. It can now be accessed using the relative path <code>data/everleys_data.csv</code> or <code>data\everleys_data.csv</code>, respectively.<br><br>The file <code>everleys_data.csv</code> contains serum concentrations of calcium and sodium ions, sampled from 17 patients with Everley&#x27;s syndrome - a rare genetic disorder that results in sufferers experiencing developmental delays, intellectual and physical abnormalities. The data are taken from a <a href="https://www.bmj.com/about-bmj/resources-readers/publications/statistics-square-one/7-t-tests">BMJ statistics tutorial</a>, and are stored as comma-separated values (csv): with two values given for each patient.<br><br>To get to know a dataset, we will use the Pandas package and the Matplotlib plotting library. The Pandas package for data science is included in the Anaconda distribution of Python. Check this <a href="https://pandas.pydata.org/getting_started.html">link for installation instructions</a> to get started.<br><br>If you are not using the Anaconda distribution, please refer to <a href="https://pandas.pydata.org/docs/getting_started/install.html">these guidelines</a>.<br><br>In order to use the functions contained in Pandas, they must first to be imported. Since our dataset is in a &#x27;.csv&#x27; file, we must first read it from a csv file. For this, we must import the function <code>read_csv</code>, which will create a Pandas DataFrame from data provided in a &#x27;.csv&#x27; file.<br><br>Executing this code does not leads to any output on the screen. However, the function is now ready to be used. To use it, we type its name and provide the required arguments. The following code should import the Everley&#x27;s data into your Python Notebook:</p>
+        <div class="code-area">
+            <div class="code-container code-fixed">
+                <textarea id="code-cell-1">from pandas import read_csv</textarea>
+            </div>
+            <div id="code-cell-1-output" class="output" style="display: none;"></div>
+        </div>
+        
+        <div class="info-box remember-box">
+            <div class="box-title">
+                <span class="box-icon"></span>
+                REMEMBER
+            </div>
+            <div class="box-content">
+                <p>An alternative and very common way of importing the Pandas library is using an alias. You may see this in online tutorials and in other people&#x27;s code. Using aliases results in an import statement that looks like this: <code>import pandas as pd</code>. This approach imports the entire Pandas package and assigns it the shorthand name <code>pd</code>, making it easier to access its functions — for example, you would then use <code>pd.read_csv()</code> to load a dataset. The alias <code>pd</code> can be substituted for anything you choose. When importing Pandas as an alias, <code>pd</code> is conventionally commonly used, as it&#x27;s sensical shorthand for Pandas, and is easy and quick to type. Similarly, you may also see <code>import numpy as np</code>.<br><br><code>from pandas import read_csv</code>. This imports only the specific function we need, which can be beneficial in certain cases — such as reducing memory usage in lightweight scripts, speeding up import time, or improving readability by focusing only on the functions being used. We&#x27;ll continue using the <code>from pandas import</code> convention throughout this lesson to keep the code minimal and focused, since we are only calling a small number of specific functions from Pandas. However, in cases where you are using a large number of functions from Pandas, it may be quicker and easier for you to just use <code>import pandas as pd</code>.</p>
+            </div>
+        </div>
+        
+        <div class="code-area">
+            <div class="code-container code-fixed">
+                <textarea id="code-cell-2"># For Mac OS and Linux:
+df = read_csv(&quot;./data/everleys_data.csv&quot;)</textarea>
+            </div>
+            <div id="code-cell-2-output" class="output" style="display: none;"></div>
+        </div>
+        <p>After execution of the code, the data is contained in a variable called <code>df</code>. This is a structure referred to as a Pandas DataFrame.</p><p>A <a href="https://pandas.pydata.org/docs/user_guide/10min.html">Pandas DataFrame</a> is a 2-dimensional labelled data structure, with columns of (potentially different) types. You can think of it as a spreadsheet.</p>
+        <div class="code-area">
+            <div class="code-container code-fixed">
+                <textarea id="code-cell-3"># For Windows:
+df = read_csv(r&quot;.\data\everleys_data.csv&quot;)</textarea>
+            </div>
+        </div>
+        
+        <div class="info-box note-box">
+            <div class="box-title">
+                <span class="box-icon"></span>
+                NOTE
+            </div>
+            <div class="box-content">
+                <p>Note the orientation of backward and forward slashes that differentiate filepaths given between Unix-based systems, and Windows. This code uses the <code>read_csv</code> function from Pandas to read data from a data file, in this case a file with extension &#x27;.csv&#x27;. Note that the location of the data file is specified within quotes by the relative path to the subfolder &#x27;data&#x27;, followed by the file name. Use your file browser or the browser in JupyterLab (or an &#x27;Explorer&#x27;-type pane in your IDE of choice) to check that subfolder does indeed exist, and contains the file within it.</p>
+            </div>
+        </div>
+        
+                    </div>
+                </div>
+            </div>
+            
+            <div class="module-card" id="viewing-your-data">
+                <div class="module-body">
+                    <div class="module-section">
+                        <h3>Viewing your data</h3>
+                        <p>To see the contents of <code>df</code>, simply use:</p>
+        <div class="code-area">
+            <div class="code-container code-fixed">
+                <textarea id="code-cell-4">df</textarea>
+            </div>
+            <div id="code-cell-4-output" class="output"></div>
+        </div>
+        <p>Using <code>print(df)</code> will give a slightly different output to using Jupyter&#x27;s built-in print of the last line in a cell. Try it out in a notebook.</p><p>The output shows in the first column an index, integers from 0 to 17; and the calcium and sodium concentrations in columns 2 and 3, respectively. The default indexing starts from zero (Python is a &#x27;zero-based&#x27; programming language).<br><br>In a Pandas DataFrame, the labels shown on the left are known as the index, and they identify the rows. By default, this index is made up of sequential integers starting from 0, although you can customise it to use any labels you like (e.g. strings, dates, or categories).<br><br>Across the top, the first row contains the column names, which serve as headers for each column. Both the index and the column names form part of the DataFrame&#x27;s structure. They are considered as metadata, and are not included in the count of rows or columns when measuring the shape or data dimensions of the DataFrame, itself.<br><br>For large datasets, the function <code>head</code> is a convenient way to get a feel of the dataset.</p>
+        <div class="code-area">
+            <div class="code-container code-fixed">
+                <textarea id="code-cell-5">df.head()</textarea>
+            </div>
+            <div id="code-cell-5-output" class="output"></div>
+        </div>
+        <p>Without any input argument, this displays the first five data lines of data in the newly-created DataFrame. You can specify and alter the number of rows displayed by including a single integer as argument, e.g. <code>head(10)</code>.<br><br>If you feel there are too many decimal places in the default view, you can restrict their number by using the <code>round</code> method. The numerical argument that you provide in the round parentheses controls the number of decimal places the method rounds to, with digits up to 5 being rounded down, and above (and inclusive of) 5, being rounded up:</p>
+        <div class="code-area">
+            <div class="code-container code-fixed">
+                <textarea id="code-cell-6">df.head(8).round(2)</textarea>
+            </div>
+            <div id="code-cell-6-output" class="output"></div>
+        </div>
+        <p>While it is possible to see how many rows there are in a DataFrame by displaying the whole DataFrame and looking at the last index, there is a convenient way to obtain this number, directly:</p>
+        <div class="code-area">
+            <div class="code-container code-fixed">
+                <textarea id="code-cell-7">print(&quot;DataFrame has&quot;, len(df), &quot;rows&quot;)</textarea>
+            </div>
+            <div id="code-cell-7-output" class="output"></div>
+        </div>
+        <p>You could see above, that the columns of the DataFrame have labels. To see all labels:</p>
+        <div class="code-area">
+            <div class="code-container code-fixed">
+                <textarea id="code-cell-8">df.columns</textarea>
+            </div>
+            <div id="code-cell-8-output" class="output"></div>
+        </div>
+        <p>Now we can count the labels to obtain the number of columns:</p>
+        <div class="code-area">
+            <div class="code-container code-fixed">
+                <textarea id="code-cell-9">print(&quot;DataFrame has&quot;, len(df.columns), &quot;columns&quot;)</textarea>
+            </div>
+            <div id="code-cell-9-output" class="output"></div>
+        </div>
+        <p>And if you want to have both the number of the rows and the number columns displayed together, you can use the <code>shape</code> method. Shape returns a tuple of two numbers: the first is the number of rows, and the second is the number of columns.</p>
+        <div class="code-area">
+            <div class="code-container code-fixed">
+                <textarea id="code-cell-10">print(&quot;DataFrame has&quot;, df.shape[0], &quot;rows and&quot;, df.shape[1], &quot;columns&quot;)</textarea>
+            </div>
+            <div id="code-cell-10-output" class="output"></div>
+        </div>
+        <p>Notice that <code>shape</code> (like <code>columns</code>) is not followed by round parentheses. It is not a function that can take arguments. Technically, <code>shape</code> is a &#x27;property&#x27; of the DataFrame.<br><br>To find out what data type is contained in each of the columns, use <code>dtypes</code>, another &#x27;property&#x27;:</p>
+        <div class="code-area">
+            <div class="code-container code-fixed">
+                <textarea id="code-cell-11">df.dtypes</textarea>
+            </div>
+            <div id="code-cell-11-output" class="output"></div>
+        </div>
+        <p>In this case, both columns contain floating point (decimal) numbers.</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="module-card" id="viewing-your-data">
+                <div class="module-body">
+                    <div class="module-section">
+                        
+        <div class="info-box practice-exercise-box">
+            <div class="box-title">
+                <span class="box-icon"></span>
+                PRACTICE EXERCISE
+            </div>
+            <div class="box-content">
+                <p><strong>1.</strong></p>
+                <p>Load in the data file &#x27;loan_data.csv&#x27;, it is within the same folder <code>data</code> as the everleysdataset. It contains data that can be used for the assessment of loan applications. Read the data into a DataFrame. It is best to assign it a name other than &#x27;df&#x27; (to avoid overwriting the everleys dataset).<ul class="nested-list"><li>Display the first ten rows of the Loan dataset to see its contents.</li><br><li>Display the data types in this data file.</li></ul></p>
+            </div>
+        </div>
+        
+        <div class="code-area">
+            <div class="code-container code-editor">
+                <textarea id="code-cell-12"></textarea>
+            </div>
+            <button id="run-code-cell-12" class="run-button">Run Code</button>
+            <div id="code-cell-12-output" class="output"></div>
+        </div>
+        
+                    </div>
+                </div>
+            </div>
+            
+            <div class="module-card" id="accessing-data-in-a-dataframe">
+                <div class="module-body">
+                    <div class="module-section">
+                        <h3>Accessing data in a DataFrame</h3>
+                        <p>If a datafile is large and you only want to check the format of data in a specific column, you can limit the display to that column. To access data contained in a specific column of a DataFrame, we can use a similar convention as in a Python dictionary, treating the column names as &#x27;keys&#x27;. E.g. to show all rows in column &#x27;Calcium&#x27;, use:</p>
+        <div class="code-area">
+            <div class="code-container code-fixed">
+                <textarea id="code-cell-13">df[&#x27;calcium&#x27;]</textarea>
+            </div>
+            <div id="code-cell-13-output" class="output"></div>
+        </div>
+        <p>To access individual rows of a column we use two pairs of square brackets:</p>
+        <div class="code-area">
+            <div class="code-container code-fixed">
+                <textarea id="code-cell-14">df[&#x27;calcium&#x27;][0:3]</textarea>
+            </div>
+            <div id="code-cell-14-output" class="output"></div>
+        </div>
+        <p>Here all rules for <a href="https://docs.python.org/3/tutorial/introduction.html">slicing</a> can be applied. As for lists and tuples, the indexing of rows is semi-inclusive, with the lower boundary included and upper boundary excluded. Note that the first pair of square brackets refers to columns, and the second pair refers to the rows. However, this is different from accessing items in a nested list, for instance.<br><br>Accessing items in a Pandas DataFrame is analogous to accessing the values in a Python dictionary by referring to its keys.<br><br>To access non-contiguous elements, we use an additional pair of square brackets (as if for a list within a list):</p>
+        <div class="code-area">
+            <div class="code-container code-fixed">
+                <textarea id="code-cell-15">df[&#x27;calcium&#x27;][[1, 3, 7]]</textarea>
+            </div>
+            <div id="code-cell-15-output" class="output"></div>
+        </div>
+        
+                    </div>
+                </div>
+            </div>
+            
+            <div class="module-card" id="indexing-and-slicing-using--loc">
+                <div class="module-body">
+                    <div class="module-section">
+                        <h3>Indexing and slicing using .loc</h3>
+                        <p>Another common method for indexing and slicing a DataFrame is to use the label-based indexer, <code>.loc</code>. Unlike <code>.iloc</code> (a now-deprecated method found in Pandas versions earlier than 2.2.0), which uses numerical index positions, <code>.loc</code> uses the explicit labels of rows and columns.<br><br>This is now the preferred approach in Pandas, especially when working with DataFrames that have named indices or meaningful column names. While <code>.iloc</code> remains supported, it&#x27;s important to note that <code>.loc</code> is more readable, aligning well with good data science practice; particularly when working with real-world datasets.<br><br>In the code examples given below, <code>.loc</code> still follows the format of [rows, columns], but uses labels rather than integers. For instance, in order to obtain all the rows from the column called &quot;calcium&quot;, we would use:</p>
+        <div class="code-area">
+            <div class="code-container code-fixed">
+                <textarea id="code-cell-16">df.loc[:, &#x27;calcium&#x27;]</textarea>
+            </div>
+            <div id="code-cell-16-output" class="output"></div>
+        </div>
+        <p>To display only the first three calcium concentrations, assuming the DataFrame index is a simple range starting at 0, you could use:</p>
+        <div class="code-area">
+            <div class="code-container code-fixed">
+                <textarea id="code-cell-17">df.loc[0:2, &#x27;calcium&#x27;]</textarea>
+            </div>
+            <div id="code-cell-17-output" class="output"></div>
+        </div>
+        <p>Note: Unlike <code>.iloc</code>, the upper boundary is included when using <code>.loc</code>. In order to access non-consecutive rows from a column using their labels:</p>
+        <div class="code-area">
+            <div class="code-container code-fixed">
+                <textarea id="code-cell-18">df.loc[[2, 4, 7], &#x27;calcium&#x27;].round(5)</textarea>
+            </div>
+            <div id="code-cell-18-output" class="output"></div>
+        </div>
+        <p>We can also retrieve multiple columns by passing <code>.loc</code> a list of column names as an argument:</p>
+        <div class="code-area">
+            <div class="code-container code-fixed">
+                <textarea id="code-cell-19">df.loc[[2, 4, 7], [&#x27;calcium&#x27;, &#x27;sodium&#x27;]].round(5)</textarea>
+            </div>
+            <div id="code-cell-19-output" class="output"></div>
+        </div>
+        <p>To select even-numbered rows (up to index 16) and all columns:</p>
+        <div class="code-area">
+            <div class="code-container code-fixed">
+                <textarea id="code-cell-20">df.loc[0:16:2, :]</textarea>
+            </div>
+            <div id="code-cell-20-output" class="output"></div>
+        </div>
+        <p>In this line, the step size after the second colon behaves just like Python slicing; but again, the final index value is included when using <code>.loc</code>.<br><br>Mixing the different methods of accessing specific data in a DataFrame can be confusing, and requires practice and diligence.</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="module-card" id="indexing-and-slicing-using--loc">
+                <div class="module-body">
+                    <div class="module-section">
+                        
+        <div class="info-box practice-exercise-box">
+            <div class="box-title">
+                <span class="box-icon"></span>
+                PRACTICE EXERCISE
+            </div>
+            <div class="box-content">
+                <p><strong>2.</strong></p>
+                <p>From the everleys dataset display the calcium and sodium concentrations of all patients - except the first.</p>
+            </div>
+        </div>
+        
+        <div class="code-area">
+            <div class="code-container code-editor">
+                <textarea id="code-cell-21"></textarea>
+            </div>
+            <button id="run-code-cell-21" class="run-button">Run Code</button>
+            <div id="code-cell-21-output" class="output"></div>
+        </div>
+        
+                    </div>
+                </div>
+            </div>
+            
+        
+        <div class="page-navigation">
+            <a href="./introduction.html" class="nav-button prev">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                    <path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"/>
+                </svg>
+                Previous
+            </a>
+            <a href="./data-features.html" class="nav-button next">
+                Next
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                    <path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"/>
+                </svg>
+            </a></div>
+        
+        <!-- Footer -->
+        <div class="footer">
+            <div>© All materials are copyright scryptIQ 2025</div>
+            <div>Powered by Pyodide</div>
+        </div>
+    </div>
+
+    <!-- JavaScript -->
+    <script src="../assets/main.js"></script>
+    
+    <!-- Pyodide Initialisation Script -->
+    <script>
+
+// Generalisable Pyodide Initialisation Script
+// Variables and state build up naturally as code blocks execute in order
+
+async function main() {
+    // Show loading message for all output elements
+    document.querySelectorAll(".output").forEach(el => {
+        el.textContent = "Loading Pyodide...";
+        el.classList.add("loading-message");
+    });
+    
+    try {
+        // Load Pyodide
+        console.log("Loading Pyodide...");
+        const pyodideStartTime = performance.now();
+        let pyodide = await loadPyodide();
+        const pyodideLoadTime = performance.now() - pyodideStartTime;
+        console.log(`Pyodide loaded in ${pyodideLoadTime.toFixed(2)}ms`);
+        
+        // Load required packages only if specified
+        const lessonPackages = window.LESSON_PACKAGES || [];
+        
+        if (lessonPackages.length > 0) {
+            console.log("Loading required Python packages...");
+            const packagesStartTime = performance.now();
+            
+            // Separate built-in packages from PyPI packages
+            const builtInPackages = lessonPackages.filter(pkg => 
+                ['numpy', 'scipy', 'matplotlib', 'pandas', 'scikit-learn', 'pillow', 'regex'].includes(pkg)
+            );
+            
+            const micropipPackages = lessonPackages.filter(pkg => !builtInPackages.includes(pkg));
+            
+            // Load built-in packages (fast)
+            if (builtInPackages.length > 0) {
+                await pyodide.loadPackage(builtInPackages);
+                console.log(`Loaded built-in packages: ${builtInPackages.join(', ')}`);
+            }
+            
+            // Install PyPI packages (slower)
+            if (micropipPackages.length > 0) {
+                await pyodide.loadPackage(['micropip']);
+                const micropip = pyodide.pyimport('micropip');
+                await micropip.install(micropipPackages);
+                console.log(`Installed PyPI packages: ${micropipPackages.join(', ')}`);
+            }
+            
+            const packagesLoadTime = performance.now() - packagesStartTime;
+            console.log(`Packages loaded in ${packagesLoadTime.toFixed(2)}ms`);
+            console.log(`Total initialisation time: ${(pyodideLoadTime + packagesLoadTime).toFixed(2)}ms`);
+        } else {
+            console.log("No packages to load for this lesson");
+            console.log(`Total initialisation time: ${pyodideLoadTime.toFixed(2)}ms`);
+        }
+
+        // Only set up basic Python environment - no pre-loaded variables
+        await pyodide.runPythonAsync(`
+            import sys
+            from io import StringIO
+        `);
+
+        // Only set up matplotlib if it's in the loaded packages
+        if (lessonPackages.includes('matplotlib')) {
+            await pyodide.runPythonAsync(`
+                # Set up matplotlib for web rendering
+                import matplotlib
+                matplotlib.use('AGG')
+                import matplotlib.pyplot as plt
+                import io
+                import base64
+                
+                def capture_matplotlib():
+                    """Capture current matplotlib figure as HTML img tag"""
+                    buf = io.BytesIO()
+                    plt.savefig(buf, format='png', bbox_inches='tight', dpi=100)
+                    buf.seek(0)
+                    img_base64 = base64.b64encode(buf.read()).decode('utf-8')
+                    plt.close()
+                    return f'<img src="data:image/png;base64,{img_base64}" style="max-width: 100%; height: auto;" />'
+            `);
+            console.log('Matplotlib capture function set up');
+        }
+        
+        console.log("Pyodide loaded successfully");
+        
+        // Load remote files if URLs are specified
+        const lessonFiles = window.LESSON_FILES || [];
+        
+        if (lessonFiles.length > 0) {
+            try {
+                console.log(`Checking for ${lessonFiles.length} remote file(s) to load...`);
+                
+                // Build Python code to load all files dynamically
+                let pythonCode = `
+from pyodide.http import pyfetch
+import os
+
+# Create data directory if it doesn't exist
+os.makedirs('./data', exist_ok=True)
+`;
+                
+                // Add loading code for each file
+                for (const file of lessonFiles) {
+                    pythonCode += `
+# Load ${file.filename}
+try:
+    response = await pyfetch("${file.url}")
+    content = await response.string()
+    with open('./data/${file.filename}', 'w') as f:
+        f.write(content)
+    print("Loaded: ${file.filename}")
+except Exception as e:
+    print(f"Could not load ${file.filename}: {e}")
+`;
+                }
+                
+                await pyodide.runPythonAsync(pythonCode);
+                console.log("Remote files loaded successfully");
+            } catch (error) {
+                console.warn("Error loading remote files (continuing anyway):", error);
+            }
+        } else {
+            console.log("No remote files to load for this lesson");
+        }
+        
+        // Function to execute Python code and capture output
+        async function executePythonCode(code) {
+            try {
+                // Redirect Python stdout to capture print statements
+                await pyodide.runPythonAsync(`
+                    old_stdout = sys.stdout
+                    sys.stdout = mystdout = StringIO()
+                `);
+                
+                // Run the user code
+                const result = await pyodide.runPythonAsync(code);
+                
+                // Get the captured stdout
+                let stdout = await pyodide.runPythonAsync(`
+                    sys.stdout = old_stdout
+                    mystdout.getvalue()
+                `);
+                
+                // Check for matplotlib figures only if matplotlib was loaded
+                const lessonPackages = window.LESSON_PACKAGES || [];
+                if (lessonPackages.includes('matplotlib')) {
+                    const hasFigures = await pyodide.runPythonAsync(`
+                        import matplotlib.pyplot as plt
+                        len(plt.get_fignums()) > 0
+                    `);
+                    
+                    if (hasFigures) {
+                        const figureHtml = await pyodide.runPythonAsync(`capture_matplotlib()`);
+                        if (stdout) stdout += "\n";
+                        stdout += figureHtml;
+                    }
+                }
+                
+                // Combine stdout and result
+                let output = stdout;
+                if (result !== undefined && result !== null && String(result).trim() !== '') {
+                    if (output) output += "\n";
+                    output += String(result);
+                }
+                
+                return { success: true, output: output || "Code executed successfully (no output)" };
+                
+            } catch (error) {
+                return { success: false, output: "Error: " + error.message };
+            }
+        }
+        
+        // Execute all hidden code blocks first (for setup code like imports)
+        const hiddenCodeBlocks = Array.from(document.querySelectorAll('.hidden-code textarea'));
+        console.log(`Found ${hiddenCodeBlocks.length} hidden code blocks`);
+
+        for (const textarea of hiddenCodeBlocks) {
+            const code = textarea.value.trim();
+            if (!code) continue;
+            
+            console.log(`Executing hidden code block: ${textarea.id}`);
+            const result = await executePythonCode(code);
+            
+            if (!result.success) {
+                console.error(`Error in hidden code block ${textarea.id}:`, result.output);
+            } else {
+                console.log(`Hidden code block ${textarea.id} executed successfully`);
+            }
+        }
+
+        console.log("All hidden code blocks executed");
+        
+        // Get all fixed code blocks in document order
+        const fixedCodeBlocks = Array.from(document.querySelectorAll('.code-fixed textarea'));
+        
+        // Setup and execute fixed code blocks sequentially
+        for (const textarea of fixedCodeBlocks) {
+            const code = textarea.value.trim();
+            if (!code) continue;
+            
+            // Set up CodeMirror editor (read-only)
+            const editor = CodeMirror.fromTextArea(textarea, {
+                mode: "python",
+                theme: "pastel-on-dark",
+                lineNumbers: true,
+                readOnly: true,
+                viewportMargin: Infinity
+            });
+            
+            // Find corresponding output element
+            const outputId = textarea.id + '-output';
+            const outputElement = document.getElementById(outputId);
+            
+            if (outputElement) {
+                outputElement.textContent = "Running code...";
+                outputElement.classList.add("loading-message");
+                
+                // Execute the code (this maintains state for subsequent blocks)
+                const result = await executePythonCode(code);
+                
+                // Display the output - check if it's HTML
+                const trimmedOutput = result.output.trim();
+                console.log('Output length:', trimmedOutput.length);
+                console.log('Output starts with:', trimmedOutput.substring(0, 100));
+                
+                if (trimmedOutput.includes('<script') && trimmedOutput.includes('Plotly')) {
+                    // It's Plotly HTML output - extract just the body content
+                    console.log('Rendering as Plotly HTML');
+                    const parser = new DOMParser();
+                    const doc = parser.parseFromString(result.output, 'text/html');
+                    // Clear the output element and append the body content
+                    outputElement.innerHTML = '';
+                    
+                    // Find and load external scripts first (like Plotly CDN)
+                    const externalScripts = Array.from(doc.querySelectorAll('script[src]'));
+                    const inlineScripts = Array.from(doc.querySelectorAll('script:not([src])'));
+                    
+                    // Append non-script content first
+                    Array.from(doc.body.children).forEach(child => {
+                        if (child.tagName !== 'SCRIPT') {
+                            outputElement.appendChild(child.cloneNode(true));
+                        }
+                    });
+                    
+                    // Load external scripts sequentially
+                    const loadScript = (src) => {
+                        return new Promise((resolve, reject) => {
+                            const script = document.createElement('script');
+                            script.src = src;
+                            script.onload = resolve;
+                            script.onerror = reject;
+                            document.head.appendChild(script);
+                        });
+                    };
+                    
+                    // Load all external scripts first
+                    Promise.all(externalScripts.map(s => loadScript(s.src)))
+                        .then(() => {
+                            console.log('External scripts loaded, executing inline scripts');
+                            // Now execute inline scripts
+                            inlineScripts.forEach(oldScript => {
+                                const newScript = document.createElement('script');
+                                newScript.textContent = oldScript.textContent;
+                                outputElement.appendChild(newScript);
+                            });
+                            console.log('Output element after processing:', outputElement.children.length, 'children');
+                        })
+                        .catch(err => {
+                            console.error('Failed to load external scripts:', err);
+                            outputElement.textContent = 'Error loading Plotly: ' + err.message;
+                        });
+                } else if (trimmedOutput.startsWith('<!DOCTYPE') || 
+                           trimmedOutput.startsWith('<html') ||
+                            trimmedOutput.startsWith('<div') ||
+                            trimmedOutput.startsWith('<img')) {
+                    console.log('Rendering as generic HTML');
+                    outputElement.innerHTML = result.output;
+                    console.log('Output element after innerHTML:', outputElement.children.length, 'children');
+                } else {
+                    console.log('Rendering as plain text');
+                    outputElement.textContent = result.output;
+                }
+                outputElement.classList.remove("loading-message");
+                if (result.success) {
+                    outputElement.classList.add("success-message");
+                    outputElement.classList.remove("error-message");
+                } else {
+                    outputElement.classList.add("error-message");
+                    outputElement.classList.remove("success-message");
+                }
+            }
+            
+            // Small delay to show progression
+            await new Promise(resolve => setTimeout(resolve, 100));
+        }
+        
+        // Setup all editable code blocks (but don't execute them)
+        document.querySelectorAll('.code-editor textarea').forEach((textarea) => {
+            // Set up CodeMirror editor (editable)
+            const editor = CodeMirror.fromTextArea(textarea, {
+                mode: "python",
+                theme: "pastel-on-dark",
+                lineNumbers: true,
+                viewportMargin: Infinity
+            });
+            
+            // Find corresponding run button and output element
+            const baseId = textarea.id;
+            const runButtonId = 'run-' + baseId;
+            const outputId = baseId + '-output';
+            
+            const runButton = document.getElementById(runButtonId);
+            const outputElement = document.getElementById(outputId);
+            
+            if (runButton && outputElement) {
+                // Set initial state
+                outputElement.textContent = "Ready to run code!";
+                outputElement.classList.remove("loading-message");
+                
+                runButton.addEventListener("click", async () => {
+                    const code = editor.getValue().trim();
+                    if (!code) {
+                        outputElement.textContent = "No code to run";
+                        return;
+                    }
+                    
+                    outputElement.textContent = "Running...";
+                    outputElement.classList.remove("error-message", "success-message");
+                    outputElement.classList.add("loading-message");
+                    
+                    // Execute the code (this also maintains state for future blocks)
+                    const result = await executePythonCode(code);
+                    
+                    // Display the output - check if it's HTML
+                    const trimmedOutput = result.output.trim();
+                    console.log('Output length:', trimmedOutput.length);
+                    console.log('Output starts with:', trimmedOutput.substring(0, 100));
+                    
+                    if (trimmedOutput.includes('<script') && trimmedOutput.includes('Plotly')) {
+                        // It's Plotly HTML output - extract just the body content
+                        console.log('Rendering as Plotly HTML');
+                        const parser = new DOMParser();
+                        const doc = parser.parseFromString(result.output, 'text/html');
+                        // Clear the output element and append the body content
+                        outputElement.innerHTML = '';
+                        
+                        // Find and load external scripts first (like Plotly CDN)
+                        const externalScripts = Array.from(doc.querySelectorAll('script[src]'));
+                        const inlineScripts = Array.from(doc.querySelectorAll('script:not([src])'));
+                        
+                        // Append non-script content first
+                        Array.from(doc.body.children).forEach(child => {
+                            if (child.tagName !== 'SCRIPT') {
+                                outputElement.appendChild(child.cloneNode(true));
+                            }
+                        });
+                        
+                        // Load external scripts sequentially
+                        const loadScript = (src) => {
+                            return new Promise((resolve, reject) => {
+                                const script = document.createElement('script');
+                                script.src = src;
+                                script.onload = resolve;
+                                script.onerror = reject;
+                                document.head.appendChild(script);
+                            });
+                        };
+                        
+                        // Load all external scripts first
+                        Promise.all(externalScripts.map(s => loadScript(s.src)))
+                            .then(() => {
+                                console.log('External scripts loaded, executing inline scripts');
+                                // Now execute inline scripts
+                                inlineScripts.forEach(oldScript => {
+                                    const newScript = document.createElement('script');
+                                    newScript.textContent = oldScript.textContent;
+                                    outputElement.appendChild(newScript);
+                                });
+                                console.log('Output element after processing:', outputElement.children.length, 'children');
+                            })
+                            .catch(err => {
+                                console.error('Failed to load external scripts:', err);
+                                outputElement.textContent = 'Error loading Plotly: ' + err.message;
+                            });
+                    } else if (trimmedOutput.startsWith('<!DOCTYPE') || 
+                               trimmedOutput.startsWith('<html') ||
+                               trimmedOutput.startsWith('<div')) {
+                        outputElement.innerHTML = result.output;
+                    } else {
+                        outputElement.textContent = result.output;
+                    }
+                    outputElement.classList.remove("loading-message");
+                    if (result.success) {
+                        outputElement.classList.add("success-message");
+                        outputElement.classList.remove("error-message");
+                    } else {
+                        outputElement.classList.add("error-message");
+                        outputElement.classList.remove("success-message");
+                    }
+                });
+            }
+        });
+        
+        console.log("All code blocks initialised successfully");
+
+        // Set flag to indicate Pyodide is fully ready
+        window.pyodideReady = true;
+        console.log("Pyodide fully ready");
+        
+    } catch (error) {
+        console.error("Failed to initialise Pyodide:", error);
+        document.querySelectorAll(".output").forEach(el => {
+            el.textContent = "Error loading Pyodide: " + error.message;
+            el.classList.remove("loading-message");
+            el.classList.add("error-message");
+        });
+    }
+}
+
+// Start the application when DOM is loaded
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', main);
+} else {
+    main();
+}
+    </script>
+</body>
+</html>
+    
