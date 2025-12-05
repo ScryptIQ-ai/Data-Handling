@@ -51,7 +51,7 @@ jobs:
       - name: Generate homepage
         run: |
           echo "Generating homepage..."
-          python3 create_homepage.py --organisation "${{ github.repository_owner }}"
+          python3 create_homepage.py --organisation "${{ github.repository_owner }}" --repo-name ${{ github.repository.name }}
           echo "Homepage generated successfully!"
           ls -la homepage.html
           
