@@ -1,0 +1,952 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <!-- Pyodide and CodeMirror -->
+    <script src="https://cdn.jsdelivr.net/pyodide/v0.24.1/full/pyodide.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/codemirror.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/theme/pastel-on-dark.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/codemirror.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/mode/python/python.min.js"></script>
+    
+    <!-- Favicons -->
+    <link rel="icon" type="image/x-icon" href="../assets/favicon.ico">
+    <link rel="icon" type="image/png" sizes="32x32" href="../assets/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="../assets/favicon-16x16.png">
+    <link rel="apple-touch-icon" sizes="192x192" href="../assets/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="192x192" href="../assets/android-chrome-192x192.png">
+    <link rel="icon" type="image/png" sizes="512x512" href="../assets/android-chrome-512x512.png">
+    
+    <!-- Core Stylesheets -->
+    <link rel="stylesheet" href=../assets/colours-l2d.css>
+    <link rel="stylesheet" href="../assets/shared-styles.css">
+    <link rel="stylesheet" href="../assets/nav-bar.css">
+    <link rel="stylesheet" href="../assets/module_card.css">
+    <link rel="stylesheet" href="../assets/learning_outcomes.css">
+    <link rel="stylesheet" href="../assets/learning_lists.css">
+    <link rel="stylesheet" href="../assets/box_styles.css">
+    <link rel="stylesheet" href="../assets/code_styles.css">
+
+    <!-- Meta Tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>L2D - DH2 - Correlations</title>
+    
+    <!-- File URLs for this lesson -->
+    <script>
+        window.LESSON_FILES = [
+            {url: "https://raw.githubusercontent.com/ScryptIQ-ai/lesson-data/refs/heads/main/dh/everleys_data.csv", filename: "everleys_data.csv"},
+            {url: "https://raw.githubusercontent.com/ScryptIQ-ai/lesson-data/refs/heads/main/dh/patients.csv", filename: "patients.csv"}
+        ];
+        window.LESSON_PACKAGES = ['pandas', 'matplotlib'];
+    </script>
+        
+</head>
+<body>
+    
+    <!-- Sidebar Navigation -->
+    <div id="sidebar" class="sidebar">
+        <div class="sidebar-header">
+            <a href="../homepage.html" style="text-decoration: none; display: inline-block;">
+                <img src="../assets/l2d-brain-logo.png" alt="scryptIQ Logo" class="sidebar-logo">
+            </a>
+        </div>
+
+        <h3>Content</h3>
+        <ul>
+            <li><a href="./introduction.html" class="">Introduction</a></li><li><a href="./dataset-properties.html">Properties of a Dataset</a></li>
+            <li>
+                <div class="nav-toggle active" data-target="expandable-section-2">
+                    Correlations
+                    <span class="toggle-icon">▼</span>
+                </div>
+                <ul class="nested-nav expanded" id="expandable-section-2"><li><a href="#introduction">Introduction</a></li><li><a href="#the-correlation-coefficient">The Correlation Coefficient</a></li><li><a href="#the-correlation-matrix">The Correlation Matrix</a></li><li><a href="#heatmaps">Heatmaps</a></li><li><a href="#analysis-of-the-correlation-matrix">Analysis of the Correlation matrix</a></li><li><a href="#summary">Summary</a></li>
+                </ul>
+            </li><li><a href="./diabetes-dataset.html">Diabetes Dataset</a></li><li><a href="./assignment.html">Assignment</a></li><li><a href="./feedback.html">Feedback</a></li>
+        </ul>
+
+        <h3 class="collapsible-header collapsed">
+            Resources
+            <span class="collapse-icon">►</span>
+        </h3>
+        <div class="collapsible-content collapsed">
+            <ul>
+                <li><a href="./glossary.html">Glossary</a></li><li><a href="./downloads.html">Downloads</a></li><li><a href="../HB/introduction.html">Handbook</a></li>
+            </ul>
+        </div>
+
+        <h3 class="collapsible-header collapsed">
+            Previous Modules
+            <span class="collapse-icon">►</span>
+        </h3>
+        <div class="collapsible-content collapsed">
+            <ul>
+            <li><a href="../DH1/introduction.html">DH1</a></li>
+        </ul>
+        </div>
+
+        <h3>
+            <li><a href="./report-issue.html">Report an Issue</a></li>
+        </h3>
+    </div>
+    
+    <!-- Sidebar Toggle Button -->
+    <button id="sidebar-toggle" class="sidebar-toggle">❮</button>
+    
+    <!-- Main Content Area -->
+    <div id="main-content" class="main-content">
+        <!-- Top Navigation Bar -->
+        <div class="top-navbar">
+            <h1 class="page-title">Data Handling 2</h1>
+            <div class="nav-actions">
+                <a href="../homepage.html" class="text-button" title="Materials homepage">
+                    Homepage
+                </a>
+                <a href="https://learntodiscover.ai/my-cohorts/" class="text-button" title="Find out more about us">
+                    Learn to Discover
+                </a>
+            </div>
+        </div>
+
+        
+            <div class="module-card" id="introduction">
+                <div class="module-header">
+                    Correlations <span class="module-tag">DH2</span>
+                </div>
+                <div class="module-body">
+                    <h3>Learning Objectives</h3>
+                    <div class="learning-outcomes">
+                        <div class="outcome-item">
+                    <span class="outcome-number">1</span>
+                    <span class="outcome-text">Understand an implement calculation of the correlation coefficient</span>
+                </div>
+<div class="outcome-item">
+                    <span class="outcome-number">2</span>
+                    <span class="outcome-text">Create heatmaps of the correlation matrix</span>
+                </div>
+<div class="outcome-item">
+                    <span class="outcome-number">3</span>
+                    <span class="outcome-text">How to analyse correlation coefficients</span>
+                </div>
+                    </div>
+                    <h3>Introduction</h3>
+                    <p>Bivariate measures are quantities that are calculated from two variables of data. Bivariate features are the most widely used subset of multivariate features - all of which require more than one variable in order to be calculated.<br><br>The concept behind many bivariate measures is to quantify &quot;similarity&quot; between two datasets. If any similarity is observed, it is assumed that there is a connection or relationship in the data. For variables exhibiting similarity, knowledge of one understandably leads to an expectation surrounding the other.</p>
+                </div>
+            </div>
+            
+            <div class="module-card" id="the-correlation-coefficient">
+                <div class="module-body">
+                    <div class="module-section">
+                        <h3>The Correlation Coefficient</h3>
+                        <p>Here we are going to look at a specific bivariate quantity: the <a href="https://en.wikipedia.org/wiki/Pearson_correlation_coefficient">Pearson correlation coefficient</a> <em>PCC</em>.<br><br>The formula for the <em>PCC</em> is set up such that two identical datasets yield a <em>PCC</em> of 1. Technically, this is achieved by normalising all variances to be equal to 1. This also implies that all data points in a scatter plot of one variable plotted against itself are aligned along the main diagonal (with a positive slope).<br><br>In two perfectly antisymmetrical datasets, where one variable can be obtained by multiplying the other by -1, a value of -1 is obtained. This implies that all data points in a scatter plot are aligned along the negative, or anti diagonal, (with a negative slope). All other possibilities lie in between. A value of 0 refers to precisely balanced positive and negative contributions to the measure. However - strictly speaking - the latter does not necessarily indicate that there is no relationship between the variables.<br><br>The PCC is an <strong>undirected</strong> measure. This means that its value for the comparison between dataset 1 and dataset 2 is exactly the same as the <em>PCC</em> between dataset 2 and dataset 1.</p>
+        <div class="code-area">
+            <div class="code-container code-fixed">
+                <textarea id="code-cell-9"># First, lets load in the functions for this section
+
+from pandas import read_csv
+from matplotlib.pyplot import subplots, show
+
+# Specific numpy functions, description in the main body
+from numpy import arange, isnan</textarea>
+            </div>
+            <div id="code-cell-9-output" class="output" style="display: none;"></div>
+        </div>
+        <p>A method to directly calculate the <em>PCC</em> of your data, is to use the method <code>.corr()</code> with your DataFrame. For instance, we can apply it to the Everleys dataset:</p>
+        <div class="code-area">
+            <div class="code-container code-fixed">
+                <textarea id="code-cell-10"># Load in our dataset
+df_everley = read_csv(&#x27;./data/everleys_data.csv&#x27;)
+# Use the method .corr()
+df_everley.corr()</textarea>
+            </div>
+            <div id="code-cell-10-output" class="output" style="display: none;"></div>
+        </div>
+        <p>The result as a matrix of two-by-two numbers. Along the diagonal (top left and bottom right) are the values for the comparison of a column to itself. As any dataset is identical with itself, the values are one by definition.<br><br>The non-diagonal elements indicate that <strong>CC is approx. -0.26</strong> for the two datasets. Both <strong>CC(calcium-sodium)</strong> and <strong>CC(sodium-calcium)</strong> are given in the matrix, however because of the symmetry, we would only need to report one out of the two.</p>
+        <div class="info-box note-box">
+            <div class="box-title">
+                <span class="box-icon"></span>
+                NOTE
+            </div>
+            <div class="box-content">
+                <p>In this lesson we introduce how to calculate the <em>PCC</em> but do not discuss its significance. For example, interpreting the value above requires consideration of the fact that we only have only 18 data points. Specifically, we refrain from concluding that because the $PCC$ is negative, a high value for the calcium concentration is associated with a small value for sodium concentration (relative to their respective means).<br><br>One quantitative way to assess whether or not a given value of the $PCC$ is meaningful or not, is to use surrogate data. In our example, we could create random numbers in an array with shape (18, 2), for instance - such that the two means and standard deviations are the same as in the Everley dataset, but the two columns are independent of each other. Creating many realisations, we can check what distribution of $PCC$ values is expected from the randomly generated data, and compare this against the values obtained from the Everleys dataset.</p>
+            </div>
+        </div>
+        <p>Much of what we will cover in the Machine Learning component of L2D will involve NumPy arrays. Let us, therefore, convert the Everleys dataset from a Pandas DataFrame into a NumPy array.<br><br>A <a href="https://numpy.org/doc/2.2/user/whatisnumpy.html">NumPy array</a> is a data structure much like a list, however it is built for mathematical operations. Typical analytical tasks such as sorting, selecting, linear algebra, statistics, ect. are all much quicker than using a list. Additionally, these operations can be applied easily to the whole structure or <strong>array</strong> without having to loop over every <strong>item</strong> in term.</p>
+        <div class="code-area">
+            <div class="code-container code-fixed">
+                <textarea id="code-cell-11"># Pandas Dataframes can be easily converted to numpy arrays
+everley_numpy = df_everley.to_numpy()
+
+everley_numpy</textarea>
+            </div>
+            <div id="code-cell-11-output" class="output"></div>
+        </div>
+        <p>We can see that the numbers remain the same, but the format has changed; we have lost the names of the columns. Similar to a Pandas DataFrame, we can also make use of the <code>shape</code> function to see the dimensions of the data array.</p>
+        <div class="code-area">
+            <div class="code-container code-fixed">
+                <textarea id="code-cell-12">everley_numpy.shape</textarea>
+            </div>
+            <div id="code-cell-12-output" class="output"></div>
+        </div>
+        <p>We can now use the NumPy function <code>corrcoef</code> to calculate the Pearson correlation.</p><p>The function <code>corrcoef</code> takes a two-dimensional array as its input. The keyword argument <code>rowvar</code> is True by default, which means that the correlation will be calculated along the rows of the dataset. As we have the data features contained in the columns, the value of <code>rowvar</code> needs to be set to False. (You can check what happens if you set it to &#x27;True&#x27;. Instead of a 2x2 matrix for two columns you will get a 18x18 matrix for eighteen pair comparisons.)<br><br>We mentioned that the values of the $PCC$ are calculated such that they must lie between -1 and 1. This is achieved by normalisation with the variance. If, for any reason, we don&#x27;t want the similarity calculated using this normalisation, what results is the so-called <strong>covariance</strong>. In contrast to the $PCC$, its values will depend on the absolute size of the numbers in the data array. From the NumPy library, we can use the function <code>cov</code> in order to calculate the covariance:</p>
+        <div class="code-area">
+            <div class="code-container code-fixed">
+                <textarea id="code-cell-13">from numpy import corrcoef</textarea>
+            </div>
+            <div id="code-cell-13-output" class="output" style="display: none;"></div>
+        </div>
+        
+        <div class="code-area">
+            <div class="code-container code-fixed">
+                <textarea id="code-cell-14">corr_matrix = corrcoef(everley_numpy, rowvar=False)
+
+corr_matrix</textarea>
+            </div>
+            <div id="code-cell-14-output" class="output"></div>
+        </div>
+        <p>However, the NumPy version of corrcoef doesn&#x27;t like <code>NaN</code> values on the array. We therefore need to remove them first, repeating what we learned in <a href="../PF1/data-features.html"><strong>PF1</strong></a>.</p>
+        <div class="code-area">
+            <div class="code-container code-fixed">
+                <textarea id="code-cell-15">replacement_values = {&quot;calcium&quot; : 0, &quot;sodium&quot; : 0}
+df_everley = df_everley.fillna(value = replacement_values)
+everley_numpy = df_everley.to_numpy()</textarea>
+            </div>
+            <div id="code-cell-15-output" class="output"></div>
+        </div>
+        
+        <div class="code-area">
+            <div class="code-container code-fixed">
+                <textarea id="code-cell-16">corr_matrix = corrcoef(everley_numpy, rowvar=False)
+
+corr_matrix</textarea>
+            </div>
+            <div id="code-cell-16-output" class="output"></div>
+        </div>
+        <p>The function <code>corrcoef</code> takes a two-dimensional array as its input. The keyword argument <code>rowvar</code> is True by default, which means that the correlation will be calculated along the rows of the dataset. As we have the data features contained in the columns, the value of <code>rowvar</code> needs to be set to False.</p><p>We mentioned that the values of the <strong>PCC</strong> are calculated such that they must lie between -1 and 1. This is achieved by normalisation with the variance. If, for any reason, we don&#x27;t want the similarity calculated using this normalisation, what results is the so-called <strong>covariance</strong>. In contrast to the <strong>PCC</strong>, its values will depend on the absolute size of the numbers in the data array. From the NumPy library, we can use the function <code>cov</code> in order to calculate the covariance:</p>
+        <div class="code-area">
+            <div class="code-container code-fixed">
+                <textarea id="code-cell-17">from numpy import cov</textarea>
+            </div>
+            <div id="code-cell-17-output" class="output" style="display: none;"></div>
+        </div>
+        
+        <div class="code-area">
+            <div class="code-container code-fixed">
+                <textarea id="code-cell-18">cov_matrix = cov(everley_numpy, rowvar=False)
+
+cov_matrix</textarea>
+            </div>
+            <div id="code-cell-18-output" class="output"></div>
+        </div>
+        <p>The result shows how covariance is strongly dependent on the actual numerical values in a data column. The two values along the diagonal are identical with the variances obtained by squaring the standard deviation (calculated, for example, using the <code>describe</code> function).</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="module-card" id="the-correlation-coefficient">
+                <div class="module-body">
+                    <div class="module-section">
+                        
+        <div class="info-box practice-exercise-box">
+            <div class="box-title">
+                <span class="box-icon"></span>
+                PRACTICE EXERCISE
+            </div>
+            <div class="box-content">
+                <p><strong>1.</strong></p>
+                <p>Calculate the Pearson <strong>PCC</strong> between the systolic and the diastolic blood pressure from the patients data using:<ul class="nested-list"><li>The Pandas DataFrame</li><br><li>The data as a NumPy array.</li></ul></p>
+            </div>
+        </div>
+        
+        <div class="code-area">
+            <div class="code-container code-editor">
+                <textarea id="code-cell-19"></textarea>
+            </div>
+            <button id="run-code-cell-19" class="run-button">Run Code</button>
+            <div id="code-cell-19-output" class="output"></div>
+        </div>
+        
+                    </div>
+                </div>
+            </div>
+            
+            <div class="module-card" id="the-correlation-matrix">
+                <div class="module-body">
+                    <div class="module-section">
+                        <h3>The Correlation Matrix</h3>
+                        
+        <div class="video-container">
+            <iframe 
+                src="https://www.youtube.com/embed/Z8eX4ncHjyQ"
+                width="560"
+                height="315"
+                frameborder="0"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowfullscreen>
+            </iframe>
+        </div>
+        <p>If we have more than two columns of data, we can obtain a Pearson correlation coefficient for each pair. In general, for N columns, we get $N^2$ pairwise values. We will omit the correlations of each column relative to itself, of which there are $N$, which means we are left with <strong>N x (N-1)</strong> pairs. Since each value appears twice, due to the symmetry of the calculation, we can ignore half of them, leaving us with <strong>N x (N-1) / 2</strong> coefficients for <strong>N</strong> columns.</p><p>Here is an example using the &#x27;patients&#x27; data:</p>
+        <div class="code-area">
+            <div class="code-container code-fixed">
+                <textarea id="code-cell-20">df = read_csv(&#x27;./data/patients.csv&#x27;)
+
+# As there is string data (Gender) we must set it to numeric only
+df.corr(numeric_only=True)</textarea>
+            </div>
+            <div id="code-cell-20-output" class="output"></div>
+        </div>
+        <p>If we do the calculation with the Pandas DataFrame we get the coefficients for the six columns, as we&#x27;re dropping &quot;Gender&quot; through <code>numeric_only</code>. Note that the values that involves the &#x27;Smoker&#x27; column are meaningless, since they represent a True/False-like binary.<br><br>Let us now convert the DataFrame into a NumPy array, and check its shape:</p>
+        <div class="code-area">
+            <div class="code-container code-fixed">
+                <textarea id="code-cell-21">patients_numpy = df.to_numpy()
+patients_numpy.shape</textarea>
+            </div>
+            <div id="code-cell-21-output" class="output"></div>
+        </div>
+        <p>Next, we can try to calculate the correlation matrix for the first five columns (dropping smoker) of this data array. If we do this directly to the array, we get an AttributeError: &#x27;float&#x27; object has no attribute &#x27;shape&#x27;.<br><br>This is amended by converting the array to a floating point prior to using the <code>corrcoef</code> function. For this, we can convert the data type using the method <code>astype(float)</code>:</p>
+        <div class="code-area">
+            <div class="code-container code-fixed">
+                <textarea id="code-cell-22">cols = 5
+
+# Select all rows and the first 5 column (excluding Smoker)
+patients_numpy_float = patients_numpy[:, :cols].astype(float)
+
+patients_corr = corrcoef(patients_numpy_float, rowvar=False)
+
+patients_corr</textarea>
+            </div>
+            <div id="code-cell-22-output" class="output"></div>
+        </div>
+        <p>The result is called the <strong>correlation matrix</strong>. It contains all the bivariate comparisons possible for the five chosen columns.<br><br>In the calculation above, we used the $PCC$ in order to calculate the matrix. In general, any bivariate measure can be used to obtain a matrix of the same shape.</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="module-card" id="heatmaps">
+                <div class="module-body">
+                    <div class="module-section">
+                        <h3>Heatmaps</h3>
+                        <p>To get an illustration of the correlation pattern in a dataset, we can plot the correlation matrix as a heatmap.<br><br>Below are three lines of code, that make use of functionality within <code>Matplotlib</code>, to plot a heatmap of the correlation matrix from the &#x27;patients&#x27; dataset. We make use of the function <code>imshow</code>:</p>
+        <div class="code-area">
+            <div class="code-container code-fixed">
+                <textarea id="code-cell-23">fig, ax = subplots(figsize=(5,5))
+
+im = ax.imshow(patients_corr, cmap=&#x27;coolwarm&#x27;);
+
+show()</textarea>
+            </div>
+            <div id="code-cell-23-output" class="output"></div>
+        </div>
+        
+        <div class="info-box note-box">
+            <div class="box-title">
+                <span class="box-icon"></span>
+                NOTE
+            </div>
+            <div class="box-content">
+                <p>We have specified the colour map <code>coolwarm</code>, using the keyword argument <code>cmap</code>. For a list of <code>Matplotlib</code> colour maps, please refer to the <a href="https://matplotlib.org/stable/gallery/color/colormap_reference.htmll">gallery in the documentation</a>. The names to use in the code are on the left hand side of the colour bar.</p>
+            </div>
+        </div>
+        <p>Let us add two more features to improve this figure.<br><br>Firstly, in order to highlight true correlations stand out (rather than the trivial self-correlations along the diagonal, which are always equal to 1) we can deliberately set the diagonal as being equal to 0. To achieve this, we use the NumPy function <code>fill_diagonal</code>.<br><br>Secondly, the <code>imshow</code> function, by default, will scale the colours to the minimum and maximum values present in the array. As such, we do not know what red or blue means. To see the colour bar, it can be added to the figure environment &#x27;fig&#x27; using <code>colorbar</code>.</p>
+        <div class="code-area">
+            <div class="code-container code-fixed">
+                <textarea id="code-cell-24">from numpy import fill_diagonal</textarea>
+            </div>
+            <div id="code-cell-24-output" class="output" style="display: none;"></div>
+        </div>
+        
+        <div class="code-area">
+            <div class="code-container code-fixed">
+                <textarea id="code-cell-25">fill_diagonal(patients_corr, 0)
+
+fig, ax = subplots(figsize=(7,7))
+
+im = ax.imshow(patients_corr, cmap=&#x27;coolwarm&#x27;);
+
+fig.colorbar(im, orientation=&#x27;horizontal&#x27;, shrink=0.7);
+
+show()</textarea>
+            </div>
+            <div id="code-cell-25-output" class="output"></div>
+        </div>
+        <p>The result is that the correlation between columns &#x27;Height&#x27; and &#x27;Weight&#x27; is the strongest, and presumably higher than would be expected if these two measures were independent. We can confirm this by plotting a scatter plot for these two columns, and refer to the scatter plot for columns 2 (Height) and 5 (Diastolic blood pressure):</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="module-card" id="heatmaps">
+                <div class="module-body">
+                    <div class="module-section">
+                        
+        <div class="info-box practice-exercise-box">
+            <div class="box-title">
+                <span class="box-icon"></span>
+                PRACTICE EXERCISE
+            </div>
+            <div class="box-content">
+                <p><strong>2.</strong></p>
+                <p>Calculate and plot the correlation matrix of the first five columns, as above, based on the <a href="https://en.wikipedia.org/wiki/Spearman%27s_rank_correlation_coefficient">Spearman rank correlation coefficient</a>. This is based on the ranking of values instead of their numerical values as for the Pearson coefficient. Spearman therefore tests for monotonic relationships, whereas Pearson tests for linear relationships.<br>To import the function in question:<br><pre class="markdown-code-block"><code>from scipy.stats import spearmanr</code></pre><br>You can then apply it:<br><pre class="markdown-code-block"><code>data_spearman_corr = spearmanr(data).correlation</code></pre></p>
+            </div>
+        </div>
+        
+        <div class="code-area">
+            <div class="code-container code-editor">
+                <textarea id="code-cell-26"></textarea>
+            </div>
+            <button id="run-code-cell-26" class="run-button">Run Code</button>
+            <div id="code-cell-26-output" class="output"></div>
+        </div>
+        
+                    </div>
+                </div>
+            </div>
+            
+            <div class="module-card" id="analysis-of-the-correlation-matrix">
+                <div class="module-body">
+                    <div class="module-section">
+                        <h3>Analysis of the Correlation matrix</h3>
+                        <p>To analyse the correlations in a dataset, we are only interested in the <strong>N x (N-1)/2</strong> unduplicated correlation coefficients. Here is a way to extract them and assign them to a variable.<br><br>Firstly, we must import the function <code>triu_indices</code>. It provides the indices of a matrix with specified size. The required size is obtained from our correlation matrix, using <code>len</code>. It is identical to the number of columns for which we calculated the $CCs$.<br><br>We also need to specify that we do not want the diagonal to be included. For this, there is an offset parameter &#x27;k&#x27;, which collects the indices excluding the diagonal, provided it is set to 1. (To include the indices of the diagonal, it would have to be set to 0).</p>
+        <div class="code-area">
+            <div class="code-container code-fixed">
+                <textarea id="code-cell-27"># FIXED WITH NO OUTPUT
+
+from numpy import triu_indices</textarea>
+            </div>
+            <div id="code-cell-27-output" class="output" style="display: none;"></div>
+        </div>
+        
+        <div class="code-area">
+            <div class="code-container code-fixed">
+                <textarea id="code-cell-28"># Get the number of rows of the correlation matrix
+no_cols = len(patients_corr)
+
+# Get the indices of the 10 correlation coefficients for 5 data columns
+corr_coeff_indices = triu_indices(no_cols, k=1)
+
+# Get the 10 correlation coefficients
+corr_coeffs = patients_corr[corr_coeff_indices]
+
+print(corr_coeffs)</textarea>
+            </div>
+            <div id="code-cell-28-output" class="output"></div>
+        </div>
+        <p>Now we plot these correlation coefficients as a bar chart to see them one next to each other.</p>
+        <div class="code-area">
+            <div class="code-container code-fixed">
+                <textarea id="code-cell-29">fig, ax = subplots()
+
+bins = arange(len(corr_coeffs))
+
+ax.bar(bins, corr_coeffs)
+
+show()</textarea>
+            </div>
+            <div id="code-cell-29-output" class="output"></div>
+        </div>
+        <p>If there are a large number of coefficients, we can also display their histogram or boxplot as summary statistics.</p><h4>The Average Correlation per Column</h4><p>On a higher level, we can calculate the overall, or average correlation per data column. This can be achieved by averaging over either the rows or the columns of the correlation matrix. Because our similarity measure is undirected, both ways of summing yield the same result.<br><br>However, we need to consider whether the value is positive or negative. Correlation coefficients can be either positive or negative. As such, adding for instance +1 and -1 would yield an average of 0, even though both indicate perfect correlation and anti-correlation, respectively. This can be addressed by using the absolute value <code>abs</code>, and ignoring the sign.</p><p>In order to average, we can use the NumPy function: <code>mean</code>. This function defaults to averaging over all values of the matrix. In order to obtain the five values by averaging over the columns, we specify the &#x27;axis&#x27; keyword argument must be specified as 0.</p>
+        <div class="code-area">
+            <div class="code-container code-fixed">
+                <textarea id="code-cell-30">from numpy import abs, mean</textarea>
+            </div>
+            <div id="code-cell-30-output" class="output" style="display: none;"></div>
+        </div>
+        
+        <div class="code-area">
+            <div class="code-container code-fixed">
+                <textarea id="code-cell-31"># Absolute values of correlation matrix
+corr_matrix_abs = abs(patients_corr)
+
+# Average of the correlation strengths
+corr_column_average = mean(corr_matrix_abs, axis=0)
+
+fig, ax = subplots()
+
+bins = arange(corr_column_average.shape[0])
+
+ax.bar(bins, corr_column_average );
+
+print(corr_column_average)
+
+show()</textarea>
+            </div>
+            <div id="code-cell-31-output" class="output"></div>
+        </div>
+        <h4>The Average Dataset Correlation</h4><p>The sum over rows or columns has given us a reduced set of values to look at. We can now take the final step and average over all correlation coefficients. This will yield the average correlation of the dataset. It condenses the full bivariate analysis into a single number, and can be a starting point when comparing different datasets of the same type, for example.</p>
+        <div class="code-area">
+            <div class="code-container code-fixed">
+                <textarea id="code-cell-32"># Average of the correlation strengths
+corr_matrix_average = mean(corr_matrix_abs)
+
+print(&#x27;Average correlation strength: &#x27;, round(corr_matrix_average, 3))</textarea>
+            </div>
+            <div id="code-cell-32-output" class="output"></div>
+        </div>
+        
+                    </div>
+                </div>
+            </div>
+            
+            <div class="module-card" id="summary">
+                <div class="module-body">
+                    <div class="module-section">
+                        <h3>Summary</h3>
+                        <p>Analysis of the correlation between features is an important beginning step in machine learning. The tools we have learned here can be used to reduce the feature space for subsequent learning or help us narrow down on a key feature early on, skipping machine learning entirely.</p>
+                    </div>
+                </div>
+            </div>
+            
+        
+        <div class="page-navigation">
+            <a href="./dataset-properties.html" class="nav-button prev">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                    <path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"/>
+                </svg>
+                Previous
+            </a>
+            <a href="./diabetes-dataset.html" class="nav-button next">
+                Next
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                    <path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"/>
+                </svg>
+            </a></div>
+        
+        <!-- Footer -->
+        <div class="footer">
+            <div>© All materials are copyright scryptIQ 2025</div>
+            <div>Powered by Pyodide</div>
+        </div>
+    </div>
+
+    <!-- JavaScript -->
+    <script src="../assets/main.js"></script>
+    
+    <!-- Pyodide Initialisation Script -->
+    <script>
+
+// Generalisable Pyodide Initialisation Script
+// Variables and state build up naturally as code blocks execute in order
+
+async function main() {
+    // Show loading message for all output elements
+    document.querySelectorAll(".output").forEach(el => {
+        el.textContent = "Loading Pyodide...";
+        el.classList.add("loading-message");
+    });
+    
+    try {
+        // Load Pyodide
+        console.log("Loading Pyodide...");
+        const pyodideStartTime = performance.now();
+        let pyodide = await loadPyodide();
+        const pyodideLoadTime = performance.now() - pyodideStartTime;
+        console.log(`Pyodide loaded in ${pyodideLoadTime.toFixed(2)}ms`);
+        
+        // Load required packages only if specified
+        const lessonPackages = window.LESSON_PACKAGES || [];
+        
+        if (lessonPackages.length > 0) {
+            console.log("Loading required Python packages...");
+            const packagesStartTime = performance.now();
+            
+            // Separate built-in packages from PyPI packages
+            const builtInPackages = lessonPackages.filter(pkg => 
+                ['numpy', 'scipy', 'matplotlib', 'pandas', 'scikit-learn', 'pillow', 'regex'].includes(pkg)
+            );
+            
+            const micropipPackages = lessonPackages.filter(pkg => !builtInPackages.includes(pkg));
+            
+            // Load built-in packages (fast)
+            if (builtInPackages.length > 0) {
+                await pyodide.loadPackage(builtInPackages);
+                console.log(`Loaded built-in packages: ${builtInPackages.join(', ')}`);
+            }
+            
+            // Install PyPI packages (slower)
+            if (micropipPackages.length > 0) {
+                await pyodide.loadPackage(['micropip']);
+                const micropip = pyodide.pyimport('micropip');
+                await micropip.install(micropipPackages);
+                console.log(`Installed PyPI packages: ${micropipPackages.join(', ')}`);
+            }
+            
+            const packagesLoadTime = performance.now() - packagesStartTime;
+            console.log(`Packages loaded in ${packagesLoadTime.toFixed(2)}ms`);
+            console.log(`Total initialisation time: ${(pyodideLoadTime + packagesLoadTime).toFixed(2)}ms`);
+        } else {
+            console.log("No packages to load for this lesson");
+            console.log(`Total initialisation time: ${pyodideLoadTime.toFixed(2)}ms`);
+        }
+
+        // Only set up basic Python environment - no pre-loaded variables
+        await pyodide.runPythonAsync(`
+            import sys
+            from io import StringIO
+        `);
+
+        // Only set up matplotlib if it's in the loaded packages
+        if (lessonPackages.includes('matplotlib')) {
+            await pyodide.runPythonAsync(`
+                # Set up matplotlib for web rendering
+                import matplotlib
+                matplotlib.use('AGG')
+                import matplotlib.pyplot as plt
+                import io
+                import base64
+                
+                def capture_matplotlib():
+                    """Capture current matplotlib figure as HTML img tag"""
+                    buf = io.BytesIO()
+                    plt.savefig(buf, format='png', bbox_inches='tight', dpi=100)
+                    buf.seek(0)
+                    img_base64 = base64.b64encode(buf.read()).decode('utf-8')
+                    plt.close()
+                    return f'<img src="data:image/png;base64,{img_base64}" style="max-width: 100%; height: auto;" />'
+            `);
+            console.log('Matplotlib capture function set up');
+        }
+        
+        console.log("Pyodide loaded successfully");
+        
+        // Load remote files if URLs are specified
+        const lessonFiles = window.LESSON_FILES || [];
+        
+        if (lessonFiles.length > 0) {
+            try {
+                console.log(`Checking for ${lessonFiles.length} remote file(s) to load...`);
+                
+                // Build Python code to load all files dynamically
+                let pythonCode = `
+from pyodide.http import pyfetch
+import os
+
+# Create data directory if it doesn't exist
+os.makedirs('./data', exist_ok=True)
+`;
+                
+                // Add loading code for each file
+                for (const file of lessonFiles) {
+                    pythonCode += `
+# Load ${file.filename}
+try:
+    response = await pyfetch("${file.url}")
+    content = await response.string()
+    with open('./data/${file.filename}', 'w') as f:
+        f.write(content)
+    print("Loaded: ${file.filename}")
+except Exception as e:
+    print(f"Could not load ${file.filename}: {e}")
+`;
+                }
+                
+                await pyodide.runPythonAsync(pythonCode);
+                console.log("Remote files loaded successfully");
+            } catch (error) {
+                console.warn("Error loading remote files (continuing anyway):", error);
+            }
+        } else {
+            console.log("No remote files to load for this lesson");
+        }
+        
+        // Function to execute Python code and capture output
+        async function executePythonCode(code) {
+            try {
+                // Redirect Python stdout to capture print statements
+                await pyodide.runPythonAsync(`
+                    old_stdout = sys.stdout
+                    sys.stdout = mystdout = StringIO()
+                `);
+                
+                // Run the user code
+                const result = await pyodide.runPythonAsync(code);
+                
+                // Get the captured stdout
+                let stdout = await pyodide.runPythonAsync(`
+                    sys.stdout = old_stdout
+                    mystdout.getvalue()
+                `);
+                
+                // Check for matplotlib figures only if matplotlib was loaded
+                const lessonPackages = window.LESSON_PACKAGES || [];
+                if (lessonPackages.includes('matplotlib')) {
+                    const hasFigures = await pyodide.runPythonAsync(`
+                        import matplotlib.pyplot as plt
+                        len(plt.get_fignums()) > 0
+                    `);
+                    
+                    if (hasFigures) {
+                        const figureHtml = await pyodide.runPythonAsync(`capture_matplotlib()`);
+                        if (stdout) stdout += "\n";
+                        stdout += figureHtml;
+                    }
+                }
+                
+                // Combine stdout and result
+                let output = stdout;
+                if (result !== undefined && result !== null && String(result).trim() !== '') {
+                    if (output) output += "\n";
+                    output += String(result);
+                }
+                
+                return { success: true, output: output || "Code executed successfully (no output)" };
+                
+            } catch (error) {
+                return { success: false, output: "Error: " + error.message };
+            }
+        }
+        
+        // Execute all hidden code blocks first (for setup code like imports)
+        const hiddenCodeBlocks = Array.from(document.querySelectorAll('.hidden-code textarea'));
+        console.log(`Found ${hiddenCodeBlocks.length} hidden code blocks`);
+
+        for (const textarea of hiddenCodeBlocks) {
+            const code = textarea.value.trim();
+            if (!code) continue;
+            
+            console.log(`Executing hidden code block: ${textarea.id}`);
+            const result = await executePythonCode(code);
+            
+            if (!result.success) {
+                console.error(`Error in hidden code block ${textarea.id}:`, result.output);
+            } else {
+                console.log(`Hidden code block ${textarea.id} executed successfully`);
+            }
+        }
+
+        console.log("All hidden code blocks executed");
+        
+        // Get all fixed code blocks in document order
+        const fixedCodeBlocks = Array.from(document.querySelectorAll('.code-fixed textarea'));
+        
+        // Setup and execute fixed code blocks sequentially
+        for (const textarea of fixedCodeBlocks) {
+            const code = textarea.value.trim();
+            if (!code) continue;
+            
+            // Set up CodeMirror editor (read-only)
+            const editor = CodeMirror.fromTextArea(textarea, {
+                mode: "python",
+                theme: "pastel-on-dark",
+                lineNumbers: true,
+                readOnly: true,
+                viewportMargin: Infinity
+            });
+            
+            // Find corresponding output element
+            const outputId = textarea.id + '-output';
+            const outputElement = document.getElementById(outputId);
+            
+            if (outputElement) {
+                outputElement.textContent = "Running code...";
+                outputElement.classList.add("loading-message");
+                
+                // Execute the code (this maintains state for subsequent blocks)
+                const result = await executePythonCode(code);
+                
+                // Display the output - check if it's HTML
+                const trimmedOutput = result.output.trim();
+                console.log('Output length:', trimmedOutput.length);
+                console.log('Output starts with:', trimmedOutput.substring(0, 100));
+                
+                if (trimmedOutput.includes('<script') && trimmedOutput.includes('Plotly')) {
+                    // It's Plotly HTML output - extract just the body content
+                    console.log('Rendering as Plotly HTML');
+                    const parser = new DOMParser();
+                    const doc = parser.parseFromString(result.output, 'text/html');
+                    // Clear the output element and append the body content
+                    outputElement.innerHTML = '';
+                    
+                    // Find and load external scripts first (like Plotly CDN)
+                    const externalScripts = Array.from(doc.querySelectorAll('script[src]'));
+                    const inlineScripts = Array.from(doc.querySelectorAll('script:not([src])'));
+                    
+                    // Append non-script content first
+                    Array.from(doc.body.children).forEach(child => {
+                        if (child.tagName !== 'SCRIPT') {
+                            outputElement.appendChild(child.cloneNode(true));
+                        }
+                    });
+                    
+                    // Load external scripts sequentially
+                    const loadScript = (src) => {
+                        return new Promise((resolve, reject) => {
+                            const script = document.createElement('script');
+                            script.src = src;
+                            script.onload = resolve;
+                            script.onerror = reject;
+                            document.head.appendChild(script);
+                        });
+                    };
+                    
+                    // Load all external scripts first
+                    Promise.all(externalScripts.map(s => loadScript(s.src)))
+                        .then(() => {
+                            console.log('External scripts loaded, executing inline scripts');
+                            // Now execute inline scripts
+                            inlineScripts.forEach(oldScript => {
+                                const newScript = document.createElement('script');
+                                newScript.textContent = oldScript.textContent;
+                                outputElement.appendChild(newScript);
+                            });
+                            console.log('Output element after processing:', outputElement.children.length, 'children');
+                        })
+                        .catch(err => {
+                            console.error('Failed to load external scripts:', err);
+                            outputElement.textContent = 'Error loading Plotly: ' + err.message;
+                        });
+                } else if (trimmedOutput.startsWith('<!DOCTYPE') || 
+                           trimmedOutput.startsWith('<html') ||
+                            trimmedOutput.startsWith('<div') ||
+                            trimmedOutput.startsWith('<img')) {
+                    console.log('Rendering as generic HTML');
+                    outputElement.innerHTML = result.output;
+                    console.log('Output element after innerHTML:', outputElement.children.length, 'children');
+                } else {
+                    console.log('Rendering as plain text');
+                    outputElement.textContent = result.output;
+                }
+                outputElement.classList.remove("loading-message");
+                if (result.success) {
+                    outputElement.classList.add("success-message");
+                    outputElement.classList.remove("error-message");
+                } else {
+                    outputElement.classList.add("error-message");
+                    outputElement.classList.remove("success-message");
+                }
+            }
+            
+            // Small delay to show progression
+            await new Promise(resolve => setTimeout(resolve, 100));
+        }
+        
+        // Setup all editable code blocks (but don't execute them)
+        document.querySelectorAll('.code-editor textarea').forEach((textarea) => {
+            // Set up CodeMirror editor (editable)
+            const editor = CodeMirror.fromTextArea(textarea, {
+                mode: "python",
+                theme: "pastel-on-dark",
+                lineNumbers: true,
+                viewportMargin: Infinity
+            });
+            
+            // Find corresponding run button and output element
+            const baseId = textarea.id;
+            const runButtonId = 'run-' + baseId;
+            const outputId = baseId + '-output';
+            
+            const runButton = document.getElementById(runButtonId);
+            const outputElement = document.getElementById(outputId);
+            
+            if (runButton && outputElement) {
+                // Set initial state
+                outputElement.textContent = "Ready to run code!";
+                outputElement.classList.remove("loading-message");
+                
+                runButton.addEventListener("click", async () => {
+                    const code = editor.getValue().trim();
+                    if (!code) {
+                        outputElement.textContent = "No code to run";
+                        return;
+                    }
+                    
+                    outputElement.textContent = "Running...";
+                    outputElement.classList.remove("error-message", "success-message");
+                    outputElement.classList.add("loading-message");
+                    
+                    // Execute the code (this also maintains state for future blocks)
+                    const result = await executePythonCode(code);
+                    
+                    // Display the output - check if it's HTML
+                    const trimmedOutput = result.output.trim();
+                    console.log('Output length:', trimmedOutput.length);
+                    console.log('Output starts with:', trimmedOutput.substring(0, 100));
+                    
+                    if (trimmedOutput.includes('<script') && trimmedOutput.includes('Plotly')) {
+                        // It's Plotly HTML output - extract just the body content
+                        console.log('Rendering as Plotly HTML');
+                        const parser = new DOMParser();
+                        const doc = parser.parseFromString(result.output, 'text/html');
+                        // Clear the output element and append the body content
+                        outputElement.innerHTML = '';
+                        
+                        // Find and load external scripts first (like Plotly CDN)
+                        const externalScripts = Array.from(doc.querySelectorAll('script[src]'));
+                        const inlineScripts = Array.from(doc.querySelectorAll('script:not([src])'));
+                        
+                        // Append non-script content first
+                        Array.from(doc.body.children).forEach(child => {
+                            if (child.tagName !== 'SCRIPT') {
+                                outputElement.appendChild(child.cloneNode(true));
+                            }
+                        });
+                        
+                        // Load external scripts sequentially
+                        const loadScript = (src) => {
+                            return new Promise((resolve, reject) => {
+                                const script = document.createElement('script');
+                                script.src = src;
+                                script.onload = resolve;
+                                script.onerror = reject;
+                                document.head.appendChild(script);
+                            });
+                        };
+                        
+                        // Load all external scripts first
+                        Promise.all(externalScripts.map(s => loadScript(s.src)))
+                            .then(() => {
+                                console.log('External scripts loaded, executing inline scripts');
+                                // Now execute inline scripts
+                                inlineScripts.forEach(oldScript => {
+                                    const newScript = document.createElement('script');
+                                    newScript.textContent = oldScript.textContent;
+                                    outputElement.appendChild(newScript);
+                                });
+                                console.log('Output element after processing:', outputElement.children.length, 'children');
+                            })
+                            .catch(err => {
+                                console.error('Failed to load external scripts:', err);
+                                outputElement.textContent = 'Error loading Plotly: ' + err.message;
+                            });
+                    } else if (trimmedOutput.startsWith('<!DOCTYPE') || 
+                               trimmedOutput.startsWith('<html') ||
+                               trimmedOutput.startsWith('<div')) {
+                        outputElement.innerHTML = result.output;
+                    } else {
+                        outputElement.textContent = result.output;
+                    }
+                    outputElement.classList.remove("loading-message");
+                    if (result.success) {
+                        outputElement.classList.add("success-message");
+                        outputElement.classList.remove("error-message");
+                    } else {
+                        outputElement.classList.add("error-message");
+                        outputElement.classList.remove("success-message");
+                    }
+                });
+            }
+        });
+        
+        console.log("All code blocks initialised successfully");
+
+        // Set flag to indicate Pyodide is fully ready
+        window.pyodideReady = true;
+        console.log("Pyodide fully ready");
+        
+    } catch (error) {
+        console.error("Failed to initialise Pyodide:", error);
+        document.querySelectorAll(".output").forEach(el => {
+            el.textContent = "Error loading Pyodide: " + error.message;
+            el.classList.remove("loading-message");
+            el.classList.add("error-message");
+        });
+    }
+}
+
+// Start the application when DOM is loaded
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', main);
+} else {
+    main();
+}
+    </script>
+</body>
+</html>
+    

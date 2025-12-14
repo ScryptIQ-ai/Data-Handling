@@ -1,0 +1,686 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <!-- Pyodide and CodeMirror -->
+    <script src="https://cdn.jsdelivr.net/pyodide/v0.24.1/full/pyodide.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/codemirror.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/theme/pastel-on-dark.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/codemirror.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/mode/python/python.min.js"></script>
+    
+    <!-- Favicons -->
+    <link rel="icon" type="image/x-icon" href="../assets/favicon.ico">
+    <link rel="icon" type="image/png" sizes="32x32" href="../assets/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="../assets/favicon-16x16.png">
+    <link rel="apple-touch-icon" sizes="192x192" href="../assets/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="192x192" href="../assets/android-chrome-192x192.png">
+    <link rel="icon" type="image/png" sizes="512x512" href="../assets/android-chrome-512x512.png">
+    
+    <!-- Core Stylesheets -->
+    <link rel="stylesheet" href=../assets/colours-l2d.css>
+    <link rel="stylesheet" href="../assets/shared-styles.css">
+    <link rel="stylesheet" href="../assets/nav-bar.css">
+    <link rel="stylesheet" href="../assets/module_card.css">
+    <link rel="stylesheet" href="../assets/learning_outcomes.css">
+    <link rel="stylesheet" href="../assets/learning_lists.css">
+    <link rel="stylesheet" href="../assets/box_styles.css">
+    <link rel="stylesheet" href="../assets/code_styles.css">
+
+    <!-- Meta Tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>L2D - DH2 - Diabetes Dataset</title>
+    
+    <!-- File URLs for this lesson -->
+    <script>
+        window.LESSON_FILES = [
+            
+        ];
+        window.LESSON_PACKAGES = ['pandas', 'matplotlib', 'scikit-learn'];
+    </script>
+        
+</head>
+<body>
+    
+    <!-- Sidebar Navigation -->
+    <div id="sidebar" class="sidebar">
+        <div class="sidebar-header">
+            <a href="../homepage.html" style="text-decoration: none; display: inline-block;">
+                <img src="../assets/l2d-brain-logo.png" alt="scryptIQ Logo" class="sidebar-logo">
+            </a>
+        </div>
+
+        <h3>Content</h3>
+        <ul>
+            <li><a href="./introduction.html" class="">Introduction</a></li><li><a href="./dataset-properties.html">Properties of a Dataset</a></li><li><a href="./correlation.html">Correlations</a></li>
+            <li>
+                <div class="nav-toggle active" data-target="expandable-section-3">
+                    Diabetes Dataset
+                    <span class="toggle-icon">▼</span>
+                </div>
+                <ul class="nested-nav expanded" id="expandable-section-3"><li><a href="#introduction">Introduction</a></li><li><a href="#loading">Loading</a></li><li><a href="#application">Application</a></li><li><a href="#summary">Summary</a></li>
+                </ul>
+            </li><li><a href="./assignment.html">Assignment</a></li><li><a href="./feedback.html">Feedback</a></li>
+        </ul>
+
+        <h3 class="collapsible-header collapsed">
+            Resources
+            <span class="collapse-icon">►</span>
+        </h3>
+        <div class="collapsible-content collapsed">
+            <ul>
+                <li><a href="./glossary.html">Glossary</a></li><li><a href="./downloads.html">Downloads</a></li><li><a href="../HB/introduction.html">Handbook</a></li>
+            </ul>
+        </div>
+
+        <h3 class="collapsible-header collapsed">
+            Previous Modules
+            <span class="collapse-icon">►</span>
+        </h3>
+        <div class="collapsible-content collapsed">
+            <ul>
+            <li><a href="../DH1/introduction.html">DH1</a></li>
+        </ul>
+        </div>
+
+        <h3>
+            <li><a href="./report-issue.html">Report an Issue</a></li>
+        </h3>
+    </div>
+    
+    <!-- Sidebar Toggle Button -->
+    <button id="sidebar-toggle" class="sidebar-toggle">❮</button>
+    
+    <!-- Main Content Area -->
+    <div id="main-content" class="main-content">
+        <!-- Top Navigation Bar -->
+        <div class="top-navbar">
+            <h1 class="page-title">Data Handling 2</h1>
+            <div class="nav-actions">
+                <a href="../homepage.html" class="text-button" title="Materials homepage">
+                    Homepage
+                </a>
+                <a href="https://learntodiscover.ai/my-cohorts/" class="text-button" title="Find out more about us">
+                    Learn to Discover
+                </a>
+            </div>
+        </div>
+
+        
+            <div class="module-card" id="introduction">
+                <div class="module-header">
+                    Diabetes Dataset <span class="module-tag">DH2</span>
+                </div>
+                <div class="module-body">
+                    <h3>Learning Objectives</h3>
+                    <div class="learning-outcomes">
+                        <div class="outcome-item">
+                    <span class="outcome-number">1</span>
+                    <span class="outcome-text">Apply what we've learned to the diabetes dataset.</span>
+                </div>
+                    </div>
+                    <h3>Introduction</h3>
+                    <p>We now return to the dataset that began our enquiry into DataFrames in the previous lesson. Let us apply the above, and perform a summary analysis of its bivariate features.</p>
+                </div>
+            </div>
+            
+            <div class="module-card" id="loading">
+                <div class="module-body">
+                    <div class="module-section">
+                        <h3>Loading</h3>
+                        <p>First we import our packages and load in our data into our workspace.</p>
+        <div class="code-area">
+            <div class="code-container code-fixed">
+                <textarea id="code-cell-33">from sklearn import datasets
+
+from numpy import corrcoef, fill_diagonal, triu_indices, arange, abs, mean
+
+from matplotlib.pyplot import subplots, show</textarea>
+            </div>
+            <div id="code-cell-33-output" class="output" style="display: none;"></div>
+        </div>
+        
+        <div class="code-area">
+            <div class="code-container code-fixed">
+                <textarea id="code-cell-34">diabetes = datasets.load_diabetes()
+data_diabetes = diabetes.data</textarea>
+            </div>
+            <div id="code-cell-34-output" class="output" style="display: none;"></div>
+        </div>
+        
+                    </div>
+                </div>
+            </div>
+            
+            <div class="module-card" id="application">
+                <div class="module-body">
+                    <div class="module-section">
+                        <h3>Application</h3>
+                        <p>For the bivariate features, let us get the correlation matrix and plot it as a heatmap. We can make use of code that introduced above.</p>
+        <div class="code-area">
+            <div class="code-container code-fixed">
+                <textarea id="code-cell-35">data_corr_matrix = corrcoef(data_diabetes, rowvar=False)
+
+fill_diagonal(data_corr_matrix, 0)
+
+fig, ax = subplots(figsize=(8, 8))
+
+im = ax.imshow(data_corr_matrix, cmap=&#x27;coolwarm&#x27;);
+
+fig.colorbar(im, orientation=&#x27;horizontal&#x27;, shrink=0.5);
+
+show()</textarea>
+            </div>
+            <div id="code-cell-35-output" class="output"></div>
+        </div>
+        <p>There is one strongly correlated pair (column indices 4 and 5) and one strongly anti-correlated pair (column indices 6 and 7).<br><br>Let&#x27;s calculate the correlation coefficients and plot them as a histogram:</p>
+        <div class="code-area">
+            <div class="code-container code-fixed">
+                <textarea id="code-cell-36">data_corr_coeffs = data_corr_matrix[triu_indices(data_corr_matrix.shape[0], k=1)]
+
+fig, ax = subplots()
+
+ax.hist(data_corr_coeffs, bins=10);
+
+show()</textarea>
+            </div>
+            <div id="code-cell-36-output" class="output"></div>
+        </div>
+        <p>This histogram shows that the data have a distribution that is shifted towards positive correlations. However, only four values are (absolutely) larger than 0.5 (three positive, one negative).<br><br>Next, let&#x27;s obtain the average (absolute) correlation per column.</p>
+        <div class="code-area">
+            <div class="code-container code-fixed">
+                <textarea id="code-cell-37">data_column_average = mean(abs(data_corr_matrix), axis=0)
+
+fig, ax = subplots()
+
+bins = arange(len(data_column_average))
+
+ax.bar(bins, data_column_average);
+ax.set_title(&#x27;Average Correlation Strength per Column&#x27;)
+ax.set_xticks(arange(len(diabetes.feature_names)))
+ax.set_xticklabels(diabetes.feature_names);
+
+show()</textarea>
+            </div>
+            <div id="code-cell-37-output" class="output"></div>
+        </div>
+        <p>In the plot, note how the column names were extracted from the &#x27;diabetes&#x27; data using <code>diabetes.feature_names</code>.<br><br>Finally, let&#x27;s obtain the average correlation of the entire dataset.</p>
+        <div class="code-area">
+            <div class="code-container code-fixed">
+                <textarea id="code-cell-38"># Average of the correlation strengths
+data_corr_matrix_average = mean(abs(data_corr_matrix))
+
+print(&#x27;Average Correlation Strength: &#x27;, round(data_corr_matrix_average, 3))</textarea>
+            </div>
+            <div id="code-cell-38-output" class="output"></div>
+        </div>
+        
+                    </div>
+                </div>
+            </div>
+            
+            <div class="module-card" id="summary">
+                <div class="module-body">
+                    <div class="module-section">
+                        <h3>Summary</h3>
+                        <p>When you&#x27;re working with quantities derived from two variables, these are called bivariate measures. You can explore and visualise bivariate properties using matplotlib and NumPy. More broadly, multivariate data analyses are useful for uncovering relationships between the variables you&#x27;ve recorded. For calculating the Pearson correlation coefficient (PCC), you can use either the corr or corrcoef functions, and if you want to visualise a correlation matrix, a heatmap works well for that.</p>
+                    </div>
+                </div>
+            </div>
+            
+        
+        <div class="page-navigation">
+            <a href="./correlation.html" class="nav-button prev">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                    <path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"/>
+                </svg>
+                Previous
+            </a>
+            <a href="./assignment.html" class="nav-button next">
+                Next
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                    <path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"/>
+                </svg>
+            </a></div>
+        
+        <!-- Footer -->
+        <div class="footer">
+            <div>© All materials are copyright scryptIQ 2025</div>
+            <div>Powered by Pyodide</div>
+        </div>
+    </div>
+
+    <!-- JavaScript -->
+    <script src="../assets/main.js"></script>
+    
+    <!-- Pyodide Initialisation Script -->
+    <script>
+
+// Generalisable Pyodide Initialisation Script
+// Variables and state build up naturally as code blocks execute in order
+
+async function main() {
+    // Show loading message for all output elements
+    document.querySelectorAll(".output").forEach(el => {
+        el.textContent = "Loading Pyodide...";
+        el.classList.add("loading-message");
+    });
+    
+    try {
+        // Load Pyodide
+        console.log("Loading Pyodide...");
+        const pyodideStartTime = performance.now();
+        let pyodide = await loadPyodide();
+        const pyodideLoadTime = performance.now() - pyodideStartTime;
+        console.log(`Pyodide loaded in ${pyodideLoadTime.toFixed(2)}ms`);
+        
+        // Load required packages only if specified
+        const lessonPackages = window.LESSON_PACKAGES || [];
+        
+        if (lessonPackages.length > 0) {
+            console.log("Loading required Python packages...");
+            const packagesStartTime = performance.now();
+            
+            // Separate built-in packages from PyPI packages
+            const builtInPackages = lessonPackages.filter(pkg => 
+                ['numpy', 'scipy', 'matplotlib', 'pandas', 'scikit-learn', 'pillow', 'regex'].includes(pkg)
+            );
+            
+            const micropipPackages = lessonPackages.filter(pkg => !builtInPackages.includes(pkg));
+            
+            // Load built-in packages (fast)
+            if (builtInPackages.length > 0) {
+                await pyodide.loadPackage(builtInPackages);
+                console.log(`Loaded built-in packages: ${builtInPackages.join(', ')}`);
+            }
+            
+            // Install PyPI packages (slower)
+            if (micropipPackages.length > 0) {
+                await pyodide.loadPackage(['micropip']);
+                const micropip = pyodide.pyimport('micropip');
+                await micropip.install(micropipPackages);
+                console.log(`Installed PyPI packages: ${micropipPackages.join(', ')}`);
+            }
+            
+            const packagesLoadTime = performance.now() - packagesStartTime;
+            console.log(`Packages loaded in ${packagesLoadTime.toFixed(2)}ms`);
+            console.log(`Total initialisation time: ${(pyodideLoadTime + packagesLoadTime).toFixed(2)}ms`);
+        } else {
+            console.log("No packages to load for this lesson");
+            console.log(`Total initialisation time: ${pyodideLoadTime.toFixed(2)}ms`);
+        }
+
+        // Only set up basic Python environment - no pre-loaded variables
+        await pyodide.runPythonAsync(`
+            import sys
+            from io import StringIO
+        `);
+
+        // Only set up matplotlib if it's in the loaded packages
+        if (lessonPackages.includes('matplotlib')) {
+            await pyodide.runPythonAsync(`
+                # Set up matplotlib for web rendering
+                import matplotlib
+                matplotlib.use('AGG')
+                import matplotlib.pyplot as plt
+                import io
+                import base64
+                
+                def capture_matplotlib():
+                    """Capture current matplotlib figure as HTML img tag"""
+                    buf = io.BytesIO()
+                    plt.savefig(buf, format='png', bbox_inches='tight', dpi=100)
+                    buf.seek(0)
+                    img_base64 = base64.b64encode(buf.read()).decode('utf-8')
+                    plt.close()
+                    return f'<img src="data:image/png;base64,{img_base64}" style="max-width: 100%; height: auto;" />'
+            `);
+            console.log('Matplotlib capture function set up');
+        }
+        
+        console.log("Pyodide loaded successfully");
+        
+        // Load remote files if URLs are specified
+        const lessonFiles = window.LESSON_FILES || [];
+        
+        if (lessonFiles.length > 0) {
+            try {
+                console.log(`Checking for ${lessonFiles.length} remote file(s) to load...`);
+                
+                // Build Python code to load all files dynamically
+                let pythonCode = `
+from pyodide.http import pyfetch
+import os
+
+# Create data directory if it doesn't exist
+os.makedirs('./data', exist_ok=True)
+`;
+                
+                // Add loading code for each file
+                for (const file of lessonFiles) {
+                    pythonCode += `
+# Load ${file.filename}
+try:
+    response = await pyfetch("${file.url}")
+    content = await response.string()
+    with open('./data/${file.filename}', 'w') as f:
+        f.write(content)
+    print("Loaded: ${file.filename}")
+except Exception as e:
+    print(f"Could not load ${file.filename}: {e}")
+`;
+                }
+                
+                await pyodide.runPythonAsync(pythonCode);
+                console.log("Remote files loaded successfully");
+            } catch (error) {
+                console.warn("Error loading remote files (continuing anyway):", error);
+            }
+        } else {
+            console.log("No remote files to load for this lesson");
+        }
+        
+        // Function to execute Python code and capture output
+        async function executePythonCode(code) {
+            try {
+                // Redirect Python stdout to capture print statements
+                await pyodide.runPythonAsync(`
+                    old_stdout = sys.stdout
+                    sys.stdout = mystdout = StringIO()
+                `);
+                
+                // Run the user code
+                const result = await pyodide.runPythonAsync(code);
+                
+                // Get the captured stdout
+                let stdout = await pyodide.runPythonAsync(`
+                    sys.stdout = old_stdout
+                    mystdout.getvalue()
+                `);
+                
+                // Check for matplotlib figures only if matplotlib was loaded
+                const lessonPackages = window.LESSON_PACKAGES || [];
+                if (lessonPackages.includes('matplotlib')) {
+                    const hasFigures = await pyodide.runPythonAsync(`
+                        import matplotlib.pyplot as plt
+                        len(plt.get_fignums()) > 0
+                    `);
+                    
+                    if (hasFigures) {
+                        const figureHtml = await pyodide.runPythonAsync(`capture_matplotlib()`);
+                        if (stdout) stdout += "\n";
+                        stdout += figureHtml;
+                    }
+                }
+                
+                // Combine stdout and result
+                let output = stdout;
+                if (result !== undefined && result !== null && String(result).trim() !== '') {
+                    if (output) output += "\n";
+                    output += String(result);
+                }
+                
+                return { success: true, output: output || "Code executed successfully (no output)" };
+                
+            } catch (error) {
+                return { success: false, output: "Error: " + error.message };
+            }
+        }
+        
+        // Execute all hidden code blocks first (for setup code like imports)
+        const hiddenCodeBlocks = Array.from(document.querySelectorAll('.hidden-code textarea'));
+        console.log(`Found ${hiddenCodeBlocks.length} hidden code blocks`);
+
+        for (const textarea of hiddenCodeBlocks) {
+            const code = textarea.value.trim();
+            if (!code) continue;
+            
+            console.log(`Executing hidden code block: ${textarea.id}`);
+            const result = await executePythonCode(code);
+            
+            if (!result.success) {
+                console.error(`Error in hidden code block ${textarea.id}:`, result.output);
+            } else {
+                console.log(`Hidden code block ${textarea.id} executed successfully`);
+            }
+        }
+
+        console.log("All hidden code blocks executed");
+        
+        // Get all fixed code blocks in document order
+        const fixedCodeBlocks = Array.from(document.querySelectorAll('.code-fixed textarea'));
+        
+        // Setup and execute fixed code blocks sequentially
+        for (const textarea of fixedCodeBlocks) {
+            const code = textarea.value.trim();
+            if (!code) continue;
+            
+            // Set up CodeMirror editor (read-only)
+            const editor = CodeMirror.fromTextArea(textarea, {
+                mode: "python",
+                theme: "pastel-on-dark",
+                lineNumbers: true,
+                readOnly: true,
+                viewportMargin: Infinity
+            });
+            
+            // Find corresponding output element
+            const outputId = textarea.id + '-output';
+            const outputElement = document.getElementById(outputId);
+            
+            if (outputElement) {
+                outputElement.textContent = "Running code...";
+                outputElement.classList.add("loading-message");
+                
+                // Execute the code (this maintains state for subsequent blocks)
+                const result = await executePythonCode(code);
+                
+                // Display the output - check if it's HTML
+                const trimmedOutput = result.output.trim();
+                console.log('Output length:', trimmedOutput.length);
+                console.log('Output starts with:', trimmedOutput.substring(0, 100));
+                
+                if (trimmedOutput.includes('<script') && trimmedOutput.includes('Plotly')) {
+                    // It's Plotly HTML output - extract just the body content
+                    console.log('Rendering as Plotly HTML');
+                    const parser = new DOMParser();
+                    const doc = parser.parseFromString(result.output, 'text/html');
+                    // Clear the output element and append the body content
+                    outputElement.innerHTML = '';
+                    
+                    // Find and load external scripts first (like Plotly CDN)
+                    const externalScripts = Array.from(doc.querySelectorAll('script[src]'));
+                    const inlineScripts = Array.from(doc.querySelectorAll('script:not([src])'));
+                    
+                    // Append non-script content first
+                    Array.from(doc.body.children).forEach(child => {
+                        if (child.tagName !== 'SCRIPT') {
+                            outputElement.appendChild(child.cloneNode(true));
+                        }
+                    });
+                    
+                    // Load external scripts sequentially
+                    const loadScript = (src) => {
+                        return new Promise((resolve, reject) => {
+                            const script = document.createElement('script');
+                            script.src = src;
+                            script.onload = resolve;
+                            script.onerror = reject;
+                            document.head.appendChild(script);
+                        });
+                    };
+                    
+                    // Load all external scripts first
+                    Promise.all(externalScripts.map(s => loadScript(s.src)))
+                        .then(() => {
+                            console.log('External scripts loaded, executing inline scripts');
+                            // Now execute inline scripts
+                            inlineScripts.forEach(oldScript => {
+                                const newScript = document.createElement('script');
+                                newScript.textContent = oldScript.textContent;
+                                outputElement.appendChild(newScript);
+                            });
+                            console.log('Output element after processing:', outputElement.children.length, 'children');
+                        })
+                        .catch(err => {
+                            console.error('Failed to load external scripts:', err);
+                            outputElement.textContent = 'Error loading Plotly: ' + err.message;
+                        });
+                } else if (trimmedOutput.startsWith('<!DOCTYPE') || 
+                           trimmedOutput.startsWith('<html') ||
+                            trimmedOutput.startsWith('<div') ||
+                            trimmedOutput.startsWith('<img')) {
+                    console.log('Rendering as generic HTML');
+                    outputElement.innerHTML = result.output;
+                    console.log('Output element after innerHTML:', outputElement.children.length, 'children');
+                } else {
+                    console.log('Rendering as plain text');
+                    outputElement.textContent = result.output;
+                }
+                outputElement.classList.remove("loading-message");
+                if (result.success) {
+                    outputElement.classList.add("success-message");
+                    outputElement.classList.remove("error-message");
+                } else {
+                    outputElement.classList.add("error-message");
+                    outputElement.classList.remove("success-message");
+                }
+            }
+            
+            // Small delay to show progression
+            await new Promise(resolve => setTimeout(resolve, 100));
+        }
+        
+        // Setup all editable code blocks (but don't execute them)
+        document.querySelectorAll('.code-editor textarea').forEach((textarea) => {
+            // Set up CodeMirror editor (editable)
+            const editor = CodeMirror.fromTextArea(textarea, {
+                mode: "python",
+                theme: "pastel-on-dark",
+                lineNumbers: true,
+                viewportMargin: Infinity
+            });
+            
+            // Find corresponding run button and output element
+            const baseId = textarea.id;
+            const runButtonId = 'run-' + baseId;
+            const outputId = baseId + '-output';
+            
+            const runButton = document.getElementById(runButtonId);
+            const outputElement = document.getElementById(outputId);
+            
+            if (runButton && outputElement) {
+                // Set initial state
+                outputElement.textContent = "Ready to run code!";
+                outputElement.classList.remove("loading-message");
+                
+                runButton.addEventListener("click", async () => {
+                    const code = editor.getValue().trim();
+                    if (!code) {
+                        outputElement.textContent = "No code to run";
+                        return;
+                    }
+                    
+                    outputElement.textContent = "Running...";
+                    outputElement.classList.remove("error-message", "success-message");
+                    outputElement.classList.add("loading-message");
+                    
+                    // Execute the code (this also maintains state for future blocks)
+                    const result = await executePythonCode(code);
+                    
+                    // Display the output - check if it's HTML
+                    const trimmedOutput = result.output.trim();
+                    console.log('Output length:', trimmedOutput.length);
+                    console.log('Output starts with:', trimmedOutput.substring(0, 100));
+                    
+                    if (trimmedOutput.includes('<script') && trimmedOutput.includes('Plotly')) {
+                        // It's Plotly HTML output - extract just the body content
+                        console.log('Rendering as Plotly HTML');
+                        const parser = new DOMParser();
+                        const doc = parser.parseFromString(result.output, 'text/html');
+                        // Clear the output element and append the body content
+                        outputElement.innerHTML = '';
+                        
+                        // Find and load external scripts first (like Plotly CDN)
+                        const externalScripts = Array.from(doc.querySelectorAll('script[src]'));
+                        const inlineScripts = Array.from(doc.querySelectorAll('script:not([src])'));
+                        
+                        // Append non-script content first
+                        Array.from(doc.body.children).forEach(child => {
+                            if (child.tagName !== 'SCRIPT') {
+                                outputElement.appendChild(child.cloneNode(true));
+                            }
+                        });
+                        
+                        // Load external scripts sequentially
+                        const loadScript = (src) => {
+                            return new Promise((resolve, reject) => {
+                                const script = document.createElement('script');
+                                script.src = src;
+                                script.onload = resolve;
+                                script.onerror = reject;
+                                document.head.appendChild(script);
+                            });
+                        };
+                        
+                        // Load all external scripts first
+                        Promise.all(externalScripts.map(s => loadScript(s.src)))
+                            .then(() => {
+                                console.log('External scripts loaded, executing inline scripts');
+                                // Now execute inline scripts
+                                inlineScripts.forEach(oldScript => {
+                                    const newScript = document.createElement('script');
+                                    newScript.textContent = oldScript.textContent;
+                                    outputElement.appendChild(newScript);
+                                });
+                                console.log('Output element after processing:', outputElement.children.length, 'children');
+                            })
+                            .catch(err => {
+                                console.error('Failed to load external scripts:', err);
+                                outputElement.textContent = 'Error loading Plotly: ' + err.message;
+                            });
+                    } else if (trimmedOutput.startsWith('<!DOCTYPE') || 
+                               trimmedOutput.startsWith('<html') ||
+                               trimmedOutput.startsWith('<div')) {
+                        outputElement.innerHTML = result.output;
+                    } else {
+                        outputElement.textContent = result.output;
+                    }
+                    outputElement.classList.remove("loading-message");
+                    if (result.success) {
+                        outputElement.classList.add("success-message");
+                        outputElement.classList.remove("error-message");
+                    } else {
+                        outputElement.classList.add("error-message");
+                        outputElement.classList.remove("success-message");
+                    }
+                });
+            }
+        });
+        
+        console.log("All code blocks initialised successfully");
+
+        // Set flag to indicate Pyodide is fully ready
+        window.pyodideReady = true;
+        console.log("Pyodide fully ready");
+        
+    } catch (error) {
+        console.error("Failed to initialise Pyodide:", error);
+        document.querySelectorAll(".output").forEach(el => {
+            el.textContent = "Error loading Pyodide: " + error.message;
+            el.classList.remove("loading-message");
+            el.classList.add("error-message");
+        });
+    }
+}
+
+// Start the application when DOM is loaded
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', main);
+} else {
+    main();
+}
+    </script>
+</body>
+</html>
+    
