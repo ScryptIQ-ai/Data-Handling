@@ -131,21 +131,21 @@
                         <p>First we import our packages and load in our data into our workspace.</p>
         <div class="code-area">
             <div class="code-container code-fixed">
-                <textarea id="code-cell-33">from sklearn import datasets
+                <textarea id="code-cell-34">from sklearn import datasets
 
 from numpy import corrcoef, fill_diagonal, triu_indices, arange, abs, mean
 
 from matplotlib.pyplot import subplots, show</textarea>
             </div>
-            <div id="code-cell-33-output" class="output" style="display: none;"></div>
+            <div id="code-cell-34-output" class="output" style="display: none;"></div>
         </div>
         
         <div class="code-area">
             <div class="code-container code-fixed">
-                <textarea id="code-cell-34">diabetes = datasets.load_diabetes()
+                <textarea id="code-cell-35">diabetes = datasets.load_diabetes()
 data_diabetes = diabetes.data</textarea>
             </div>
-            <div id="code-cell-34-output" class="output" style="display: none;"></div>
+            <div id="code-cell-35-output" class="output" style="display: none;"></div>
         </div>
         
                     </div>
@@ -159,7 +159,7 @@ data_diabetes = diabetes.data</textarea>
                         <p>For the bivariate features, let us get the correlation matrix and plot it as a heatmap. We can make use of code that introduced above.</p>
         <div class="code-area">
             <div class="code-container code-fixed">
-                <textarea id="code-cell-35">data_corr_matrix = corrcoef(data_diabetes, rowvar=False)
+                <textarea id="code-cell-36">data_corr_matrix = corrcoef(data_diabetes, rowvar=False)
 
 fill_diagonal(data_corr_matrix, 0)
 
@@ -171,12 +171,12 @@ fig.colorbar(im, orientation=&#x27;horizontal&#x27;, shrink=0.5);
 
 show()</textarea>
             </div>
-            <div id="code-cell-35-output" class="output"></div>
+            <div id="code-cell-36-output" class="output"></div>
         </div>
         <p>There is one strongly correlated pair (column indices 4 and 5) and one strongly anti-correlated pair (column indices 6 and 7).<br><br>Let&#x27;s calculate the correlation coefficients and plot them as a histogram:</p>
         <div class="code-area">
             <div class="code-container code-fixed">
-                <textarea id="code-cell-36">data_corr_coeffs = data_corr_matrix[triu_indices(data_corr_matrix.shape[0], k=1)]
+                <textarea id="code-cell-37">data_corr_coeffs = data_corr_matrix[triu_indices(data_corr_matrix.shape[0], k=1)]
 
 fig, ax = subplots()
 
@@ -184,12 +184,12 @@ ax.hist(data_corr_coeffs, bins=10);
 
 show()</textarea>
             </div>
-            <div id="code-cell-36-output" class="output"></div>
+            <div id="code-cell-37-output" class="output"></div>
         </div>
         <p>This histogram shows that the data have a distribution that is shifted towards positive correlations. However, only four values are (absolutely) larger than 0.5 (three positive, one negative).<br><br>Next, let&#x27;s obtain the average (absolute) correlation per column.</p>
         <div class="code-area">
             <div class="code-container code-fixed">
-                <textarea id="code-cell-37">data_column_average = mean(abs(data_corr_matrix), axis=0)
+                <textarea id="code-cell-38">data_column_average = mean(abs(data_corr_matrix), axis=0)
 
 fig, ax = subplots()
 
@@ -202,17 +202,17 @@ ax.set_xticklabels(diabetes.feature_names);
 
 show()</textarea>
             </div>
-            <div id="code-cell-37-output" class="output"></div>
+            <div id="code-cell-38-output" class="output"></div>
         </div>
         <p>In the plot, note how the column names were extracted from the &#x27;diabetes&#x27; data using <code>diabetes.feature_names</code>.<br><br>Finally, let&#x27;s obtain the average correlation of the entire dataset.</p>
         <div class="code-area">
             <div class="code-container code-fixed">
-                <textarea id="code-cell-38"># Average of the correlation strengths
+                <textarea id="code-cell-39"># Average of the correlation strengths
 data_corr_matrix_average = mean(abs(data_corr_matrix))
 
 print(&#x27;Average Correlation Strength: &#x27;, round(data_corr_matrix_average, 3))</textarea>
             </div>
-            <div id="code-cell-38-output" class="output"></div>
+            <div id="code-cell-39-output" class="output"></div>
         </div>
         
                     </div>

@@ -464,21 +464,26 @@ bins = arange(corr_column_average.shape[0])
 
 ax.bar(bins, corr_column_average );
 
-print(corr_column_average)
-
 show()</textarea>
             </div>
             <div id="code-cell-31-output" class="output"></div>
         </div>
+        
+        <div class="code-area">
+            <div class="code-container code-fixed">
+                <textarea id="code-cell-32">print(f&quot;Means per column: {corr_column_average}&quot;)</textarea>
+            </div>
+            <div id="code-cell-32-output" class="output"></div>
+        </div>
         <h4>The Average Dataset Correlation</h4><p>The sum over rows or columns has given us a reduced set of values to look at. We can now take the final step and average over all correlation coefficients. This will yield the average correlation of the dataset. It condenses the full bivariate analysis into a single number, and can be a starting point when comparing different datasets of the same type, for example.</p>
         <div class="code-area">
             <div class="code-container code-fixed">
-                <textarea id="code-cell-32"># Average of the correlation strengths
+                <textarea id="code-cell-33"># Average of the correlation strengths
 corr_matrix_average = mean(corr_matrix_abs)
 
 print(&#x27;Average correlation strength: &#x27;, round(corr_matrix_average, 3))</textarea>
             </div>
-            <div id="code-cell-32-output" class="output"></div>
+            <div id="code-cell-33-output" class="output"></div>
         </div>
         
                     </div>
