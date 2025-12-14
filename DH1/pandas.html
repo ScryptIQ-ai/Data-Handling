@@ -123,7 +123,7 @@
                 </div>
                     </div>
                     <h3>Introduction</h3>
-                    <p>Pandas is a</p>
+                    <p><a href="https://pandas.pydata.org/">Pandas</a> is one of the core Python packages for data scientists. It is an open-source, community-supported project for fast and efficient manipulation of data in a tabular format; the format you see in spreadsheets or CSV files. Data in this format can be read into pandas&#x27; proprietary <em>Python object</em>, the <strong>DataFrame</strong>, which you can manipulate, filter, merge, and visualise using its built-in methods or additional functions from the pandas package. It is widely used in <strong>academic and commercial</strong> domains, so there is plenty of help and examples from users across the world.<br><br>Although other Python packages achieve the same goals as pandas, such as <a href="https://pola.rs/">Polars</a> and <a href="https://arrow.apache.org/docs/index.html">Apache Arrow</a>, to name just two, often faster or more efficiently, they were all created after pandas and use similar syntax to what pandas pioneered. Combined with the wealth of packages that integrate with pandas, it is still worth learning pandas before the others, especially as you are unlikely to be working with datasets that pandas cannot handle.<br><br><strong>DH1</strong> and <strong>DH2</strong> will walk through some of the basics of pandas; however, it is a vast ecosystem that can handle multiple niche cases, so please research the pandas pipelines people have made for your specific data goals.</p>
                 </div>
             </div>
             
@@ -138,7 +138,7 @@
                 KEY TERMS
             </div>
             <div class="box-content">
-                <p><strong>Pandas</strong>:<br><br><strong>DataFrame</strong>:</p>
+                <p><strong>Pandas</strong>: A powerful toolbox for data analysis and manipulation with the DataFrame at its core.<br><br><strong>DataFrame</strong>: A way to represent and work with tabular data. It can be seen as a table that organizes data into rows and columns, making it a two-dimensional data structure.</p>
             </div>
         </div>
         
@@ -201,7 +201,18 @@ df = read_csv(r&quot;.\data\everleys_data.csv&quot;)</textarea>
                 <div class="module-body">
                     <div class="module-section">
                         <h3>Viewing your data</h3>
-                        <p>To see the contents of <code>df</code>, simply use:</p>
+                        
+        <div class="video-container">
+            <iframe 
+                src="https://www.youtube.com/embed/jdWOAzK81VE"
+                width="560"
+                height="315"
+                frameborder="0"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowfullscreen>
+            </iframe>
+        </div>
+        <p>To see the contents of <code>df</code>, simply use:</p>
         <div class="code-area">
             <div class="code-container code-fixed">
                 <textarea id="code-cell-4">df</textarea>
@@ -273,7 +284,7 @@ df = read_csv(r&quot;.\data\everleys_data.csv&quot;)</textarea>
             </div>
             <div class="box-content">
                 <p><strong>1.</strong></p>
-                <p>Load in the data file &#x27;loan_data.csv&#x27;, it is within the same folder <code>data</code> as the everleysdataset. It contains data that can be used for the assessment of loan applications. Read the data into a DataFrame. It is best to assign it a name other than &#x27;df&#x27; (to avoid overwriting the everleys dataset).<ul class="nested-list"><li>Display the first ten rows of the Loan dataset to see its contents.</li><br><li>Display the data types in this data file.</li></ul></p>
+                <p>Load in the data file &#x27;loan_data.csv&#x27;, it is within the same folder <code>data</code> as the everleys dataset. It contains data that can be used for the assessment of loan applications. Read the data into a DataFrame. It is best to assign it a name other than &#x27;df&#x27; (to avoid overwriting the everleys dataset).<ul class="nested-list"><li>Display the first ten rows of the Loan dataset to see its contents.</li><br><li>Display the data types in this data file.</li></ul></p>
             </div>
         </div>
         
@@ -386,6 +397,15 @@ df = read_csv(r&quot;.\data\everleys_data.csv&quot;)</textarea>
             <div id="code-cell-21-output" class="output"></div>
         </div>
         
+                    </div>
+                </div>
+            </div>
+            
+            <div class="module-card" id="summary">
+                <div class="module-body">
+                    <div class="module-section">
+                        <h3>Summary</h3>
+                        <p>Manipulating a DataFrame is a key skill you will find yourself using over and over again as you seek to extract subsets of data for differential analysis. Next, we will look at how to filter a DataFrame based on a conditional applied to a singular column.</p>
                     </div>
                 </div>
             </div>

@@ -115,7 +115,7 @@
                 </div>
                     </div>
                     <h3>Introduction</h3>
-                    <p>ADD SOMETHING</p>
+                    <p>At the end of all good science is a visualisation or figure that best represents the story of your data. With Python and pandas, you can easily produce plots to describe your data with a single line of code, making it a superb tool for data exploration as well as producing the finished product. Pandas has a built-in backend for plotting data contained within a DataFrame; however, Matplotlib offers greater control. We will introduce both here, but afterwards we will stick to Matplotlib. Many of the visualisations shown here will be very basic, but as you progress in your mastery of Python you can begin to create complex, visually appealing plots that are unique to your data. The toolsets given here open up a lot of freedom to create plots the way you want.</p>
                 </div>
             </div>
             
@@ -169,14 +169,25 @@ plt.show()</textarea>
                 <div class="module-body">
                     <div class="module-section">
                         <h3>Plots using Matplotlib</h3>
-                        <p><a href="https://matplotlib.org/">Matplotlib</a> is a comprehensive library for creating static, animated and interactive visualizations in Python.<br><br>The above is an easy way to create boxplots directly on the DataFrame. It is based on the library Matplotlib and specifically uses the pyplot library. For simplicity, this code is put into a convenient Pandas function.<br><br>However, we are going to use Matplotlib extensively later on in the course, and we will therefore start by introducing a more direct and generic way of using it.<br><br>To do this, we import the function subplots from the <a href="https://matplotlib.org/stable/api/pyplot_summary.html">pyplot module</a> of matplotlib:</p>
+                        
+        <div class="video-container">
+            <iframe 
+                src="https://www.youtube.com/embed/mljXcIzx4ps"
+                width="560"
+                height="315"
+                frameborder="0"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowfullscreen>
+            </iframe>
+        </div>
+        <p><a href="https://matplotlib.org/">Matplotlib</a> is a comprehensive library for creating static, animated and interactive visualizations in Python.<br><br>The above is an easy way to create boxplots directly on the DataFrame. It is based on the library Matplotlib and specifically uses the pyplot library. For simplicity, this code is put into a convenient Pandas function.<br><br>However, we are going to use Matplotlib extensively later on in the course, and we will therefore start by introducing a more direct and generic way of using it.<br><br>To do this, we import the function subplots from the <a href="https://matplotlib.org/stable/api/pyplot_summary.html">pyplot module</a> of matplotlib:</p>
         <div class="code-area">
             <div class="code-container code-fixed">
-                <textarea id="code-cell-44">import matplotlib.pyplot as plt</textarea>
+                <textarea id="code-cell-44">from matplotlib.pyplot import subplots, show</textarea>
             </div>
             <div id="code-cell-44-output" class="output" style="display: none;"></div>
         </div>
-        <p>Matplotlib is often imported with the alias <code>plt</code>, a convention we&#x27;ll retain here.</p>
+        
         <div class="info-box note-box">
             <div class="box-title">
                 <span class="box-icon"></span>
@@ -189,7 +200,7 @@ plt.show()</textarea>
         <p>The way to use subplots is to first set up a figure environment (below referred to in the code as an object titled &#x27;fig&#x27;) and an empty coordinate system (below referred to as object <code>ax</code>). The plot is then created using one of the many methods available in Matplotlib. We will proceed by applying it to the coordinate system, <code>ax</code>.<br><br>As an example, let us create a <a href="https://matplotlib.org/api/_as_gen/matplotlib.pyplot.boxplot.html#matplotlib.pyplot.boxplot%7C">boxplot</a> of the calcium variable. As an argument of the function we need to specify the data. We can use the values of the &#x27;calcium&#x27; concentrations from the column with the same name:</p>
         <div class="code-area">
             <div class="code-container code-fixed">
-                <textarea id="code-cell-45">fig, ax = plt.subplots()
+                <textarea id="code-cell-45">fig, ax = subplots()
 ax.boxplot(df[&#x27;calcium&#x27;].tolist())
 
 # Pass a string to .set_title() to create a title 
@@ -198,29 +209,33 @@ ax.set_title(&#x27;Boxplot of Everley Calcium&#x27;)
 # Pass a list of strings to set_xticklabels() to label the x-axis
 ax.set_xticklabels([&#x27;calcium&#x27;]); # A semi colon is used here to suppress the output of this line
 
-plt.show()</textarea>
+show()</textarea>
             </div>
             <div id="code-cell-45-output" class="output"></div>
         </div>
         <p>Note how we define the title of the plot by referring to the same coordinate system <code>ax</code>.<br><br>The value of subplots becomes apparent when it is used to generate more than one plot as part of a single figure: one of its many useful features.<br><br>Here is an example whereby we create two boxplots adjacent to each other. The keyword arguments to use is &#x27;ncols&#x27; which is the number of figures per row. &#x27;ncols=2&#x27; indicates that you are plotting two plots adjacent to each other.</p>
         <div class="code-area">
             <div class="code-container code-fixed">
-                <textarea id="code-cell-46">fig, ax = plt.subplots(ncols=2)
+                <textarea id="code-cell-46">fig, ax = subplots(ncols=2)
 ax[0].boxplot(df[&#x27;calcium&#x27;])
 ax[0].set_title(&#x27;Calcium&#x27;)
 ax[0].set_xticklabels([&#x27;calcium&#x27;])
 
 ax[1].boxplot(df[&#x27;sodium&#x27;])
 ax[1].set_title(&#x27;Sodium&#x27;)
-ax[1].set_xticklabels([&#x27;sodium&#x27;]);
-plt.show()</textarea>
+ax[1].set_xticklabels([&#x27;sodium&#x27;])
+
+# We can also add a title for the whole figure
+fig.suptitle(&#x27;Boxplots of Calcium and Sodium&#x27;, fontsize=14)
+
+show()</textarea>
             </div>
             <div id="code-cell-46-output" class="output"></div>
         </div>
         <p>Each of these subplots must now be referred to using indexing the coordinate system &#x27;ax&#x27;. This figure gives a good overview of the Everley&#x27;s data.<br><br>If you prefer to have the boxplots of both columns in a single figure, this can also be done:</p>
         <div class="code-area">
             <div class="code-container code-fixed">
-                <textarea id="code-cell-47">fig, ax = plt.subplots(ncols=1, nrows=1)
+                <textarea id="code-cell-47">fig, ax = subplots(ncols=1, nrows=1)
 ax.boxplot([df[&#x27;calcium&#x27;], df[&#x27;sodium&#x27;]], positions=[1, 2])
 ax.set_title(&#x27;Boxplot of Calcium (left) and Sodium (right)&#x27;)
 
@@ -247,7 +262,7 @@ plt.show()</textarea>
             </div>
             <div class="box-content">
                 <p><strong>1.</strong></p>
-                <p>Using the Loan dataset, plot the boxplots of the <code>ApplicantIncome</code> and the <code>CoapplicantIncome</code> in using the above code.</p>
+                <p>Using the Loan dataset, plot the boxplots of the <code>ApplicantIncome</code> and the <code>CoapplicantIncome</code>.</p>
             </div>
         </div>
         
@@ -270,40 +285,46 @@ plt.show()</textarea>
                         <p>Another good visual overview for data is the histogram. Containers or &#x27;bins&#x27; are created over the range of values found within a column, and the count of the values for each bin is plotted on the vertical (y-)axis.</p>
         <div class="code-area">
             <div class="code-container code-fixed">
-                <textarea id="code-cell-49">fig, ax = plt.subplots(ncols=2, nrows=1)
+                <textarea id="code-cell-49">fig, ax = subplots(ncols=2, nrows=1)
+
 ax[0].hist(df[&#x27;calcium&#x27;])
-ax[0].set(xlabel=&#x27;Calcium&#x27;, ylabel=&#x27;Count&#x27;);
+ax[0].set(xlabel=&#x27;Calcium&#x27;, ylabel=&#x27;Count&#x27;)
 ax[1].hist(df[&#x27;sodium&#x27;])
-ax[1].set(xlabel=&#x27;Sodium&#x27;, ylabel=&#x27;Count&#x27;);
+ax[1].set(xlabel=&#x27;Sodium&#x27;, ylabel=&#x27;Count&#x27;)
+
 fig.suptitle(&#x27;Histograms of Everley concentrations&#x27;, fontsize=15);
-plt.show()</textarea>
+
+show()</textarea>
             </div>
             <div id="code-cell-49-output" class="output"></div>
         </div>
         <p>This example code also demonstrates how to use methods from within subplots to add labels to the axes, together with a title for the overall figure.<br><br>Unless specified, a default value is used for the generation of the bins. It is set to 10 bins over the range of which values are found. The number of bins in the histogram can be changed using the keyword argument &#x27;bins&#x27;:</p>
         <div class="code-area">
             <div class="code-container code-fixed">
-                <textarea id="code-cell-50">fig, ax = plt.subplots(ncols=2, nrows=1)
+                <textarea id="code-cell-50">fig, ax = subplots(ncols=2, nrows=1)
+
 ax[0].hist(df[&#x27;calcium&#x27;], bins=5)
-ax[0].set(xlabel=&#x27;Calcium, 5 bins&#x27;, ylabel=&#x27;Count&#x27;);
+ax[0].set(xlabel=&#x27;Calcium, 5 bins&#x27;, ylabel=&#x27;Count&#x27;)
 ax[1].hist(df[&#x27;calcium&#x27;], bins=15)
-ax[1].set(xlabel=&#x27;Calcium, 15 bins&#x27;, ylabel=&#x27;Count&#x27;);
+ax[1].set(xlabel=&#x27;Calcium, 15 bins&#x27;, ylabel=&#x27;Count&#x27;)
+
 fig.suptitle(&#x27;Histograms with Different Binnings&#x27;, fontsize=16);
-plt.show()</textarea>
+
+show()</textarea>
             </div>
             <div id="code-cell-50-output" class="output"></div>
         </div>
         <p>Note how the y-axis label of the right figure is slightly misplaced, and overlapping the border of the left figure. In order to correct for the placement of the labels and the title, you can use <code>tight_layout</code> automatically adjust for this:</p>
         <div class="code-area">
             <div class="code-container code-fixed">
-                <textarea id="code-cell-51">fig, ax = plt.subplots(ncols=2, nrows=1)
+                <textarea id="code-cell-51">fig, ax = subplots(ncols=2, nrows=1)
 ax[0].hist(df[&#x27;calcium&#x27;], bins=5)
 ax[0].set(xlabel=&#x27;Calcium, 5 bins&#x27;, ylabel=&#x27;Count&#x27;);
 ax[1].hist(df[&#x27;calcium&#x27;], bins=15)
 ax[1].set(xlabel=&#x27;Calcium, 15 bins&#x27;, ylabel=&#x27;Count&#x27;);
 fig.suptitle(&#x27;Histograms with Different Binnings&#x27;, fontsize=16);
 fig.tight_layout()
-plt.show()</textarea>
+show()</textarea>
             </div>
             <div id="code-cell-51-output" class="output"></div>
         </div>
@@ -335,7 +356,7 @@ plt.show()</textarea>
                 <div class="module-body">
                     <div class="module-section">
                         <h3>Summary</h3>
-                        <p>The Pandas package contains useful functions to work with DataFrames. The iloc property is used to index and slice a DataFrame, while the describe function is used to obtain a statistical summary of basic data features. The simplest method for data visualisation is to use Pandas&#x27; in-built functionality. However, using Matplotlib is the preferred method for visualisation due its comprehensive library for creating static, animated, and interactive visualisations in Python.</p>
+                        <p>The simplest method for data visualisation is to use Pandas&#x27; in-built functionality. However, using Matplotlib is the preferred method for visualisation due its comprehensive library for creating static, animated, and interactive visualisations in Python. Have a play around with Matplotlib with your own data to see its power.</p>
                     </div>
                 </div>
             </div>

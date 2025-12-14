@@ -103,7 +103,27 @@
                     Data features <span class="module-tag">DH1</span>
                 </div>
                 <div class="module-body">
-                    <p>Now we know how to load our data into our workspace, we will want to do some basic data exploration to understand it.</p>
+                    <h3>Learning Objectives</h3>
+                    <div class="learning-outcomes">
+                        <div class="outcome-item">
+                    <span class="outcome-number">1</span>
+                    <span class="outcome-text">Finding and replacing missing values</span>
+                </div>
+<div class="outcome-item">
+                    <span class="outcome-number">2</span>
+                    <span class="outcome-text">Getting basic statistics per feature such as mean, medium, std</span>
+                </div>
+<div class="outcome-item">
+                    <span class="outcome-number">3</span>
+                    <span class="outcome-text">Filtering DataFrames given a condition in a column</span>
+                </div>
+<div class="outcome-item">
+                    <span class="outcome-number">4</span>
+                    <span class="outcome-text">How to create new columns based of data in existing columns</span>
+                </div>
+                    </div>
+                    <h3>Introduction</h3>
+                    <p>The first path you should take with any new dataset is to inspect and understand what you&#x27;re working with. This includes checking for and replacing missing values, which <em>pandas</em> reads in for you without error, and to understand the basic statistics of your columns to see how they&#x27;re distributed or centered.</p>
                 </div>
             </div>
             
@@ -155,7 +175,7 @@ df.head(8)</textarea>
             </div>
             <div class="box-content">
                 <p><strong>1.</strong></p>
-                <p>Load in the loan dataset, &#x27;loan_data.csv&#x27;:<ul class="nested-list"><li>Check all columns for any <em>null</em> values</li><br><li>Use slicing to view the rows from index 6 to (and including) index 10, which of these rows contain <em>null</em> values and where?</li><br><li>Only replace the null values in the column with <em>null</em> values from the previous question. Choose an appropriate value given the other column values (<em>hint: there should be only one</em>)</li></ul></p>
+                <p>Load in the loan dataset, &#x27;loan_data.csv&#x27;:<ul class="nested-list"><li>Check all columns for any <em>null</em> values</li><br><li>Use slicing to view the rows from index 6 to (and including) index 10, which of these rows contain <em>null</em> values and where?</li><br><li>Only replace the null values in the column with <em>null</em> values from the previous question. Choose an appropriate value given the other column values.</li></ul></p>
             </div>
         </div>
         
@@ -175,7 +195,18 @@ df.head(8)</textarea>
                 <div class="module-body">
                     <div class="module-section">
                         <h3>Basic data features</h3>
-                        <h4>Summary Statistics</h4><p>To get a summary of basic data features, it is possible to use the function <code>describe</code>:</p>
+                        <h4>Summary Statistics</h4>
+        <div class="video-container">
+            <iframe 
+                src="https://www.youtube.com/embed/zw6t3yHEqGU"
+                width="560"
+                height="315"
+                frameborder="0"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowfullscreen>
+            </iframe>
+        </div>
+        <p>To get a summary of basic data features, it is possible to use the function <code>describe</code>:</p>
         <div class="code-area">
             <div class="code-container code-fixed">
                 <textarea id="code-cell-26">description = df.describe()
@@ -392,7 +423,7 @@ loan_df[loan_df[&#x27;Loan_ID&#x27;] == &quot;LP002980&quot;]</textarea>
                 <div class="module-body">
                     <div class="module-section">
                         <h3>Summary</h3>
-                        <p>Add something here</p>
+                        <p>The ease at which you can enrich your dataset by adding new column based of existing data and the ability to filter the whole dataset based on a conditional applied to a singular (or multiple) columns is what makes <em>pandas</em> such a powerful tool for the data scientist. You can create complex pipelines that pull in, transform, and analyse a dataset all dependent on multiple conditions you set throughout.</p>
                     </div>
                 </div>
             </div>

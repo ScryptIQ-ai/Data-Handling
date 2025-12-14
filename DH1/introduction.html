@@ -89,7 +89,7 @@
                     Introduction <span class="module-tag">DH1</span>
                 </div>
                 <div class="module-body">
-                    <p></p>
+                    <p>Welcome to <strong>Data Handling 1</strong>, where you&#x27;ll learn to work with structured data using one of Python&#x27;s most powerful data analysis library: <strong>pandas</strong>.<br><br>We will begin by introducing Pandas DataFrames—the core data structure for tabular data—and guide you through essential operations like indexing, slicing, filtering, and handling missing values. You&#x27;ll also learn to create insightful visualizations using both Pandas&#x27; built-in plotting capabilities and Matplotlib.</p>
                 </div>
             </div>
             
@@ -100,13 +100,92 @@
                         <table class="markdown-table">
 <thead>
 <tr>
-<th><strong>Concepts</strong></th>
+<th><strong>Concept</strong></th>
 <th><strong>Synergy</strong></th>
-<th><strong>Syntax (Functions & Methods)</strong></th>
-<th><strong>Objectives</strong></th>
+<th><strong>Syntax & Functions</strong></th>
+<th><strong>Objective / Application</strong></th>
 <th><strong>Common Pitfalls / Notes</strong></th>
 </tr>
 </thead>
+<tbody>
+<tr>
+<td><strong>DataFrames</strong></td>
+<td>Central structure for all Pandas operations; contains rows, columns, and index</td>
+<td><code>df = read_csv(...)</code>, <code>df.head()</code>, <code>df.shape</code></td>
+<td>Store and manipulate tabular data with labeled rows and columns</td>
+<td>Confusing index with data; forgetting that metadata (index/columns) isn't part of shape</td>
+</tr>
+<tr>
+<td><strong>Viewing Data</strong></td>
+<td>Essential for initial data exploration and verification</td>
+<td><code>df</code>, <code>df.head()</code>, <code>df.head(n)</code>, <code>print(df)</code></td>
+<td>Display DataFrame contents to understand structure and values</td>
+<td>Not checking data after loading; assuming data loaded correctly without verification</td>
+</tr>
+<tr>
+<td><strong>DataFrame Properties</strong></td>
+<td>Provides metadata about DataFrame structure</td>
+<td><code>df.shape</code>, <code>df.columns</code>, <code>df.dtypes</code>, <code>len(df)</code></td>
+<td>Understand dimensions, column names, and data types</td>
+<td>Confusing properties (no parentheses) with methods (with parentheses)</td>
+</tr>
+<tr>
+<td><strong>Indexing & Slicing</strong></td>
+<td>Connects to Python list slicing; essential for data access</td>
+<td><code>df['column']</code>, <code>df['column'][0:3]</code>, <code>df.loc[rows, columns]</code></td>
+<td>Extract specific data subsets from DataFrames</td>
+<td>Mixing <code>.loc</code> (label-based, inclusive) with list slicing (semi-inclusive); nested bracket confusion</td>
+</tr>
+<tr>
+<td><strong>Label-based Indexing (.loc)</strong></td>
+<td>Preferred modern approach for accessing data by labels</td>
+<td><code>df.loc[:, 'column']</code>, <code>df.loc[0:2, 'column']</code>, <code>df.loc[[1,3], ['col1', 'col2']]</code></td>
+<td>Access rows and columns using explicit labels</td>
+<td><code>.loc</code> includes upper boundary unlike standard slicing; forgetting colon for "all rows/columns"</td>
+</tr>
+<tr>
+<td><strong>Missing Values</strong></td>
+<td>Critical for data quality; affects statistical calculations and visualizations</td>
+<td><code>df.isnull()</code>, <code>df.isnull().any()</code>, <code>df.fillna(value)</code></td>
+<td>Identify and handle NaN values in datasets</td>
+<td>Not handling NaN before analysis; choosing inappropriate replacement values</td>
+</tr>
+<tr>
+<td><strong>Summary Statistics</strong></td>
+<td>Builds on mathematical operators; provides data overview</td>
+<td><code>df.describe()</code>, <code>df.mean()</code>, <code>df.std()</code>, <code>df.sum()</code></td>
+<td>Generate statistical summaries to understand data distributions</td>
+<td>Misinterpreting percentiles; not recognizing that <code>.describe()</code> returns a DataFrame</td>
+</tr>
+<tr>
+<td><strong>Creating New Columns</strong></td>
+<td>Applies mathematical and logical operators to DataFrame columns</td>
+<td><code>df['new_col'] = expression</code>, <code>df['col1'] + df['col2']</code>, <code>df['col'] > value</code></td>
+<td>Derive new data from existing columns through calculations or conditions</td>
+<td>Column length mismatch; including spaces in column names</td>
+</tr>
+<tr>
+<td><strong>Filtering Data</strong></td>
+<td>Combines Boolean logic with indexing</td>
+<td><code>df[df['column'] > value]</code>, <code>df[condition]</code></td>
+<td>Select rows that meet specific criteria</td>
+<td>Creating filters but not applying them; complex multi-condition logic errors</td>
+</tr>
+<tr>
+<td><strong>Pandas Visualization</strong></td>
+<td>Quick plotting built on Matplotlib; useful for rapid exploration</td>
+<td><code>df.boxplot()</code>, <code>df.boxplot(column='name')</code></td>
+<td>Create simple plots directly from DataFrame</td>
+<td>Limited customization compared to Matplotlib; forgetting to handle NaN values first</td>
+</tr>
+<tr>
+<td><strong>Matplotlib Basics</strong></td>
+<td>Foundation for advanced visualization; more control than Pandas plotting</td>
+<td><code>from matplotlib.pyplot import subplots, show</code>, <code>fig, ax = subplots()</code></td>
+<td>Create customizable, publication-quality visualizations</td>
+<td>Forgetting to import; confusion between <code>fig</code> and <code>ax</code> objects</td>
+</tr>
+</tbody>
 </table>
                     </div>
                 </div>

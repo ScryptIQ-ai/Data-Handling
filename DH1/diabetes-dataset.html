@@ -106,15 +106,11 @@
                     <div class="learning-outcomes">
                         <div class="outcome-item">
                     <span class="outcome-number">1</span>
-                    <span class="outcome-text">How to plot data with Pandas</span>
-                </div>
-<div class="outcome-item">
-                    <span class="outcome-number">2</span>
-                    <span class="outcome-text">How to plot data with Matplotlib</span>
+                    <span class="outcome-text">Applying what we've learned to the Diabetes Dataset</span>
                 </div>
                     </div>
                     <h3>Introduction</h3>
-                    <p>ADD SOMETHING</p>
+                    <p>Let us return to the dataset that commenced our exploration of the handling of data within a DataFrame.<br><br>Next, we will:<ul class="nested-list"><li>Import the diabetes data from &#x27;sklearn&#x27;</li><br><li>Check the shape of the DataFrame and search for NaNs</li><br><li>Get a summary plot of one of its statistical quantities (i.e. mean) for all columns</li></ul></p>
                 </div>
             </div>
             
@@ -122,7 +118,7 @@
                 <div class="module-body">
                     <div class="module-section">
                         <h3>Handling the Diabetes Dataset</h3>
-                        <p>Let us return to the dataset that commenced our exploration of the handling of data within a DataFrame.<br><br>Next, we will:<ul class="nested-list"><li>Import the diabetes data from &#x27;sklearn&#x27;</li><br><li>Check the shape of the DataFrame and search for NaNs</li><br><li>Get a summary plot of one of its statistical quantities (i.e. mean) for all columns</li></ul>Firstly, let&#x27;s import the dataset and check out the first few rows of data with <code>head()</code>. In some cases, this may take a moment: please be patient, and wait for the numbers to appear as output below your code cell (if you&#x27;re using an IDE).</p>
+                        <p>Firstly, import the data. This is one of the example datasets from scikit-learn: a Python library used for Machine Learning. It is already included in the Anaconda distribution of Python, and can therefore be directly imported, if you have installed Python this way.</p>
         <div class="code-area">
             <div class="code-container code-fixed">
                 <textarea id="code-cell-52"># First we need to import sklearn
@@ -132,11 +128,11 @@ from sklearn import datasets
 from pandas import DataFrame
 
 # And matplotlib
-import matplotlib.pyplot as plt</textarea>
+from matplotlib.pyplot import subplots, show</textarea>
             </div>
             <div id="code-cell-52-output" class="output" style="display: none;"></div>
         </div>
-        
+        <p>Now let&#x27;s import the dataset and check out the first few rows of data with <code>head()</code>. In some cases, this may take a moment: please be patient, and wait for the numbers to appear as output below your code cell (if you&#x27;re using an IDE).</p>
         <div class="code-area">
             <div class="code-container code-fixed">
                 <textarea id="code-cell-53"># Load in the dataset from sklearn
@@ -180,13 +176,16 @@ print(&#x27;The means are: &#x27;, conc_means)</textarea>
         <p>The Matplotlib function to plot a bar chart is called bar:</p>
         <div class="code-area">
             <div class="code-container code-fixed">
-                <textarea id="code-cell-57">fig, ax = plt.subplots()
+                <textarea id="code-cell-57">fig, ax = subplots()
+
 ax.bar(range(len(conc_means)), conc_means)
 ax.set_title(&#x27;Mean values for all columns&#x27;)
+
 ax.set_xticks(range(len(conc_means)))
 ax.set_xticklabels(df_diabetes.columns)
 ax.set_ylabel(&#x27;Mean value&#x27;)
-plt.show()</textarea>
+
+show()</textarea>
             </div>
             <div id="code-cell-57-output" class="output"></div>
         </div>
