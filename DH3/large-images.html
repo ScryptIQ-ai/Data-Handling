@@ -1,0 +1,863 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <!-- Pyodide and CodeMirror -->
+    <script src="https://cdn.jsdelivr.net/pyodide/v0.24.1/full/pyodide.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/codemirror.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/theme/pastel-on-dark.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/codemirror.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/mode/python/python.min.js"></script>
+    
+    <!-- Favicons -->
+    <link rel="icon" type="image/x-icon" href="../assets/favicon.ico">
+    <link rel="icon" type="image/png" sizes="32x32" href="../assets/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="../assets/favicon-16x16.png">
+    <link rel="apple-touch-icon" sizes="192x192" href="../assets/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="192x192" href="../assets/android-chrome-192x192.png">
+    <link rel="icon" type="image/png" sizes="512x512" href="../assets/android-chrome-512x512.png">
+    
+    <!-- Core Stylesheets -->
+    <link rel="stylesheet" href=../assets/colours-l2d.css>
+    <link rel="stylesheet" href="../assets/shared-styles.css">
+    <link rel="stylesheet" href="../assets/nav-bar.css">
+    <link rel="stylesheet" href="../assets/module_card.css">
+    <link rel="stylesheet" href="../assets/learning_outcomes.css">
+    <link rel="stylesheet" href="../assets/learning_lists.css">
+    <link rel="stylesheet" href="../assets/box_styles.css">
+    <link rel="stylesheet" href="../assets/code_styles.css">
+
+    <!-- Meta Tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>L2D - DH3 - Large Images</title>
+    
+    <!-- File URLs for this lesson -->
+    <script>
+        window.LESSON_FILES = [
+            
+        ];
+        window.LESSON_PACKAGES = ['numpy', 'matplotlib', 'scikit-learn'];
+    </script>
+        
+</head>
+<body>
+    
+    <!-- Sidebar Navigation -->
+    <div id="sidebar" class="sidebar">
+        <div class="sidebar-header">
+            <a href="../homepage.html" style="text-decoration: none; display: inline-block;">
+                <img src="../assets/l2d-brain-logo.png" alt="scryptIQ Logo" class="sidebar-logo">
+            </a>
+        </div>
+
+        <h3>Content</h3>
+        <ul>
+            <li><a href="./introduction.html" class="">Introduction</a></li><li><a href="./reading-images.html">Reading Images</a></li><li><a href="./filtering-images.html">Filtering Images</a></li>
+            <li>
+                <div class="nav-toggle active" data-target="expandable-section-3">
+                    Large Images
+                    <span class="toggle-icon">▼</span>
+                </div>
+                <ul class="nested-nav expanded" id="expandable-section-3"><li><a href="#introduction">Introduction</a></li><li><a href="#dealing-with-large-images">Dealing with Large Images</a></li><li><a href="#summary">Summary</a></li>
+                </ul>
+            </li><li><a href="./3D-images.html">3D Images</a></li><li><a href="./assignment.html">Assignment</a></li><li><a href="./feedback.html">Feedback</a></li>
+        </ul>
+
+        <h3 class="collapsible-header collapsed">
+            Resources
+            <span class="collapse-icon">►</span>
+        </h3>
+        <div class="collapsible-content collapsed">
+            <ul>
+                <li><a href="./glossary.html">Glossary</a></li><li><a href="./downloads.html">Downloads</a></li><li><a href="../HB/introduction.html">Handbook</a></li>
+            </ul>
+        </div>
+
+        <h3 class="collapsible-header collapsed">
+            Previous Modules
+            <span class="collapse-icon">►</span>
+        </h3>
+        <div class="collapsible-content collapsed">
+            <ul>
+            <li><a href="../DH1/introduction.html">DH1</a></li>
+            <li><a href="../DH2/introduction.html">DH2</a></li>
+        </ul>
+        </div>
+
+        <h3>
+            <li><a href="./report-issue.html">Report an Issue</a></li>
+        </h3>
+    </div>
+    
+    <!-- Sidebar Toggle Button -->
+    <button id="sidebar-toggle" class="sidebar-toggle">❮</button>
+    
+    <!-- Main Content Area -->
+    <div id="main-content" class="main-content">
+        <!-- Top Navigation Bar -->
+        <div class="top-navbar">
+            <h1 class="page-title">Data Handling 3</h1>
+            <div class="nav-actions">
+                <a href="../homepage.html" class="text-button" title="Materials homepage">
+                    Homepage
+                </a>
+                <a href="https://learntodiscover.ai/my-cohorts/" class="text-button" title="Find out more about us">
+                    Learn to Discover
+                </a>
+            </div>
+        </div>
+
+        
+            <div class="module-card" id="introduction">
+                <div class="module-header">
+                    Large Images <span class="module-tag">DH3</span>
+                </div>
+                <div class="module-body">
+                    <h3>Learning Objectives</h3>
+                    <div class="learning-outcomes">
+                        <div class="outcome-item">
+                    <span class="outcome-number">1</span>
+                    <span class="outcome-text">How to import and work with large images</span>
+                </div>
+<div class="outcome-item">
+                    <span class="outcome-number">2</span>
+                    <span class="outcome-text">Decreasing memory load when dealing with images</span>
+                </div>
+                    </div>
+                    <h3>Introduction</h3>
+                    <p>Often, we encounter situations where we have to deal with very large images that are composed of many pixels. Images such as these are often difficult to process, as they can require a lot of computer memory to do so. We will explore two different strategies for dealing with this problem - decreasing resolution, and using patches from the original image.</p>
+                </div>
+            </div>
+            
+            <div class="module-card" id="dealing-with-large-images">
+                <div class="module-body">
+                    <div class="module-section">
+                        <h3>Dealing with Large Images</h3>
+                        <p>To demonstrate this problem, we can make use of the full-resolution version of the rat brain image we used in the first sub-module.<br><br>Since the file is quite large, and this is an instructional course where you may wish to use a GitHub Codespace to practise these examples. As this file is too large to be uploaded to GitHUb we will use an online, remotely-hosted copy of the image.</p>
+        <div class="info-box warning-box">
+            <div class="box-title">
+                <span class="box-icon"></span>
+                WARNING
+            </div>
+            <div class="box-content">
+                <p>To process this image with Pyodide (the software that lets you code in the browser in real time), we need to slightly downscale the high resolution image as we import it. This is in the backend, so you won&#x27;t see it. Even then it is slow to process and takes up a lot of memory. If you find your page refreshing and starting over, try downloading the notebook (<em>see resources</em>) and running it locally or in a CodeSpace. Doing so you will be working with the full resolution image and have fewer issues.</p>
+            </div>
+        </div>
+        <p>In order to do this, we will firstly store our image URL in a variable for ease of handling:</p>
+        <div class="code-area">
+            <div class="code-container code-fixed">
+                <textarea id="code-cell-28">from matplotlib.pyplot import subplots, show
+from matplotlib.image import imread
+
+# URL to the remotely hosted PNG image
+url = &quot;https://media.githubusercontent.com/media/L2D-Assets/Assets/refs/heads/master/rat_brain.png&quot;</textarea>
+            </div>
+            <div id="code-cell-28-output" class="output" style="display: none;"></div>
+        </div>
+        <p>Next, we must bypass the validation of the server&#x27;s certificate, for ease. SSL stands for Secure Sockets Layer, which is a standard way of providing an encrypted connection between a server and a client. As this is an instructional material, we are disabling this, as we trust the issuing author of the source file (ourselves).</p>
+        <div class="code-area">
+            <div class="code-container code-fixed">
+                <textarea id="code-cell-29">import ssl
+
+# Disable SSL verification
+ssl_context = ssl._create_unverified_context()</textarea>
+            </div>
+            <div id="code-cell-29-output" class="output" style="display: none;"></div>
+        </div>
+        
+        <div class="code-area hidden-code" style="display: none;">
+            <div class="code-container">
+                <textarea id="code-cell-30">from pyodide.http import pyfetch
+from io import BytesIO
+from PIL import Image
+import numpy as np
+from matplotlib.pyplot import subplots, show
+
+Image.MAX_IMAGE_PIXELS = 1000000000
+
+url = &quot;https://media.githubusercontent.com/media/L2D-Assets/Assets/refs/heads/master/rat_brain.png&quot;
+
+# Download the image
+response = await pyfetch(url)
+image_bytes = await response.bytes()
+
+# Open with PIL
+img_pil = Image.open(BytesIO(bytes(image_bytes)))
+
+# Check size and downsample if needed
+max_dimension = 2048  # Adjust based on typical browser memory
+width, height = img_pil.size
+
+if width &gt; max_dimension or height &gt; max_dimension:
+    # Calculate new size maintaining aspect ratio
+    scale = max_dimension / max(width, height)
+    new_size = (int(width * scale), int(height * scale))
+    img_pil = img_pil.resize(new_size, Image.Resampling.LANCZOS)
+
+# Convert to numpy array
+img_hr = np.array(img_pil)</textarea>
+            </div>
+            <div id="code-cell-30-output" class="output" style="display: none;"></div>
+        </div>
+        <p>Lastly, we must then import the function <code>urlopen</code> and the class <code>BytesIO</code>, where the former allows us to open the URL as raw binary data, and the latter wraps this into memory, simulating a file object. This allows us to work with this online, remotely-hosted large image, from its remote location. Please be patient - this step can take time, and will depend on the speed of your internet connection.</p>
+        <div class="code-area">
+            <div class="code-container code-fixed">
+                <textarea id="code-cell-31">from urllib.request import urlopen
+from io import BytesIO
+
+# Consolidate into &#x27;remote_image&#x27;
+remote_image = BytesIO(urlopen(url, context=ssl_context).read())</textarea>
+            </div>
+        </div>
+        
+        <div class="info-box note-box">
+            <div class="box-title">
+                <span class="box-icon"></span>
+                NOTE
+            </div>
+            <div class="box-content">
+                <p>This demonstrates how to read a remotely-hosted image into memory. However, if you wish to try this with a large image stored locally on your computer you can bypass the steps above and use the lines of code that is commented out in the cells below, instead of the line immediately above.</p>
+            </div>
+        </div>
+        <p>Next, we can read the image into Python, using the imread() function. However, if we do this plainly, we will receive a warning from Python indicating that the &quot;Image size (324649360 pixels) exceeds limit of 178956970 pixels, could be decompression bomb DOS attack.&quot; This alludes to a potential malicious file, designed to crash or cause disruption by using consuming large amounts of memory.<br><br>We can get around this by changing the maximum pixel limit, for which we will require the Image module from the Python Imaging Library (PIL). We will make use of the <code>MAX_IMAGE_PIXELS</code> class-level attribute in order to do this, as follows:</p>
+        <div class="code-area">
+            <div class="code-container code-fixed">
+                <textarea id="code-cell-32">from PIL import Image
+
+# Disables the decompression bomb check:
+Image.MAX_IMAGE_PIXELS = 1000000000</textarea>
+            </div>
+        </div>
+        <p>Let&#x27;s try to use <code>imread</code>, again. Please be patient, as this may take a moment to execute.</p>
+        <div class="code-area">
+            <div class="code-container code-fixed">
+                <textarea id="code-cell-33"># Use &#x27;remote_image&#x27; with imread:
+img_hr = imread(remote_image)
+# img_hr = imread(&#x27;fig/rat_brain.png&#x27;) # For local image processing.</textarea>
+            </div>
+        </div>
+        
+        <div class="code-area">
+            <div class="code-container code-fixed">
+                <textarea id="code-cell-34">img_hr.shape</textarea>
+            </div>
+            <div id="code-cell-34-output" class="output"></div>
+        </div>
+        
+        <div class="info-box note-box">
+            <div class="box-title">
+                <span class="box-icon"></span>
+                NOTE
+            </div>
+            <div class="box-content">
+                <p>The actual dimensions of the image are <code>(17360, 18701, 3)</code> before we downscaled it. This is what you should see if working locally or in a CodeSpace.</p>
+            </div>
+        </div>
+        <p>Now we can plot the full high-resolution image:</p>
+        <div class="code-area">
+            <div class="code-container code-fixed">
+                <textarea id="code-cell-35">fig, ax = subplots(figsize=(25, 15))
+
+ax.imshow(img_hr);
+
+show()</textarea>
+            </div>
+            <div id="code-cell-35-output" class="output"></div>
+        </div>
+        <p>Although now we can plot this image, it does still consist of over 300 million pixels, which could run us into memory problems when attempting to process it. One approach is simply to reduce the resolution by importing the image using the Image module from the PIL library: which we imported in the code given, above. This library gives us a wealth of tools to process images, including methods to decrease an image&#x27;s resolution. PIL is a very rich library with a multitude of useful tools. As always, having a look at the official <a href="https://pillow.readthedocs.io/en/stable/">documentation</a> and playing around with it yourself is highly encouraged.<br><br>We can make use of the <code>resize</code> method to downsample the image, providing the desired width and height as numerical arguments, as follows:</p>
+        <div class="code-area">
+            <div class="code-container code-fixed">
+                <textarea id="code-cell-36"># Open the remotely hosted image:
+img_pil = Image.open(remote_image) </textarea>
+            </div>
+        </div>
+        
+        <div class="code-area">
+            <div class="code-container code-fixed">
+                <textarea id="code-cell-37"># As a PIL image we can use methods such as .resize()
+img_small = img_pil.resize((174, 187))
+
+print(type(img_small))</textarea>
+            </div>
+            <div id="code-cell-37-output" class="output"></div>
+        </div>
+        <p>Plotting should now be considerably quicker.</p>
+        <div class="code-area">
+            <div class="code-container code-fixed">
+                <textarea id="code-cell-38">fig, ax = subplots(figsize=(25, 15))
+
+ax.imshow(img_small);
+
+show()</textarea>
+            </div>
+            <div id="code-cell-38-output" class="output"></div>
+        </div>
+        <p>Using the above code, we have successfully resized the image to a resolution of 174 x 187 pixels. It is, however, important to note that our image is no longer in the format of a NumPy array, but rather it now has the type <code>PIL.Image.Image</code>. We can, however, easily convert it back into a NumPy array using the array function, if we so wish.</p>
+        <div class="code-area">
+            <div class="code-container code-fixed">
+                <textarea id="code-cell-39">from numpy import array
+
+img_numpy = array(img_small)
+
+print(type(img_numpy))</textarea>
+            </div>
+            <div id="code-cell-39-output" class="output"></div>
+        </div>
+        <p>Despite the above, it is often desired to keep images in their full resolution, as resizing effectively results in a loss of information. A commonly used, alternative approach to such downsampling is to <strong>patch</strong> the images. Patching an image essentially divides the picture up into smaller chunks that are termed patches.<br><br>For this, we can implement functionality from the <a href="https://scikit-learn.org/stable/">Scikit-Learn</a> machine learning library.</p>
+        <div class="code-area">
+            <div class="code-container code-fixed">
+                <textarea id="code-cell-40">from sklearn.feature_extraction.image import extract_patches_2d</textarea>
+            </div>
+            <div id="code-cell-40-output" class="output" style="display: none;"></div>
+        </div>
+        <p>The <code>extract_patches_2d</code> function is used to extract parts of the image. The shape of each patch, together with the maximal number of patches, can be specified, as follows:</p>
+        <div class="code-area">
+            <div class="code-container code-fixed">
+                <textarea id="code-cell-41">patches = extract_patches_2d(img_hr, (57, 60), max_patches=100)
+
+# Use the below if working locally as the image will have more pixels!
+# extract_patches_2d(img_hr, (174, 187), max_patches=100)</textarea>
+            </div>
+        </div>
+        
+        <div class="code-area hidden-code" style="display: none;">
+            <div class="code-container">
+                <textarea id="code-cell-42">def extract_random_patches(image, patch_size, n_patches, seed=None):
+    rng = np.random.default_rng(seed)
+    h, w = image.shape[:2]
+    ph, pw = patch_size
+    
+    # Random top-left corners
+    row_indices = rng.integers(0, h - ph + 1, size=n_patches)
+    col_indices = rng.integers(0, w - pw + 1, size=n_patches)
+    
+    patches = np.array([
+        image[r:r+ph, c:c+pw] 
+        for r, c in zip(row_indices, col_indices)
+    ])
+    return patches
+
+patches = extract_random_patches(img_hr, (57, 60), 100)</textarea>
+            </div>
+            <div id="code-cell-42-output" class="output" style="display: none;"></div>
+        </div>
+        
+        <div class="code-area">
+            <div class="code-container code-fixed">
+                <textarea id="code-cell-43">patches.shape</textarea>
+            </div>
+            <div id="code-cell-43-output" class="output"></div>
+        </div>
+        <p>When using the <code>.shape</code> attribute, the output given here shows that the image has been successfully subdivided into 100 patches, with resolution 57 x 60 pixels, across three channels: red, blue and green (as this is an RGB, colour image).</p>
+        <div class="info-box warning-box">
+            <div class="box-title">
+                <span class="box-icon"></span>
+                WARNING
+            </div>
+            <div class="box-content">
+                <p>Patching itself can be a memory-intensive task, as the code makes a view of all possible patches into memory. Extracting lots and lots of patches may take a long time.</p>
+            </div>
+        </div>
+        <p>To look at the patches, we can make use of a for loop to iterate through the first element of the <code>.shape</code> array (the 100 patches), and visualise each one on its own subplot using the <code>.imshow</code> method, as follows:</p>
+        <div class="code-area">
+            <div class="code-container code-fixed">
+                <textarea id="code-cell-44">fig, ax = subplots(nrows=10, ncols=10, figsize=(15, 15))
+
+ax = ax.flatten()
+
+for index in range(patches.shape[0]):
+    ax[index].imshow(patches[index, :, :, :])
+
+show()</textarea>
+            </div>
+            <div id="code-cell-44-output" class="output"></div>
+        </div>
+        <p>Working with these smaller, individual patches will be much more manageable and computationally resourceful.</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="module-card" id="summary">
+                <div class="module-body">
+                    <div class="module-section">
+                        <h3>Summary</h3>
+                        <p>Something</p>
+                    </div>
+                </div>
+            </div>
+            
+        
+        <div class="page-navigation">
+            <a href="./filtering-images.html" class="nav-button prev">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                    <path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"/>
+                </svg>
+                Previous
+            </a>
+            <a href="./3D-images.html" class="nav-button next">
+                Next
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                    <path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"/>
+                </svg>
+            </a></div>
+        
+        <!-- Footer -->
+        <div class="footer">
+            <div>© All materials are copyright scryptIQ 2025</div>
+            <div>Powered by Pyodide</div>
+        </div>
+    </div>
+
+    <!-- JavaScript -->
+    <script src="../assets/main.js"></script>
+    
+    <!-- Pyodide Initialisation Script -->
+    <script>
+
+// Generalisable Pyodide Initialisation Script
+// Variables and state build up naturally as code blocks execute in order
+
+async function main() {
+    // Show loading message for all output elements
+    document.querySelectorAll(".output").forEach(el => {
+        el.textContent = "Loading Pyodide...";
+        el.classList.add("loading-message");
+    });
+    
+    try {
+        // Load Pyodide
+        console.log("Loading Pyodide...");
+        const pyodideStartTime = performance.now();
+        let pyodide = await loadPyodide();
+        const pyodideLoadTime = performance.now() - pyodideStartTime;
+        console.log(`Pyodide loaded in ${pyodideLoadTime.toFixed(2)}ms`);
+        
+        // Load required packages only if specified
+        const lessonPackages = window.LESSON_PACKAGES || [];
+        
+        if (lessonPackages.length > 0) {
+            console.log("Loading required Python packages...");
+            const packagesStartTime = performance.now();
+            
+            // Separate built-in packages from PyPI packages
+            const builtInPackages = lessonPackages.filter(pkg => 
+                ['numpy', 'scipy', 'matplotlib', 'pandas', 'scikit-learn', 'pillow', 'regex'].includes(pkg)
+            );
+            
+            const micropipPackages = lessonPackages.filter(pkg => !builtInPackages.includes(pkg));
+            
+            // Load built-in packages (fast)
+            if (builtInPackages.length > 0) {
+                await pyodide.loadPackage(builtInPackages);
+                console.log(`Loaded built-in packages: ${builtInPackages.join(', ')}`);
+            }
+            
+            // Install PyPI packages (slower)
+            if (micropipPackages.length > 0) {
+                await pyodide.loadPackage(['micropip']);
+                const micropip = pyodide.pyimport('micropip');
+                await micropip.install(micropipPackages);
+                console.log(`Installed PyPI packages: ${micropipPackages.join(', ')}`);
+            }
+            
+            const packagesLoadTime = performance.now() - packagesStartTime;
+            console.log(`Packages loaded in ${packagesLoadTime.toFixed(2)}ms`);
+            console.log(`Total initialisation time: ${(pyodideLoadTime + packagesLoadTime).toFixed(2)}ms`);
+        } else {
+            console.log("No packages to load for this lesson");
+            console.log(`Total initialisation time: ${pyodideLoadTime.toFixed(2)}ms`);
+        }
+
+        // Only set up basic Python environment - no pre-loaded variables
+        await pyodide.runPythonAsync(`
+            import sys
+            from io import StringIO
+        `);
+
+        // Only set up matplotlib if it's in the loaded packages
+        if (lessonPackages.includes('matplotlib')) {
+            await pyodide.runPythonAsync(`
+                # Set up matplotlib for web rendering
+                import matplotlib
+                matplotlib.use('AGG')
+                import matplotlib.pyplot as plt
+                import io
+                import base64
+                
+                def capture_matplotlib():
+                    """Capture current matplotlib figure as HTML img tag"""
+                    buf = io.BytesIO()
+                    plt.savefig(buf, format='png', bbox_inches='tight', dpi=100)
+                    buf.seek(0)
+                    img_base64 = base64.b64encode(buf.read()).decode('utf-8')
+                    plt.close()
+                    return f'<img src="data:image/png;base64,{img_base64}" style="max-width: 100%; height: auto;" />'
+            `);
+            console.log('Matplotlib capture function set up');
+        }
+        
+        console.log("Pyodide loaded successfully");
+        
+        // Load remote files if URLs are specified
+        const lessonFiles = window.LESSON_FILES || [];
+        
+        if (lessonFiles.length > 0) {
+            try {
+                console.log(`Checking for ${lessonFiles.length} remote file(s) to load...`);
+                
+                // Build Python code to load all files dynamically
+                let pythonCode = `
+from pyodide.http import pyfetch
+import os
+
+# Create data directory if it doesn't exist
+os.makedirs('./data', exist_ok=True)
+`;
+                
+                // Add loading code for each file
+                for (const file of lessonFiles) {
+                    if (file.is_binary) {
+                        // Binary files (images, etc.) - use bytes
+                        pythonCode += `
+# Load ${file.filename} (binary)
+try:
+    response = await pyfetch("${file.url}")
+    content = await response.bytes()
+    with open('./data/${file.filename}', 'wb') as f:
+        f.write(bytes(content))
+    print("Loaded: ${file.filename}")
+except Exception as e:
+    print(f"Could not load ${file.filename}: {e}")
+`;
+                    } else {
+                        // Text files (CSV, etc.) - use string
+                        pythonCode += `
+# Load ${file.filename} (text)
+try:
+    response = await pyfetch("${file.url}")
+    content = await response.string()
+    with open('./data/${file.filename}', 'w') as f:
+        f.write(content)
+    print("Loaded: ${file.filename}")
+except Exception as e:
+    print(f"Could not load ${file.filename}: {e}")
+`;
+                    }
+                }
+                
+                await pyodide.runPythonAsync(pythonCode);
+                console.log("Remote files loaded successfully");
+            } catch (error) {
+                console.warn("Error loading remote files (continuing anyway):", error);
+            }
+        } else {
+            console.log("No remote files to load for this lesson");
+        }
+        
+        // Function to execute Python code and capture output
+        async function executePythonCode(code) {
+            try {
+                // Redirect Python stdout to capture print statements
+                await pyodide.runPythonAsync(`
+                    old_stdout = sys.stdout
+                    sys.stdout = mystdout = StringIO()
+                `);
+                
+                // Run the user code
+                const result = await pyodide.runPythonAsync(code);
+                
+                // Get the captured stdout
+                let stdout = await pyodide.runPythonAsync(`
+                    sys.stdout = old_stdout
+                    mystdout.getvalue()
+                `);
+                
+                // Check for matplotlib figures only if matplotlib was loaded
+                const lessonPackages = window.LESSON_PACKAGES || [];
+                if (lessonPackages.includes('matplotlib')) {
+                    const hasFigures = await pyodide.runPythonAsync(`
+                        import matplotlib.pyplot as plt
+                        len(plt.get_fignums()) > 0
+                    `);
+                    
+                    if (hasFigures) {
+                        const figureHtml = await pyodide.runPythonAsync(`capture_matplotlib()`);
+                        if (stdout) stdout += "\n";
+                        stdout += figureHtml;
+                    }
+                }
+                
+                // Combine stdout and result
+                let output = stdout;
+                if (result !== undefined && result !== null && String(result).trim() !== '') {
+                    if (output) output += "\n";
+                    output += String(result);
+                }
+                
+                return { success: true, output: output || "Code executed successfully (no output)" };
+                
+            } catch (error) {
+                return { success: false, output: "Error: " + error.message };
+            }
+        }
+        
+        // Execute all hidden code blocks first (for setup code like imports)
+        const hiddenCodeBlocks = Array.from(document.querySelectorAll('.hidden-code textarea'));
+        console.log(`Found ${hiddenCodeBlocks.length} hidden code blocks`);
+
+        for (const textarea of hiddenCodeBlocks) {
+            const code = textarea.value.trim();
+            if (!code) continue;
+            
+            console.log(`Executing hidden code block: ${textarea.id}`);
+            console.log(`Hidden code content: ${code.substring(0, 100)}...`);
+            const result = await executePythonCode(code);
+            
+            if (!result.success) {
+                console.error(`Error in hidden code block ${textarea.id}:`, result.output);
+            } else {
+                console.log(`Hidden code block ${textarea.id} executed successfully`);
+                console.log(`Result: ${result.output}`);
+            }
+        }
+
+        console.log("All hidden code blocks executed");
+        
+        // Get all fixed code blocks in document order
+        const fixedCodeBlocks = Array.from(document.querySelectorAll('.code-fixed textarea'));
+        
+        // Setup and execute fixed code blocks sequentially
+        for (const textarea of fixedCodeBlocks) {
+            const code = textarea.value.trim();
+            if (!code) continue;
+            
+            // Set up CodeMirror editor (read-only)
+            const editor = CodeMirror.fromTextArea(textarea, {
+                mode: "python",
+                theme: "pastel-on-dark",
+                lineNumbers: true,
+                readOnly: true,
+                viewportMargin: Infinity
+            });
+            
+            // Find corresponding output element
+            const outputId = textarea.id + '-output';
+            const outputElement = document.getElementById(outputId);
+            
+            if (outputElement) {
+                outputElement.textContent = "Running code...";
+                outputElement.classList.add("loading-message");
+                
+                // Execute the code (this maintains state for subsequent blocks)
+                const result = await executePythonCode(code);
+                
+                // Display the output - check if it's HTML
+                const trimmedOutput = result.output.trim();
+                console.log('Output length:', trimmedOutput.length);
+                console.log('Output starts with:', trimmedOutput.substring(0, 100));
+                
+                if (trimmedOutput.includes('<script') && trimmedOutput.includes('Plotly')) {
+                    // It's Plotly HTML output - extract just the body content
+                    console.log('Rendering as Plotly HTML');
+                    const parser = new DOMParser();
+                    const doc = parser.parseFromString(result.output, 'text/html');
+                    // Clear the output element and append the body content
+                    outputElement.innerHTML = '';
+                    
+                    // Find and load external scripts first (like Plotly CDN)
+                    const externalScripts = Array.from(doc.querySelectorAll('script[src]'));
+                    const inlineScripts = Array.from(doc.querySelectorAll('script:not([src])'));
+                    
+                    // Append non-script content first
+                    Array.from(doc.body.children).forEach(child => {
+                        if (child.tagName !== 'SCRIPT') {
+                            outputElement.appendChild(child.cloneNode(true));
+                        }
+                    });
+                    
+                    // Load external scripts sequentially
+                    const loadScript = (src) => {
+                        return new Promise((resolve, reject) => {
+                            const script = document.createElement('script');
+                            script.src = src;
+                            script.onload = resolve;
+                            script.onerror = reject;
+                            document.head.appendChild(script);
+                        });
+                    };
+                    
+                    // Load all external scripts first
+                    Promise.all(externalScripts.map(s => loadScript(s.src)))
+                        .then(() => {
+                            console.log('External scripts loaded, executing inline scripts');
+                            // Now execute inline scripts
+                            inlineScripts.forEach(oldScript => {
+                                const newScript = document.createElement('script');
+                                newScript.textContent = oldScript.textContent;
+                                outputElement.appendChild(newScript);
+                            });
+                            console.log('Output element after processing:', outputElement.children.length, 'children');
+                        })
+                        .catch(err => {
+                            console.error('Failed to load external scripts:', err);
+                            outputElement.textContent = 'Error loading Plotly: ' + err.message;
+                        });
+                } else if (trimmedOutput.startsWith('<!DOCTYPE') || 
+                           trimmedOutput.startsWith('<html') ||
+                            trimmedOutput.startsWith('<div') ||
+                            trimmedOutput.startsWith('<img')) {
+                    console.log('Rendering as generic HTML');
+                    outputElement.innerHTML = result.output;
+                    console.log('Output element after innerHTML:', outputElement.children.length, 'children');
+                } else {
+                    console.log('Rendering as plain text');
+                    outputElement.textContent = result.output;
+                }
+                outputElement.classList.remove("loading-message");
+                if (result.success) {
+                    outputElement.classList.add("success-message");
+                    outputElement.classList.remove("error-message");
+                } else {
+                    outputElement.classList.add("error-message");
+                    outputElement.classList.remove("success-message");
+                }
+            }
+            
+            // Small delay to show progression
+            await new Promise(resolve => setTimeout(resolve, 100));
+        }
+        
+        // Setup all editable code blocks (but don't execute them)
+        document.querySelectorAll('.code-editor textarea').forEach((textarea) => {
+            // Set up CodeMirror editor (editable)
+            const editor = CodeMirror.fromTextArea(textarea, {
+                mode: "python",
+                theme: "pastel-on-dark",
+                lineNumbers: true,
+                viewportMargin: Infinity
+            });
+            
+            // Find corresponding run button and output element
+            const baseId = textarea.id;
+            const runButtonId = 'run-' + baseId;
+            const outputId = baseId + '-output';
+            
+            const runButton = document.getElementById(runButtonId);
+            const outputElement = document.getElementById(outputId);
+            
+            if (runButton && outputElement) {
+                // Set initial state
+                outputElement.textContent = "Ready to run code!";
+                outputElement.classList.remove("loading-message");
+                
+                runButton.addEventListener("click", async () => {
+                    const code = editor.getValue().trim();
+                    if (!code) {
+                        outputElement.textContent = "No code to run";
+                        return;
+                    }
+                    
+                    outputElement.textContent = "Running...";
+                    outputElement.classList.remove("error-message", "success-message");
+                    outputElement.classList.add("loading-message");
+                    
+                    // Execute the code (this also maintains state for future blocks)
+                    const result = await executePythonCode(code);
+                    
+                    // Display the output - check if it's HTML
+                    const trimmedOutput = result.output.trim();
+                    console.log('Output length:', trimmedOutput.length);
+                    console.log('Output starts with:', trimmedOutput.substring(0, 100));
+                    
+                    if (trimmedOutput.includes('<script') && trimmedOutput.includes('Plotly')) {
+                        // It's Plotly HTML output - extract just the body content
+                        console.log('Rendering as Plotly HTML');
+                        const parser = new DOMParser();
+                        const doc = parser.parseFromString(result.output, 'text/html');
+                        // Clear the output element and append the body content
+                        outputElement.innerHTML = '';
+                        
+                        // Find and load external scripts first (like Plotly CDN)
+                        const externalScripts = Array.from(doc.querySelectorAll('script[src]'));
+                        const inlineScripts = Array.from(doc.querySelectorAll('script:not([src])'));
+                        
+                        // Append non-script content first
+                        Array.from(doc.body.children).forEach(child => {
+                            if (child.tagName !== 'SCRIPT') {
+                                outputElement.appendChild(child.cloneNode(true));
+                            }
+                        });
+                        
+                        // Load external scripts sequentially
+                        const loadScript = (src) => {
+                            return new Promise((resolve, reject) => {
+                                const script = document.createElement('script');
+                                script.src = src;
+                                script.onload = resolve;
+                                script.onerror = reject;
+                                document.head.appendChild(script);
+                            });
+                        };
+                        
+                        // Load all external scripts first
+                        Promise.all(externalScripts.map(s => loadScript(s.src)))
+                            .then(() => {
+                                console.log('External scripts loaded, executing inline scripts');
+                                // Now execute inline scripts
+                                inlineScripts.forEach(oldScript => {
+                                    const newScript = document.createElement('script');
+                                    newScript.textContent = oldScript.textContent;
+                                    outputElement.appendChild(newScript);
+                                });
+                                console.log('Output element after processing:', outputElement.children.length, 'children');
+                            })
+                            .catch(err => {
+                                console.error('Failed to load external scripts:', err);
+                                outputElement.textContent = 'Error loading Plotly: ' + err.message;
+                            });
+                    } else if (trimmedOutput.startsWith('<!DOCTYPE') || 
+                               trimmedOutput.startsWith('<html') ||
+                               trimmedOutput.startsWith('<div') ||
+                               trimmedOutput.startsWith('<img')) {
+                        outputElement.innerHTML = result.output;
+                    } else {
+                        outputElement.textContent = result.output;
+                    }
+                    outputElement.classList.remove("loading-message");
+                    if (result.success) {
+                        outputElement.classList.add("success-message");
+                        outputElement.classList.remove("error-message");
+                    } else {
+                        outputElement.classList.add("error-message");
+                        outputElement.classList.remove("success-message");
+                    }
+                });
+            }
+        });
+        
+        console.log("All code blocks initialised successfully");
+
+        // Set flag to indicate Pyodide is fully ready
+        window.pyodideReady = true;
+        console.log("Pyodide fully ready");
+        
+    } catch (error) {
+        console.error("Failed to initialise Pyodide:", error);
+        document.querySelectorAll(".output").forEach(el => {
+            el.textContent = "Error loading Pyodide: " + error.message;
+            el.classList.remove("loading-message");
+            el.classList.add("error-message");
+        });
+    }
+}
+
+// Start the application when DOM is loaded
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', main);
+} else {
+    main();
+}
+    </script>
+</body>
+</html>
+    

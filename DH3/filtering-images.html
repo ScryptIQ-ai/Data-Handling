@@ -1,0 +1,826 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <!-- Pyodide and CodeMirror -->
+    <script src="https://cdn.jsdelivr.net/pyodide/v0.24.1/full/pyodide.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/codemirror.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/theme/pastel-on-dark.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/codemirror.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/mode/python/python.min.js"></script>
+    
+    <!-- Favicons -->
+    <link rel="icon" type="image/x-icon" href="../assets/favicon.ico">
+    <link rel="icon" type="image/png" sizes="32x32" href="../assets/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="../assets/favicon-16x16.png">
+    <link rel="apple-touch-icon" sizes="192x192" href="../assets/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="192x192" href="../assets/android-chrome-192x192.png">
+    <link rel="icon" type="image/png" sizes="512x512" href="../assets/android-chrome-512x512.png">
+    
+    <!-- Core Stylesheets -->
+    <link rel="stylesheet" href=../assets/colours-l2d.css>
+    <link rel="stylesheet" href="../assets/shared-styles.css">
+    <link rel="stylesheet" href="../assets/nav-bar.css">
+    <link rel="stylesheet" href="../assets/module_card.css">
+    <link rel="stylesheet" href="../assets/learning_outcomes.css">
+    <link rel="stylesheet" href="../assets/learning_lists.css">
+    <link rel="stylesheet" href="../assets/box_styles.css">
+    <link rel="stylesheet" href="../assets/code_styles.css">
+
+    <!-- Meta Tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>L2D - DH3 - Filtering Images</title>
+    
+    <!-- File URLs for this lesson -->
+    <script>
+        window.LESSON_FILES = [
+            {url: "https://raw.githubusercontent.com/ScryptIQ-ai/lesson-data/main/dh/axon_slice.jpg", filename: "axon_slice.jpg", is_binary: true},
+            {url: "https://raw.githubusercontent.com/ScryptIQ-ai/lesson-data/main/dh/rat_cerebellum.jpeg", filename: "rat_cerebellum.jpeg", is_binary: true}
+        ];
+        window.LESSON_PACKAGES = ['numpy', 'matplotlib'];
+    </script>
+        
+</head>
+<body>
+    
+    <!-- Sidebar Navigation -->
+    <div id="sidebar" class="sidebar">
+        <div class="sidebar-header">
+            <a href="../homepage.html" style="text-decoration: none; display: inline-block;">
+                <img src="../assets/l2d-brain-logo.png" alt="scryptIQ Logo" class="sidebar-logo">
+            </a>
+        </div>
+
+        <h3>Content</h3>
+        <ul>
+            <li><a href="./introduction.html" class="">Introduction</a></li><li><a href="./reading-images.html">Reading Images</a></li>
+            <li>
+                <div class="nav-toggle active" data-target="expandable-section-2">
+                    Filtering Images
+                    <span class="toggle-icon">▼</span>
+                </div>
+                <ul class="nested-nav expanded" id="expandable-section-2"><li><a href="#introduction">Introduction</a></li><li><a href="#creating-an-image-mask">Creating an Image Mask</a></li><li><a href="#filtering-colour-images">Filtering Colour Images</a></li><li><a href="#summary">Summary</a></li>
+                </ul>
+            </li><li><a href="./large-images.html">Large Images</a></li><li><a href="./3D-images.html">3D Images</a></li><li><a href="./assignment.html">Assignment</a></li><li><a href="./feedback.html">Feedback</a></li>
+        </ul>
+
+        <h3 class="collapsible-header collapsed">
+            Resources
+            <span class="collapse-icon">►</span>
+        </h3>
+        <div class="collapsible-content collapsed">
+            <ul>
+                <li><a href="./glossary.html">Glossary</a></li><li><a href="./downloads.html">Downloads</a></li><li><a href="../HB/introduction.html">Handbook</a></li>
+            </ul>
+        </div>
+
+        <h3 class="collapsible-header collapsed">
+            Previous Modules
+            <span class="collapse-icon">►</span>
+        </h3>
+        <div class="collapsible-content collapsed">
+            <ul>
+            <li><a href="../DH1/introduction.html">DH1</a></li>
+            <li><a href="../DH2/introduction.html">DH2</a></li>
+        </ul>
+        </div>
+
+        <h3>
+            <li><a href="./report-issue.html">Report an Issue</a></li>
+        </h3>
+    </div>
+    
+    <!-- Sidebar Toggle Button -->
+    <button id="sidebar-toggle" class="sidebar-toggle">❮</button>
+    
+    <!-- Main Content Area -->
+    <div id="main-content" class="main-content">
+        <!-- Top Navigation Bar -->
+        <div class="top-navbar">
+            <h1 class="page-title">Data Handling 3</h1>
+            <div class="nav-actions">
+                <a href="../homepage.html" class="text-button" title="Materials homepage">
+                    Homepage
+                </a>
+                <a href="https://learntodiscover.ai/my-cohorts/" class="text-button" title="Find out more about us">
+                    Learn to Discover
+                </a>
+            </div>
+        </div>
+
+        
+            <div class="module-card" id="introduction">
+                <div class="module-header">
+                    Filtering Images <span class="module-tag">DH3</span>
+                </div>
+                <div class="module-body">
+                    <h3>Learning Objectives</h3>
+                    <div class="learning-outcomes">
+                        <div class="outcome-item">
+                    <span class="outcome-number">1</span>
+                    <span class="outcome-text">How to extract thresholds for pixel intensities</span>
+                </div>
+<div class="outcome-item">
+                    <span class="outcome-number">2</span>
+                    <span class="outcome-text">Applying boolean masks to filter an image</span>
+                </div>
+<div class="outcome-item">
+                    <span class="outcome-number">3</span>
+                    <span class="outcome-text">Filtering with both greyscale and colour images</span>
+                </div>
+                    </div>
+                    <h3>Introduction</h3>
+                    <p>Now that we know that images essentially comprise of arrays of numerical intensities, we can start processing the images using said numbers. Much like how we can filter, augment the columns in a DataFrame or data in a Python list, images can be processed to highlight or exclude certain features.</p>
+                </div>
+            </div>
+            
+            <div class="module-card" id="creating-an-image-mask">
+                <div class="module-body">
+                    <div class="module-section">
+                        <h3>Creating an Image Mask</h3>
+                        
+        <div class="video-container">
+            <iframe 
+                src="https://www.youtube.com/embed/xJsCInqgLz4"
+                width="560"
+                height="315"
+                frameborder="0"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowfullscreen>
+            </iframe>
+        </div>
+        
+        <div class="code-area">
+            <div class="code-container code-fixed">
+                <textarea id="code-cell-17"># Setup our workspace
+
+from matplotlib.image import imread
+from matplotlib.pyplot import subplots, show
+
+img = imread(&#x27;data/axon_slice.jpg&#x27;)</textarea>
+            </div>
+            <div id="code-cell-17-output" class="output" style="display: none;"></div>
+        </div>
+        
+        <div class="code-area">
+            <div class="code-container code-fixed">
+                <textarea id="code-cell-18">fig, ax = subplots(figsize=(10, 5))
+
+ax.imshow(img, cmap=&#x27;gray&#x27;);
+
+show()</textarea>
+            </div>
+            <div id="code-cell-18-output" class="output"></div>
+        </div>
+        <p>As an initial approach, we can plot a histogram of the intensity values that comprise an image. We can make use of the <code>.flatten()</code> method to turn the original 2300 x 3040 array into a one-dimensional array with 6,992,000 values. This rearrangement allows the numbers within the image to be represented by a single column inside a matrix or DataFrame.<br><br>The histogram plot shows how several instances of each intensity make up this image:</p>
+        <div class="code-area">
+            <div class="code-container code-fixed">
+                <textarea id="code-cell-19">fig, ax = subplots(figsize=(10, 4))
+
+ax.hist(img.flatten(), bins = 50)
+ax.set_xlabel(&quot;Pixel intensity&quot;, fontsize=16);
+
+show()</textarea>
+            </div>
+            <div id="code-cell-19-output" class="output"></div>
+        </div>
+        <p>The histogram is a distribution, with intensities mostly lying between values of 50 and 250.<br><br>The image displays a slice through an axon bundle. For the sake of example, let&#x27;s say that we are now interested in the myelin sheath surrounding the axons (the dark rings). We can create a <strong>mask</strong> that isolates pixels whose intensity value is below a certain threshold (because darker pixels have lower intensity values). Everything below this threshold can be assigned to, for instance, a value of 1 (representing True), and everything above will be assigned a value of 0 (representing False). This is called a binary or Boolean mask.<br><br>Based on the histogram above, we might want to try adjusting that threshold somewhere between 100 and 200. Let&#x27;s see what we get with a threshold set to 125. Firstly, we must implement a conditional statement in order to create the mask. It is then possible to apply this mask to the image. We can then plot both the mask and the masked image.<br><br><em>Try playing around with the threshold value to see how it affects the mask.</em></p>
+        <div class="code-area">
+            <div class="code-container code-editor">
+                <textarea id="code-cell-20">threshold = 125
+
+mask = img &lt; threshold
+
+img_masked = img * mask
+
+fig, ax = subplots(nrows=1, ncols=2, figsize=(20, 10))
+
+ax[0].imshow(mask, cmap=&#x27;gray&#x27;)
+ax[0].set_title(&#x27;Binary mask&#x27;, fontsize=16)
+ax[1].imshow(img_masked, cmap=&#x27;gray&#x27;)
+ax[1].set_title(&#x27;Masked image&#x27;, fontsize=16)
+
+show()</textarea>
+            </div>
+            <button id="run-code-cell-20" class="run-button">Run Code</button>
+            <div id="code-cell-20-output" class="output"></div>
+        </div>
+        <p>The left subplot shows the binary mask itself. White represents values where our condition is true, and black where our condition is false. The right image shows the original image after we have applied the binary mask, showing the original pixel intensities in regions where the mask value is <code>True</code>.<br><br>Note that applying the mask means that the intensities where the condition is true are left unchanged. The intensities where the condition is false are multiplied by zero, and therefore set to zero.<br><br>Let&#x27;s have a look at the resulting image histograms.</p>
+        <div class="code-area">
+            <div class="code-container code-fixed">
+                <textarea id="code-cell-21">threshold = 125
+mask = img &lt; threshold
+img_masked = img * mask
+
+fig, ax = subplots(nrows=1, ncols=2, figsize=(20, 5))
+
+ax[0].hist(img_masked.flatten(), bins=50)
+ax[0].set_title(&#x27;Histogram of masked image&#x27;, fontsize=16)
+ax[0].set_xlabel(&quot;Pixel intensity&quot;, fontsize=16)
+
+# != tells the filter to only keep values that are not equal to 0
+ax[1].hist(img_masked[img_masked != 0].flatten(), bins=25)
+ax[1].set_title(&#x27;Histogram of masked image after zeros are removed&#x27;, fontsize=16)
+ax[1].set_xlabel(&quot;Pixel intensity&quot;, fontsize=16)
+
+show()</textarea>
+            </div>
+            <div id="code-cell-21-output" class="output"></div>
+        </div>
+        <p>The left subplot displays the values for the masked image. Note that there is a large peak at zero, as a large part of the image is masked. The right subplot histogram, however, displays only the non-zero pixel intensities. From this, we can see that our mask has worked as expected, where only values up to 125 are found. This is because our threshold causes a sharp cut-off at a pixel intensity of 125.</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="module-card" id="filtering-colour-images">
+                <div class="module-body">
+                    <div class="module-section">
+                        <h3>Filtering Colour Images</h3>
+                        <p>The same process can be applied to colour images, except this time we will be filtering based on the intensities of one channel (red, green, or blue) and applying this to all of the channels.<br><br>For this demonstration, we will be using a rat brain slice we used in the previous lesson.</p>
+        <div class="code-area">
+            <div class="code-container code-fixed">
+                <textarea id="code-cell-22">rat_brain = imread(&#x27;./data/rat_brain_low_res.jpg&#x27;)</textarea>
+            </div>
+            <div id="code-cell-22-output" class="output" style="display: none;"></div>
+        </div>
+        
+        <div class="code-area">
+            <div class="code-container code-fixed">
+                <textarea id="code-cell-23">fig, ax = subplots(figsize=(10, 6))
+
+ax.imshow(rat_brain);
+
+show()</textarea>
+            </div>
+            <div id="code-cell-23-output" class="output"></div>
+        </div>
+        <p>The sample is labeled for Hoechst stain (blue), the Inositol trisphosphate (IP3) receptor (green) and Glial fibrillary acidic protein (GFAP) (red).</p><h4>Splitting the channels</h4><p>Once again we seperate the image by each channel to see the fluorescence signal. Rather than artifically colour it through cmap, as we did preiously, we will leave the colour scale grey so we can more easily compare the intensity in differeing sections. From these images it is clear the IP3 stain (green)is clearly demarking the Purkinje cell layer, above the granular cell layer highlighted in blue by the Hoechst stain..</p>
+        <div class="code-area">
+            <div class="code-container code-fixed">
+                <textarea id="code-cell-24">red, green, blue = 0, 1, 2
+
+fig, ax = subplots(ncols=3, figsize=(20,10))
+
+ax[0].imshow(rat_brain[:, :, red], cmap=&#x27;gray&#x27;)
+ax[0].set_title(&#x27;Red Channel&#x27;)
+
+ax[1].imshow(rat_brain[:, :, green], cmap=&#x27;gray&#x27;)
+ax[1].set_title(&#x27;Green Channel&#x27;)
+
+ax[2].imshow(rat_brain[:, :, blue], cmap=&#x27;gray&#x27;);
+ax[2].set_title(&#x27;Blue Channel&#x27;);</textarea>
+            </div>
+            <div id="code-cell-24-output" class="output"></div>
+        </div>
+        <p>Plotting a histogram of the pixel intensities in the green channel show a clear bimodal distribution, separated by a trough at around the 50 mark.</p>
+        <div class="code-area">
+            <div class="code-container code-fixed">
+                <textarea id="code-cell-25">fig, ax = subplots()
+
+image_green = rat_cerebellum[:, :, green]
+
+image_green_flattened = image_green.flatten()
+
+ax.hist(image_green_flattened, bins=60);</textarea>
+            </div>
+            <div id="code-cell-25-output" class="output"></div>
+        </div>
+        <p>In this instance we are interested in areas with high intensity values, as they indicate the purkinje cells. We will create a mask that is True only when the pixels are higher than the threshold. Multiplying the image by the mask will keep all the values above the threshold at the <strong>same</strong> value, those below will become <code>0</code>.<br><br>We can see this effect clearly when comparing the boolean mask image, which is either black or white, with the image being imaged where the white portions have some variation.<br><br><em>Try playing around with the threshold value to see how it affects the mask.</em></p>
+        <div class="code-area">
+            <div class="code-container code-editor">
+                <textarea id="code-cell-26">threshold = 60
+
+mask = image_green &gt; threshold
+
+image_masked = image_green * mask
+
+fig, ax = subplots(ncols=3)
+
+ax[0].imshow(image_green, cmap=&#x27;gray&#x27;);
+ax[0].set_title(&quot;Green Channel&quot;);
+ax[0].axis(&quot;off&quot;);
+
+ax[1].imshow(mask, cmap=&#x27;gray&#x27;);
+ax[1].set_title(&quot;Boolean Mask&quot;);
+ax[1].axis(&quot;off&quot;);
+
+ax[2].imshow(image_masked, cmap=&#x27;gray&#x27;);
+ax[2].set_title(&quot;Masked Image&quot;);
+ax[2].axis(&quot;off&quot;);
+
+fig.tight_layout()</textarea>
+            </div>
+            <button id="run-code-cell-26" class="run-button">Run Code</button>
+            <div id="code-cell-26-output" class="output"></div>
+        </div>
+        <p>Now we have our mask we need to apply it to the other channels and recompose our image with all <strong>three</strong> channels. To do so we actually need to flip the boolean mask, changing the Trues to False and the False to True. We can do this using the <code>~</code> operator.<br><br>We do this because we want to zero out the pixels that are not above the threshold, by setting them to 0 through assignment. Here our mask tells the assignment value where to set the values to 0 and where to leave them, with the former being True and the latter being False. We therefore want the pixels below the threshold to be True and not False as they were before. Take some time to think about this, as it can feel unintuitive at first.<br><br><em>Run the cell with differing thresholds to see how well you can isolate the purkinje cells.</em></p>
+        <div class="code-area">
+            <div class="code-container code-editor">
+                <textarea id="code-cell-27"># Copy the orignal image incase of change
+img_masked = rat_cerebellum.copy()
+
+# Recreate the mask
+background = 0
+threshold = 60
+mask = image_green &gt; threshold
+
+# We apply the ~ here to flip the mask
+img_masked[~mask, :] = background
+
+fig, ax = subplots()
+
+ax.imshow(img_masked)
+ax.axis(&quot;off&quot;);</textarea>
+            </div>
+            <button id="run-code-cell-27" class="run-button">Run Code</button>
+            <div id="code-cell-27-output" class="output"></div>
+        </div>
+        <p>We now have a full colour image, where the pixel intensities are only present where the co-locate with pixels higher than our threshold in the green channel. Removing the background creates a clear distinction between the purkinje cells and their surroundings. You could then proceed to obtain statistics on the size of the layer by extrating its volume.</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="module-card" id="summary">
+                <div class="module-body">
+                    <div class="module-section">
+                        <h3>Summary</h3>
+                        <p>Something</p>
+                    </div>
+                </div>
+            </div>
+            
+        
+        <div class="page-navigation">
+            <a href="./reading-images.html" class="nav-button prev">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                    <path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"/>
+                </svg>
+                Previous
+            </a>
+            <a href="./large-images.html" class="nav-button next">
+                Next
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                    <path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"/>
+                </svg>
+            </a></div>
+        
+        <!-- Footer -->
+        <div class="footer">
+            <div>© All materials are copyright scryptIQ 2025</div>
+            <div>Powered by Pyodide</div>
+        </div>
+    </div>
+
+    <!-- JavaScript -->
+    <script src="../assets/main.js"></script>
+    
+    <!-- Pyodide Initialisation Script -->
+    <script>
+
+// Generalisable Pyodide Initialisation Script
+// Variables and state build up naturally as code blocks execute in order
+
+async function main() {
+    // Show loading message for all output elements
+    document.querySelectorAll(".output").forEach(el => {
+        el.textContent = "Loading Pyodide...";
+        el.classList.add("loading-message");
+    });
+    
+    try {
+        // Load Pyodide
+        console.log("Loading Pyodide...");
+        const pyodideStartTime = performance.now();
+        let pyodide = await loadPyodide();
+        const pyodideLoadTime = performance.now() - pyodideStartTime;
+        console.log(`Pyodide loaded in ${pyodideLoadTime.toFixed(2)}ms`);
+        
+        // Load required packages only if specified
+        const lessonPackages = window.LESSON_PACKAGES || [];
+        
+        if (lessonPackages.length > 0) {
+            console.log("Loading required Python packages...");
+            const packagesStartTime = performance.now();
+            
+            // Separate built-in packages from PyPI packages
+            const builtInPackages = lessonPackages.filter(pkg => 
+                ['numpy', 'scipy', 'matplotlib', 'pandas', 'scikit-learn', 'pillow', 'regex'].includes(pkg)
+            );
+            
+            const micropipPackages = lessonPackages.filter(pkg => !builtInPackages.includes(pkg));
+            
+            // Load built-in packages (fast)
+            if (builtInPackages.length > 0) {
+                await pyodide.loadPackage(builtInPackages);
+                console.log(`Loaded built-in packages: ${builtInPackages.join(', ')}`);
+            }
+            
+            // Install PyPI packages (slower)
+            if (micropipPackages.length > 0) {
+                await pyodide.loadPackage(['micropip']);
+                const micropip = pyodide.pyimport('micropip');
+                await micropip.install(micropipPackages);
+                console.log(`Installed PyPI packages: ${micropipPackages.join(', ')}`);
+            }
+            
+            const packagesLoadTime = performance.now() - packagesStartTime;
+            console.log(`Packages loaded in ${packagesLoadTime.toFixed(2)}ms`);
+            console.log(`Total initialisation time: ${(pyodideLoadTime + packagesLoadTime).toFixed(2)}ms`);
+        } else {
+            console.log("No packages to load for this lesson");
+            console.log(`Total initialisation time: ${pyodideLoadTime.toFixed(2)}ms`);
+        }
+
+        // Only set up basic Python environment - no pre-loaded variables
+        await pyodide.runPythonAsync(`
+            import sys
+            from io import StringIO
+        `);
+
+        // Only set up matplotlib if it's in the loaded packages
+        if (lessonPackages.includes('matplotlib')) {
+            await pyodide.runPythonAsync(`
+                # Set up matplotlib for web rendering
+                import matplotlib
+                matplotlib.use('AGG')
+                import matplotlib.pyplot as plt
+                import io
+                import base64
+                
+                def capture_matplotlib():
+                    """Capture current matplotlib figure as HTML img tag"""
+                    buf = io.BytesIO()
+                    plt.savefig(buf, format='png', bbox_inches='tight', dpi=100)
+                    buf.seek(0)
+                    img_base64 = base64.b64encode(buf.read()).decode('utf-8')
+                    plt.close()
+                    return f'<img src="data:image/png;base64,{img_base64}" style="max-width: 100%; height: auto;" />'
+            `);
+            console.log('Matplotlib capture function set up');
+        }
+        
+        console.log("Pyodide loaded successfully");
+        
+        // Load remote files if URLs are specified
+        const lessonFiles = window.LESSON_FILES || [];
+        
+        if (lessonFiles.length > 0) {
+            try {
+                console.log(`Checking for ${lessonFiles.length} remote file(s) to load...`);
+                
+                // Build Python code to load all files dynamically
+                let pythonCode = `
+from pyodide.http import pyfetch
+import os
+
+# Create data directory if it doesn't exist
+os.makedirs('./data', exist_ok=True)
+`;
+                
+                // Add loading code for each file
+                for (const file of lessonFiles) {
+                    if (file.is_binary) {
+                        // Binary files (images, etc.) - use bytes
+                        pythonCode += `
+# Load ${file.filename} (binary)
+try:
+    response = await pyfetch("${file.url}")
+    content = await response.bytes()
+    with open('./data/${file.filename}', 'wb') as f:
+        f.write(bytes(content))
+    print("Loaded: ${file.filename}")
+except Exception as e:
+    print(f"Could not load ${file.filename}: {e}")
+`;
+                    } else {
+                        // Text files (CSV, etc.) - use string
+                        pythonCode += `
+# Load ${file.filename} (text)
+try:
+    response = await pyfetch("${file.url}")
+    content = await response.string()
+    with open('./data/${file.filename}', 'w') as f:
+        f.write(content)
+    print("Loaded: ${file.filename}")
+except Exception as e:
+    print(f"Could not load ${file.filename}: {e}")
+`;
+                    }
+                }
+                
+                await pyodide.runPythonAsync(pythonCode);
+                console.log("Remote files loaded successfully");
+            } catch (error) {
+                console.warn("Error loading remote files (continuing anyway):", error);
+            }
+        } else {
+            console.log("No remote files to load for this lesson");
+        }
+        
+        // Function to execute Python code and capture output
+        async function executePythonCode(code) {
+            try {
+                // Redirect Python stdout to capture print statements
+                await pyodide.runPythonAsync(`
+                    old_stdout = sys.stdout
+                    sys.stdout = mystdout = StringIO()
+                `);
+                
+                // Run the user code
+                const result = await pyodide.runPythonAsync(code);
+                
+                // Get the captured stdout
+                let stdout = await pyodide.runPythonAsync(`
+                    sys.stdout = old_stdout
+                    mystdout.getvalue()
+                `);
+                
+                // Check for matplotlib figures only if matplotlib was loaded
+                const lessonPackages = window.LESSON_PACKAGES || [];
+                if (lessonPackages.includes('matplotlib')) {
+                    const hasFigures = await pyodide.runPythonAsync(`
+                        import matplotlib.pyplot as plt
+                        len(plt.get_fignums()) > 0
+                    `);
+                    
+                    if (hasFigures) {
+                        const figureHtml = await pyodide.runPythonAsync(`capture_matplotlib()`);
+                        if (stdout) stdout += "\n";
+                        stdout += figureHtml;
+                    }
+                }
+                
+                // Combine stdout and result
+                let output = stdout;
+                if (result !== undefined && result !== null && String(result).trim() !== '') {
+                    if (output) output += "\n";
+                    output += String(result);
+                }
+                
+                return { success: true, output: output || "Code executed successfully (no output)" };
+                
+            } catch (error) {
+                return { success: false, output: "Error: " + error.message };
+            }
+        }
+        
+        // Execute all hidden code blocks first (for setup code like imports)
+        const hiddenCodeBlocks = Array.from(document.querySelectorAll('.hidden-code textarea'));
+        console.log(`Found ${hiddenCodeBlocks.length} hidden code blocks`);
+
+        for (const textarea of hiddenCodeBlocks) {
+            const code = textarea.value.trim();
+            if (!code) continue;
+            
+            console.log(`Executing hidden code block: ${textarea.id}`);
+            console.log(`Hidden code content: ${code.substring(0, 100)}...`);
+            const result = await executePythonCode(code);
+            
+            if (!result.success) {
+                console.error(`Error in hidden code block ${textarea.id}:`, result.output);
+            } else {
+                console.log(`Hidden code block ${textarea.id} executed successfully`);
+                console.log(`Result: ${result.output}`);
+            }
+        }
+
+        console.log("All hidden code blocks executed");
+        
+        // Get all fixed code blocks in document order
+        const fixedCodeBlocks = Array.from(document.querySelectorAll('.code-fixed textarea'));
+        
+        // Setup and execute fixed code blocks sequentially
+        for (const textarea of fixedCodeBlocks) {
+            const code = textarea.value.trim();
+            if (!code) continue;
+            
+            // Set up CodeMirror editor (read-only)
+            const editor = CodeMirror.fromTextArea(textarea, {
+                mode: "python",
+                theme: "pastel-on-dark",
+                lineNumbers: true,
+                readOnly: true,
+                viewportMargin: Infinity
+            });
+            
+            // Find corresponding output element
+            const outputId = textarea.id + '-output';
+            const outputElement = document.getElementById(outputId);
+            
+            if (outputElement) {
+                outputElement.textContent = "Running code...";
+                outputElement.classList.add("loading-message");
+                
+                // Execute the code (this maintains state for subsequent blocks)
+                const result = await executePythonCode(code);
+                
+                // Display the output - check if it's HTML
+                const trimmedOutput = result.output.trim();
+                console.log('Output length:', trimmedOutput.length);
+                console.log('Output starts with:', trimmedOutput.substring(0, 100));
+                
+                if (trimmedOutput.includes('<script') && trimmedOutput.includes('Plotly')) {
+                    // It's Plotly HTML output - extract just the body content
+                    console.log('Rendering as Plotly HTML');
+                    const parser = new DOMParser();
+                    const doc = parser.parseFromString(result.output, 'text/html');
+                    // Clear the output element and append the body content
+                    outputElement.innerHTML = '';
+                    
+                    // Find and load external scripts first (like Plotly CDN)
+                    const externalScripts = Array.from(doc.querySelectorAll('script[src]'));
+                    const inlineScripts = Array.from(doc.querySelectorAll('script:not([src])'));
+                    
+                    // Append non-script content first
+                    Array.from(doc.body.children).forEach(child => {
+                        if (child.tagName !== 'SCRIPT') {
+                            outputElement.appendChild(child.cloneNode(true));
+                        }
+                    });
+                    
+                    // Load external scripts sequentially
+                    const loadScript = (src) => {
+                        return new Promise((resolve, reject) => {
+                            const script = document.createElement('script');
+                            script.src = src;
+                            script.onload = resolve;
+                            script.onerror = reject;
+                            document.head.appendChild(script);
+                        });
+                    };
+                    
+                    // Load all external scripts first
+                    Promise.all(externalScripts.map(s => loadScript(s.src)))
+                        .then(() => {
+                            console.log('External scripts loaded, executing inline scripts');
+                            // Now execute inline scripts
+                            inlineScripts.forEach(oldScript => {
+                                const newScript = document.createElement('script');
+                                newScript.textContent = oldScript.textContent;
+                                outputElement.appendChild(newScript);
+                            });
+                            console.log('Output element after processing:', outputElement.children.length, 'children');
+                        })
+                        .catch(err => {
+                            console.error('Failed to load external scripts:', err);
+                            outputElement.textContent = 'Error loading Plotly: ' + err.message;
+                        });
+                } else if (trimmedOutput.startsWith('<!DOCTYPE') || 
+                           trimmedOutput.startsWith('<html') ||
+                            trimmedOutput.startsWith('<div') ||
+                            trimmedOutput.startsWith('<img')) {
+                    console.log('Rendering as generic HTML');
+                    outputElement.innerHTML = result.output;
+                    console.log('Output element after innerHTML:', outputElement.children.length, 'children');
+                } else {
+                    console.log('Rendering as plain text');
+                    outputElement.textContent = result.output;
+                }
+                outputElement.classList.remove("loading-message");
+                if (result.success) {
+                    outputElement.classList.add("success-message");
+                    outputElement.classList.remove("error-message");
+                } else {
+                    outputElement.classList.add("error-message");
+                    outputElement.classList.remove("success-message");
+                }
+            }
+            
+            // Small delay to show progression
+            await new Promise(resolve => setTimeout(resolve, 100));
+        }
+        
+        // Setup all editable code blocks (but don't execute them)
+        document.querySelectorAll('.code-editor textarea').forEach((textarea) => {
+            // Set up CodeMirror editor (editable)
+            const editor = CodeMirror.fromTextArea(textarea, {
+                mode: "python",
+                theme: "pastel-on-dark",
+                lineNumbers: true,
+                viewportMargin: Infinity
+            });
+            
+            // Find corresponding run button and output element
+            const baseId = textarea.id;
+            const runButtonId = 'run-' + baseId;
+            const outputId = baseId + '-output';
+            
+            const runButton = document.getElementById(runButtonId);
+            const outputElement = document.getElementById(outputId);
+            
+            if (runButton && outputElement) {
+                // Set initial state
+                outputElement.textContent = "Ready to run code!";
+                outputElement.classList.remove("loading-message");
+                
+                runButton.addEventListener("click", async () => {
+                    const code = editor.getValue().trim();
+                    if (!code) {
+                        outputElement.textContent = "No code to run";
+                        return;
+                    }
+                    
+                    outputElement.textContent = "Running...";
+                    outputElement.classList.remove("error-message", "success-message");
+                    outputElement.classList.add("loading-message");
+                    
+                    // Execute the code (this also maintains state for future blocks)
+                    const result = await executePythonCode(code);
+                    
+                    // Display the output - check if it's HTML
+                    const trimmedOutput = result.output.trim();
+                    console.log('Output length:', trimmedOutput.length);
+                    console.log('Output starts with:', trimmedOutput.substring(0, 100));
+                    
+                    if (trimmedOutput.includes('<script') && trimmedOutput.includes('Plotly')) {
+                        // It's Plotly HTML output - extract just the body content
+                        console.log('Rendering as Plotly HTML');
+                        const parser = new DOMParser();
+                        const doc = parser.parseFromString(result.output, 'text/html');
+                        // Clear the output element and append the body content
+                        outputElement.innerHTML = '';
+                        
+                        // Find and load external scripts first (like Plotly CDN)
+                        const externalScripts = Array.from(doc.querySelectorAll('script[src]'));
+                        const inlineScripts = Array.from(doc.querySelectorAll('script:not([src])'));
+                        
+                        // Append non-script content first
+                        Array.from(doc.body.children).forEach(child => {
+                            if (child.tagName !== 'SCRIPT') {
+                                outputElement.appendChild(child.cloneNode(true));
+                            }
+                        });
+                        
+                        // Load external scripts sequentially
+                        const loadScript = (src) => {
+                            return new Promise((resolve, reject) => {
+                                const script = document.createElement('script');
+                                script.src = src;
+                                script.onload = resolve;
+                                script.onerror = reject;
+                                document.head.appendChild(script);
+                            });
+                        };
+                        
+                        // Load all external scripts first
+                        Promise.all(externalScripts.map(s => loadScript(s.src)))
+                            .then(() => {
+                                console.log('External scripts loaded, executing inline scripts');
+                                // Now execute inline scripts
+                                inlineScripts.forEach(oldScript => {
+                                    const newScript = document.createElement('script');
+                                    newScript.textContent = oldScript.textContent;
+                                    outputElement.appendChild(newScript);
+                                });
+                                console.log('Output element after processing:', outputElement.children.length, 'children');
+                            })
+                            .catch(err => {
+                                console.error('Failed to load external scripts:', err);
+                                outputElement.textContent = 'Error loading Plotly: ' + err.message;
+                            });
+                    } else if (trimmedOutput.startsWith('<!DOCTYPE') || 
+                               trimmedOutput.startsWith('<html') ||
+                               trimmedOutput.startsWith('<div') ||
+                               trimmedOutput.startsWith('<img')) {
+                        outputElement.innerHTML = result.output;
+                    } else {
+                        outputElement.textContent = result.output;
+                    }
+                    outputElement.classList.remove("loading-message");
+                    if (result.success) {
+                        outputElement.classList.add("success-message");
+                        outputElement.classList.remove("error-message");
+                    } else {
+                        outputElement.classList.add("error-message");
+                        outputElement.classList.remove("success-message");
+                    }
+                });
+            }
+        });
+        
+        console.log("All code blocks initialised successfully");
+
+        // Set flag to indicate Pyodide is fully ready
+        window.pyodideReady = true;
+        console.log("Pyodide fully ready");
+        
+    } catch (error) {
+        console.error("Failed to initialise Pyodide:", error);
+        document.querySelectorAll(".output").forEach(el => {
+            el.textContent = "Error loading Pyodide: " + error.message;
+            el.classList.remove("loading-message");
+            el.classList.add("error-message");
+        });
+    }
+}
+
+// Start the application when DOM is loaded
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', main);
+} else {
+    main();
+}
+    </script>
+</body>
+</html>
+    

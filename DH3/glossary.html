@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <!-- Favicons -->
+    <link rel="icon" type="image/x-icon" href="../assets/favicon.ico">
+    <link rel="icon" type="image/png" sizes="32x32" href="../assets/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="../assets/favicon-16x16.png">
+    <link rel="apple-touch-icon" sizes="192x192" href="../assets/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="192x192" href="../assets/android-chrome-192x192.png">
+    <link rel="icon" type="image/png" sizes="512x512" href="../assets/android-chrome-512x512.png">
+    
+    <!-- Core Stylesheets -->
+    <link rel="stylesheet" href=../assets/colours-l2d.css>
+    <link rel="stylesheet" href="../assets/shared-styles.css">
+    <link rel="stylesheet" href="../assets/module_card.css">
+    
+    <!-- Meta Tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>L2D - DH3 - Glossary</title>
+    
+    <style>
+        /* Override sidebar styling since we're not using it */
+        body {
+            background-color: var(--background) !important;
+            color: var(--text-primary);
+            margin: 0 !important;
+            padding: 0 !important;
+            min-height: 100vh;
+            display: flex !important;
+            justify-content: center !important;
+            align-items: flex-start !important;
+            flex-direction: column !important;
+        }
+
+        .main-content {
+            width: 100% !important;
+            max-width: 1200px !important;
+            padding: 0 20px !important;
+            box-sizing: border-box !important;
+            margin: 0 auto !important;
+            position: relative !important;
+            left: auto !important;
+            right: auto !important;
+            transform: none !important;
+        }
+
+        /* Additional centering overrides */
+        #main-content {
+            margin-left: auto !important;
+            margin-right: auto !important;
+            text-align: left !important;
+        }
+
+        .logo-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px 0;
+        }
+
+        .logo-container img {
+            width: clamp(60px, 10vw, 120px);
+            height: clamp(60px, 10vw, 120px);
+            margin-right: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .glossary-entry {
+            margin-bottom: 25px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+        }
+
+        .glossary-entry:last-child {
+            border-bottom: none;
+        }
+
+        .glossary-term {
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--remember);
+            margin-bottom: 8px;
+        }
+
+        .glossary-definition {
+            line-height: 1.6;
+            color: var(--text-secondary);
+        }
+
+        @media (max-width: 768px) {
+            .logo-container img {
+                height: 60px;
+            }
+            
+            .glossary-term {
+                font-size: 16px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="main-content" class="main-content">
+        <div class="top-navbar">
+            <div class="logo-container">
+                <h1 class="page-title">Data Handling 3 - Glossary</h1>
+            </div>
+        </div>
+
+        <div class="module-card">
+            <div class="module-header">
+                Glossary <span class="module-tag">DH3</span>
+            </div>
+            <div class="module-body">
+                
+                <div class="glossary-entry">
+                    <strong>Binary Mask</strong>: A mask that isolates pixels whose intensity value is below a certain threshold. Everything below this threshold can be assigned to, for instance, a value of 1 (representing True), and everything above will be assigned a value of 0 (representing False).
+                </div>
+                <div class="glossary-entry">
+                    <strong>Channel</strong>: A single component of a colour image, such as the Red, Green, or Blue layer in an RGB image.
+                </div>
+                <div class="glossary-entry">
+                    <strong>Colour Map</strong>: A method to map numerical data to colours, allowing single-channel images to be visualized with false colours (e.g., &#x27;viridis&#x27; or &#x27;magma&#x27;).
+                </div>
+                <div class="glossary-entry">
+                    <strong>Coronal Plane</strong>: A viewing plane in 3D imaging that divides the body into front and back sections.
+                </div>
+                <div class="glossary-entry">
+                    <strong>Downsampling</strong>: The process of reducing the number of pixels in an image (resolution) to decrease file size or memory usage.
+                </div>
+                <div class="glossary-entry">
+                    <strong>False Colour</strong>: Colours assigned to intensity values in a greyscale image to enhance visualization, not representing the true colour of the subject.
+                </div>
+                <div class="glossary-entry">
+                    <strong>Greyscale</strong>: An image format where each pixel represents a single intensity value, usually ranging from 0 (black) to 255 (white).
+                </div>
+                <div class="glossary-entry">
+                    <strong>Histogram</strong>: A graphical representation of the distribution of pixel intensity values in an image.
+                </div>
+                <div class="glossary-entry">
+                    <strong>Mask</strong>: A filter applied to an image to isolate specific regions based on pixel intensity or other criteria.
+                </div>
+                <div class="glossary-entry">
+                    <strong>MRI</strong>: Magnetic Resonance Imaging. A medical imaging technique that frequently produces 3D image data.
+                </div>
+                <div class="glossary-entry">
+                    <strong>NIfTI</strong>: Neuroimaging Informatics Technology Initiative (NIfTI) open file format. A common file format for neuroimaging data (e.g., MRI scans).
+                </div>
+                <div class="glossary-entry">
+                    <strong>Patching</strong>: A technique to divide a large picture up into smaller chunks that are termed patches, often used to handle large images that are difficult to process in memory.
+                </div>
+                <div class="glossary-entry">
+                    <strong>Pixel</strong>: In digital imaging, a pixel is simply a numerical value that represents either intensity, in a greyscale image, or colour intensity, in a colour image. The name &#x27;pixel&#x27; is an amalgamation of &#x27;picture&#x27; and &#x27;element&#x27;.
+                </div>
+                <div class="glossary-entry">
+                    <strong>Resolution</strong>: The total number of pixels in the image.
+                </div>
+                <div class="glossary-entry">
+                    <strong>RGB</strong>: A colour model where any colour is a composite of the intensity value for Red, Green, and Blue channels.
+                </div>
+                <div class="glossary-entry">
+                    <strong>Sagittal Plane</strong>: A viewing plane in 3D imaging that divides the body into left and right sections.
+                </div>
+                <div class="glossary-entry">
+                    <strong>Slice</strong>: A two-dimensional cross-section extracted from a three-dimensional image volume.
+                </div>
+                <div class="glossary-entry">
+                    <strong>Thresholding</strong>: A method of image segmentation that converts a greyscale image into a binary mask based on whether pixel intensities are above or below a specified value.
+                </div>
+                <div class="glossary-entry">
+                    <strong>Transverse Plane</strong>: A viewing plane in 3D imaging that divides the body into superior (top) and inferior (bottom) sections.
+                </div>
+                <div class="glossary-entry">
+                    <strong>Voxel</strong>: Volume pixel. A value on a regular grid in three-dimensional space.
+                </div>
+            </div>
+        </div>
+
+        <div class="footer">
+            <div>© Built with parchmentIQ copyright of scryptIQ</div>
+            <div>© L2D is copyright UCL 2025</div>
+        </div>
+    </div>
+</body>
+</html>
+        
