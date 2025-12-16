@@ -35,7 +35,7 @@
     <script>
         window.LESSON_FILES = [
             {url: "https://raw.githubusercontent.com/ScryptIQ-ai/lesson-data/main/dh/axon_slice.jpg", filename: "axon_slice.jpg", is_binary: true},
-            {url: "https://raw.githubusercontent.com/ScryptIQ-ai/lesson-data/main/dh/rat_cerebellum.jpeg", filename: "rat_cerebellum.jpeg", is_binary: true}
+            {url: "https://raw.githubusercontent.com/ScryptIQ-ai/lesson-data/main/dh/rat_brain_low_res.jpg", filename: "rat_brain_low_res.jpg", is_binary: true}
         ];
         window.LESSON_PACKAGES = ['numpy', 'matplotlib'];
     </script>
@@ -277,7 +277,7 @@ ax[2].set_title(&#x27;Blue Channel&#x27;);</textarea>
             <div class="code-container code-fixed">
                 <textarea id="code-cell-25">fig, ax = subplots()
 
-image_green = rat_cerebellum[:, :, green]
+image_green = rat_brain[:, :, green]
 
 image_green_flattened = image_green.flatten()
 
@@ -317,7 +317,7 @@ fig.tight_layout()</textarea>
         <div class="code-area">
             <div class="code-container code-editor">
                 <textarea id="code-cell-27"># Copy the orignal image incase of change
-img_masked = rat_cerebellum.copy()
+img_masked = rat_brain.copy()
 
 # Recreate the mask
 background = 0
