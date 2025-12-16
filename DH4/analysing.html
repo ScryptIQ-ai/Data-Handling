@@ -1,0 +1,953 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <!-- Pyodide and CodeMirror -->
+    <script src="https://cdn.jsdelivr.net/pyodide/v0.24.1/full/pyodide.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/codemirror.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/theme/pastel-on-dark.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/codemirror.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/mode/python/python.min.js"></script>
+    
+    <!-- Favicons -->
+    <link rel="icon" type="image/x-icon" href="../assets/favicon.ico">
+    <link rel="icon" type="image/png" sizes="32x32" href="../assets/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="../assets/favicon-16x16.png">
+    <link rel="apple-touch-icon" sizes="192x192" href="../assets/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="192x192" href="../assets/android-chrome-192x192.png">
+    <link rel="icon" type="image/png" sizes="512x512" href="../assets/android-chrome-512x512.png">
+    
+    <!-- Core Stylesheets -->
+    <link rel="stylesheet" href=../assets/colours-l2d.css>
+    <link rel="stylesheet" href="../assets/shared-styles.css">
+    <link rel="stylesheet" href="../assets/nav-bar.css">
+    <link rel="stylesheet" href="../assets/module_card.css">
+    <link rel="stylesheet" href="../assets/learning_outcomes.css">
+    <link rel="stylesheet" href="../assets/learning_lists.css">
+    <link rel="stylesheet" href="../assets/box_styles.css">
+    <link rel="stylesheet" href="../assets/code_styles.css">
+
+    <!-- Meta Tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>L2D - DH4 - Analysis</title>
+    
+    <!-- File URLs for this lesson -->
+    <script>
+        window.LESSON_FILES = [
+            {url: "https://raw.githubusercontent.com/ScryptIQ-ai/lesson-data/refs/heads/main/dh/EEG_absence.txt", filename: "EEG_absence.txt", is_binary: false},
+            {url: "https://raw.githubusercontent.com/ScryptIQ-ai/lesson-data/refs/heads/main/dh/EEG_background.txt", filename: "EEG_background.txt", is_binary: false}
+        ];
+        window.LESSON_PACKAGES = ['pandas', 'matplotlib', 'numpy', 'scipy'];
+    </script>
+        
+</head>
+<body>
+    
+    <!-- Sidebar Navigation -->
+    <div id="sidebar" class="sidebar">
+        <div class="sidebar-header">
+            <a href="../homepage.html" style="text-decoration: none; display: inline-block;">
+                <img src="../assets/l2d-brain-logo.png" alt="scryptIQ Logo" class="sidebar-logo">
+            </a>
+        </div>
+
+        <h3>Content</h3>
+        <ul>
+            <li><a href="./introduction.html" class="">Introduction</a></li><li><a href="./visualisation.html">Visualisation</a></li><li><a href="./filtering.html">Filtering</a></li>
+            <li>
+                <div class="nav-toggle active" data-target="expandable-section-3">
+                    Analysis
+                    <span class="toggle-icon">▼</span>
+                </div>
+                <ul class="nested-nav expanded" id="expandable-section-3"><li><a href="#introduction">Introduction</a></li><li><a href="#transform-of-eeg-data">Transform of EEG data</a></li><li><a href="#cross-correlation-matrix">Cross-Correlation Matrix</a></li><li><a href="#observations">Observations</a></li><li><a href="#summary">Summary</a></li>
+                </ul>
+            </li><li><a href="./assignment.html">Assignment</a></li><li><a href="./feedback.html">Feedback</a></li>
+        </ul>
+
+        <h3 class="collapsible-header collapsed">
+            Resources
+            <span class="collapse-icon">►</span>
+        </h3>
+        <div class="collapsible-content collapsed">
+            <ul>
+                <li><a href="./glossary.html">Glossary</a></li><li><a href="./downloads.html">Downloads</a></li><li><a href="../HB/introduction.html">Handbook</a></li>
+            </ul>
+        </div>
+
+        <h3 class="collapsible-header collapsed">
+            Previous Modules
+            <span class="collapse-icon">►</span>
+        </h3>
+        <div class="collapsible-content collapsed">
+            <ul>
+            <li><a href="../DH1/introduction.html">DH1</a></li>
+            <li><a href="../DH2/introduction.html">DH2</a></li>
+            <li><a href="../DH3/introduction.html">DH3</a></li>
+        </ul>
+        </div>
+
+        <h3>
+            <li><a href="./report-issue.html">Report an Issue</a></li>
+        </h3>
+    </div>
+    
+    <!-- Sidebar Toggle Button -->
+    <button id="sidebar-toggle" class="sidebar-toggle">❮</button>
+    
+    <!-- Main Content Area -->
+    <div id="main-content" class="main-content">
+        <!-- Top Navigation Bar -->
+        <div class="top-navbar">
+            <h1 class="page-title">Data Handling 4</h1>
+            <div class="nav-actions">
+                <a href="../homepage.html" class="text-button" title="Materials homepage">
+                    Homepage
+                </a>
+                <a href="https://learntodiscover.ai/my-cohorts/" class="text-button" title="Find out more about us">
+                    Learn to Discover
+                </a>
+            </div>
+        </div>
+
+        
+            <div class="module-card" id="introduction">
+                <div class="module-header">
+                    Analysis <span class="module-tag">DH4</span>
+                </div>
+                <div class="module-body">
+                    <h3>Learning Objectives</h3>
+                    <div class="learning-outcomes">
+                        <div class="outcome-item">
+                    <span class="outcome-number">1</span>
+                    <span class="outcome-text">Learn about the fourier transformation and how to apply it</span>
+                </div>
+<div class="outcome-item">
+                    <span class="outcome-number">2</span>
+                    <span class="outcome-text">How to apply correlation analysis to time series data</span>
+                </div>
+                    </div>
+                    <h3>Introduction</h3>
+                    <p>The Fourier spectrum decomposes the time series into a sum of sine waves. The spectrum shows the amplitude of each sine wave component present in the signal. The coefficients are directly related to the amplitudes required to optimally fit the sum of all sine waves, in order to recreate the original data.<br><br>However, the assumption behind the Fourier Transform, is that the data are provided as an infinitely long, stationary time series. These assumptions are invalid, as the data are finite and stationarity of a biological system is rarely guaranteed. Thus, interpretation needs to be approached cautiously.</p>
+                </div>
+            </div>
+            
+            <div class="module-card" id="transform-of-eeg-data">
+                <div class="module-body">
+                    <div class="module-section">
+                        <h3>Transform of EEG data</h3>
+                        
+        <div class="code-area hidden-code" style="display: none;">
+            <div class="code-container">
+                <textarea id="code-cell-16">from pandas import read_csv
+from numpy import linspace, arange, zeros 
+from matplotlib.pyplot import subplots, show, legend
+
+def plot_series(data, sr):
+    &#x27;&#x27;&#x27;
+    Time series plot of multiple time series
+    Data are normalised to mean=0 and var=1
+    
+    Parameters:
+    -----------
+    data : numpy.ndarray
+        nxm numpy array. Rows are time points, columns are channels
+    sr : int
+        Sampling rate, same time units as period
+    
+    Features:
+    ---------
+    - Normalises each channel to mean=0, std=1
+    - Offsets channels vertically for clear separation
+    - Adds reference lines at zero for each channel
+    - Proper time axis scaling
+    - Channel labelling
+    &#x27;&#x27;&#x27;
+    # no. of rows or sampling events
+    samples = data.shape[0]
+    # no. of columns or sensors taking readings
+    sensors = data.shape[1]
+    # Length of time series in time
+    period = samples // sr
+    # Array of all time points
+    time = linspace(0, period, period*sr)
+    
+    offset = 5  # for mean=0 and var=1 normalised data
+    
+    # Calculate means and standard deviations of all columns
+    means = data.mean(axis=0)
+    stds = data.std(axis=0)
+    
+    # Plot each series with an offset of 2 times the standard deviations
+    fig, ax = subplots(figsize=(7, 8))
+    
+    # Plot normalised data with vertical offsets
+    ax.plot(time, (data - means)/stds + offset*arange(sensors-1, -1, -1))
+    
+    # Add reference lines at zero for each channel
+    ax.plot(time, zeros((samples, sensors)) + offset*arange(sensors-1, -1, -1),
+            &#x27;--&#x27;, color=&#x27;gray&#x27;, alpha=0.5)
+    
+    ax.set(xlabel=&#x27;Time (seconds)&#x27;, ylabel=&#x27;Channel&#x27;)
+    ax.set_yticks(offset*arange(sensors))
+    ax.set_yticklabels(arange(sensors)[::-1])
+    ax.set_title(&#x27;Multi-Channel Time Series Plot&#x27;)
+    
+    return fig, ax</textarea>
+            </div>
+            <div id="code-cell-16-output" class="output" style="display: none;"></div>
+        </div>
+        
+        <div class="code-area hidden-code" style="display: none;">
+            <div class="code-container">
+                <textarea id="code-cell-17">df_back = read_csv(&quot;./data/EEG_background.txt&quot;, sep=r&quot;\s+&quot;)
+df_epil = read_csv(&quot;./data/EEG_absence.txt&quot;, sep=r&quot;\s+&quot;)
+
+d1 = df_back.to_numpy()
+d2 = df_epil.to_numpy()
+
+sr = 256      # 1 / seconds
+period = 6    # seconds
+channels = 10
+
+data_back = d1[:period*sr:, :channels]
+data_epil = d2[:period*sr:, :channels]</textarea>
+            </div>
+            <div id="code-cell-17-output" class="output" style="display: none;"></div>
+        </div>
+        <p>We import the Fourier Transform function <code>fft</code> from the library <code>scipy.fftpack</code> where it can be used to transform all columns at the same time.</p>
+        <div class="code-area">
+            <div class="code-container code-fixed">
+                <textarea id="code-cell-18">from scipy.fftpack import fft</textarea>
+            </div>
+            <div id="code-cell-18-output" class="output" style="display: none;"></div>
+        </div>
+        <p>To plot the results of the Fourier Transform, the following steps must be taken.<br><br>Firstly, we must obtain a Fourier spectrum for every data column. Thus, we need to define how many plots we want to have. If we take only the columns in our data, we should be able to display them all, simultaneously.</p>
+        <div class="code-area">
+            <div class="code-container code-fixed">
+                <textarea id="code-cell-19">data_back_fft = fft(data_back, axis=0)</textarea>
+            </div>
+            <div id="code-cell-19-output" class="output" style="display: none;"></div>
+        </div>
+        <p>Secondly, the Fourier Transform results in twice the number of complex coefficients; it produces both positive and negative frequency components, of which we only need the first (positive) half.<br><br>Lastly, the Fourier Transform outputs complex numbers. To display the &#x27;amplitude&#x27; of each frequency, we take the absolute value of the complex numbers, using the <code>abs()</code> function.</p>
+        <div class="code-area">
+            <div class="code-container code-fixed">
+                <textarea id="code-cell-20">rows = data_back.shape[0]
+
+freqs = (sr/2)*linspace(0, 1, int(rows/2))
+
+amplitudes_back = (2.0 / rows) * abs(data_back_fft[:rows//2])</textarea>
+            </div>
+            <div id="code-cell-20-output" class="output" style="display: none;"></div>
+        </div>
+        <p>Now we have wrangled the data into a format that can be plotted using MatplotLib.</p>
+        <div class="info-box tip-box">
+            <div class="box-title">
+                <span class="box-icon"></span>
+                TIP
+            </div>
+            <div class="box-content">
+                <p>Change the value of <code>no_win</code> in all the plots below to see more channels</p>
+            </div>
+        </div>
+        
+        <div class="code-area">
+            <div class="code-container code-editor">
+                <textarea id="code-cell-21">no_win = 2 # number of sensors
+
+# sharex shares the x-axis numbers
+fig, axes = subplots(figsize=(6, 5), ncols=1, nrows=no_win, sharex=True) 
+
+names = df_back.columns[:no_win]
+
+for index, ax in enumerate(axes.flat):
+    axes[index].plot(freqs, amplitudes_back[:, index])
+    axes[index].set_xlim(0, 8) # limit the x-axis to between 0 - 8
+    axes[index].set(ylabel=f&#x27;Amplitude {names[index]}&#x27;)
+    axes[index].set(xlabel=&#x27;Frequency (Hz)&#x27;)
+
+show()</textarea>
+            </div>
+            <button id="run-code-cell-21" class="run-button">Run Code</button>
+            <div id="code-cell-21-output" class="output"></div>
+        </div>
+        <p>In these two channels, we can clearly see that the main amplitude contributions lie in the low frequencies, below 2 Hz.</p><p>Let us compare the corresponding figure for the case of seizure activity:</p>
+        <div class="code-area">
+            <div class="code-container code-fixed">
+                <textarea id="code-cell-22">data_epil_fft = fft(data_epil, axis=0)</textarea>
+            </div>
+            <div id="code-cell-22-output" class="output" style="display: none;"></div>
+        </div>
+        
+        <div class="code-area">
+            <div class="code-container code-editor">
+                <textarea id="code-cell-23">no_win = 2 # number of sensors
+
+fig, axes = subplots(figsize=(6, 5), ncols=1, nrows=no_win, sharex=False)
+
+names = df_back.columns[:no_win]
+
+amplitudes_epil = (2.0 / rows) * abs(data_epil_fft[:rows//2])
+
+for index, ax in enumerate(axes.flat):
+    axes[index].plot(freqs, amplitudes_epil[:, index])
+    axes[index].set_xlim(0, 12)
+    axes[index].set(ylabel=f&#x27;Amplitude {names[index]}&#x27;)
+    axes[index].set(xlabel=&#x27;Frequency (Hz)&#x27;)
+
+show()</textarea>
+            </div>
+            <button id="run-code-cell-23" class="run-button">Run Code</button>
+            <div id="code-cell-23-output" class="output"></div>
+        </div>
+        <p>During the seizure, it is clear that the main frequency of the epileptic rhythm is between 2 and 3 Hz.<br><br>As we can see from the Fourier spectra generated above, the amplitudes are high for low frequencies; and these amplitudes tend to decrease as the frequency increases. Thus, it can sometimes be useful to see the high frequencies enhanced. This can be achieved with a logarithmic plot of the powers.</p>
+        <div class="code-area">
+            <div class="code-container code-editor">
+                <textarea id="code-cell-24">no_win = 2 # number of sensors
+
+fig, axes = subplots(figsize=(6, 6), ncols=1, nrows=no_win, sharex=True)
+
+names = df_back.columns[:no_win]
+
+for index, ax in enumerate(axes.flat):
+    axes[index].plot(freqs, amplitudes_back[:, index])
+    axes[index].set_xlim(0, 30)
+    axes[index].set(ylabel=f&#x27;Amplitude {names[index]}&#x27;)
+    axes[index].set_yscale(&#x27;log&#x27;) # set the y-axis to natural log
+
+axes[no_win-1].set(xlabel=&#x27;Frequency (Hz)&#x27;)
+fig.suptitle(&#x27;Logarithmic Fourier Spectra of Background EEG&#x27;, fontsize=16)
+
+show()</textarea>
+            </div>
+            <button id="run-code-cell-24" class="run-button">Run Code</button>
+            <div id="code-cell-24-output" class="output"></div>
+        </div>
+        <p>And for the seizure data:</p>
+        <div class="code-area">
+            <div class="code-container code-editor">
+                <textarea id="code-cell-25">no_win = 2 # number of sensors
+
+fig, axes = subplots(figsize=(6, 10), ncols=1, nrows=no_win, sharex=True)
+
+names = df_back.columns[:no_win]
+
+for index, ax in enumerate(axes.flat):
+    axes[index].plot(freqs, amplitudes_epil[:, index])
+    axes[index].set_xlim(0, 30)
+    axes[index].set(ylabel=f&#x27;Power {names[index]}&#x27;)
+    axes[index].set_yscale(&#x27;log&#x27;)
+
+axes[no_win-1].set(xlabel=&#x27;Frequency (Hz)&#x27;)
+fig.suptitle(&#x27;Logarithmic Fourier Spectra of Seizure EEG&#x27;, fontsize=16)
+
+show()</textarea>
+            </div>
+            <button id="run-code-cell-25" class="run-button">Run Code</button>
+            <div id="code-cell-25-output" class="output"></div>
+        </div>
+        <p>In the spectrum of the absence data, it is now more obvious that there are further maxima at 6, 9, 12 and perhaps 15Hz. These are integer multiples or &#x27;harmonics&#x27; of the basic frequency at around 3Hz, which we term as the fundamental frequency.<br><br>A feature that can be used as a summary statistic, is to calculate the band power for each channel. Band power is the total power of a signal within a specific frequency range. The band power can be obtained by calculating the sum of all powers within a specified range of frequencies; this range is also referred to as the &#x27;band&#x27;. The band power, thus, is given as a single number.</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="module-card" id="transform-of-eeg-data">
+                <div class="module-body">
+                    <div class="module-section">
+                        
+        <div class="info-box practice-exercise-box">
+            <div class="box-title">
+                <span class="box-icon"></span>
+                PRACTICE EXERCISE
+            </div>
+            <div class="box-content">
+                <p><strong>1.</strong></p>
+                <p>Calculate and display the Fourier spectra of the first two channels filtered between 4 and 12 Hz for the absence seizure data.<br>Can you find any harmonics?</p>
+            </div>
+        </div>
+        
+        <div class="code-area">
+            <div class="code-container code-editor">
+                <textarea id="code-cell-26"># Write your code here:</textarea>
+            </div>
+            <button id="run-code-cell-26" class="run-button">Run Code</button>
+            <div id="code-cell-26-output" class="output"></div>
+        </div>
+        
+                    </div>
+                </div>
+            </div>
+            
+            <div class="module-card" id="cross-correlation-matrix">
+                <div class="module-body">
+                    <div class="module-section">
+                        <h3>Cross-Correlation Matrix</h3>
+                        <p>As one example of a multivariate analysis of time series data, we can also calculate the cross-correlation matrix.<br><br>Let us calculate it for the background:</p>
+        <div class="code-area">
+            <div class="code-container code-fixed">
+                <textarea id="code-cell-27">from numpy import corrcoef, fill_diagonal</textarea>
+            </div>
+            <div id="code-cell-27-output" class="output" style="display: none;"></div>
+        </div>
+        
+        <div class="code-area">
+            <div class="code-container code-fixed">
+                <textarea id="code-cell-28">corr_matrix_back = corrcoef(data_back, rowvar=False)
+
+fill_diagonal(corr_matrix_back, 0)
+
+fig, ax = subplots(figsize = (8,8))
+
+im = ax.imshow(corr_matrix_back, cmap=&#x27;coolwarm&#x27;)
+
+fig.colorbar(im, orientation=&#x27;horizontal&#x27;, shrink=0.68)
+
+show()</textarea>
+            </div>
+            <div id="code-cell-28-output" class="output"></div>
+        </div>
+        <p>The diagonal is set to zero. This is done to improve the visual display. If it was left set to one, the diagonal would dominate the visual impression given, even though it is trivial and uninformative.<br><br>Looking at the non-diagonal elements, we find:<ul class="nested-list"><li>Two strongly correlated series (indices 5 and 7)</li><br><li>Two strongly anti-correlated series (indices 3 and 4)</li><br><li>A block of pronounced correlations (between series with indices 4 through 9)</li></ul></p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="module-card" id="cross-correlation-matrix">
+                <div class="module-body">
+                    <div class="module-section">
+                        
+        <div class="info-box practice-exercise-box">
+            <div class="box-title">
+                <span class="box-icon"></span>
+                PRACTICE EXERCISE
+            </div>
+            <div class="box-content">
+                <p><strong>2.</strong></p>
+                <p>Calculate the correlation matrix for the seizure data and compare the correlation pattern to the one from the background data.<br><em>The solution is given below as we discuss the comparison after</em></p>
+            </div>
+        </div>
+        
+        <div class="code-area">
+            <div class="code-container code-editor">
+                <textarea id="code-cell-29"># Write your code here:</textarea>
+            </div>
+            <button id="run-code-cell-29" class="run-button">Run Code</button>
+            <div id="code-cell-29-output" class="output"></div>
+        </div>
+        
+        <div class="code-area">
+            <div class="code-collapse-header" onclick="toggleCodeCollapse('code-cell-30')">
+                <span class="code-collapse-icon">▶</span>
+                <span class="code-collapse-label">Show code</span>
+            </div>
+            <div class="code-container code-fixed code-collapsed" id="code-cell-30-container">
+                <textarea id="code-cell-30">corr_matrix_epil = corrcoef(data_epil, rowvar=False)
+
+fill_diagonal(corr_matrix_epil, 0)
+
+fig, ax = subplots(figsize = (8,8))
+
+im = ax.imshow(corr_matrix_epil, cmap=&#x27;coolwarm&#x27;)
+
+fig.colorbar(im, orientation=&#x27;horizontal&#x27;, shrink=0.68)
+
+show()</textarea>
+            </div>
+            <div id="code-cell-30-output" class="output" style="display: none;"></div>
+        </div>
+        
+                    </div>
+                </div>
+            </div>
+            
+            <div class="module-card" id="observations">
+                <div class="module-body">
+                    <div class="module-section">
+                        <h3>Observations</h3>
+                        <h4>1. Background:</h4><p><ul class="nested-list"><li>There are irregular oscillations of all recorded brain potentials.</li><br><li>Oscillations recorded at different locations above the brain, differ.</li><br><li>Oscillations are not stable, but are modulated over time.</li><br><li>There are different frequency components evident in each trace.</li></ul></p><h4>2. Epileptic Seizure:</h4><p><ul class="nested-list"><li>There are regular oscillations.</li><br><li>Oscillations recorded at different locations are not identical but similar or at least related in terms of their shape.</li><br><li>Despite some modulation, the oscillations are fairly stable over time.</li><br><li>There are repetitive motifs comprising two major components throughout the recording, a sharp spike and a slow wave.</li></ul></p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="module-card" id="summary">
+                <div class="module-body">
+                    <div class="module-section">
+                        <h3>Summary</h3>
+                        <p>We have quantified features of these time series data to obtain an overview of the data. For univariate features, we can use the frequency content. This approach recognises that the rows (or samples) aren&#x27;t independent but are organised along the time axis. Consequently, data points along each column are correlated, and the Fourier spectrum can identify these correlations.<br><br>The Fourier spectrum assumes the data are stationary and represent a superposition of regular sine waves at different frequencies. It reveals which frequencies are present in the data and their respective amplitudes. The spectrum is obtained through the Fourier Transform, which decomposes a signal into its constituent frequencies, enabling analysis of individual frequency components and inferences about periodic characteristics.<br><br>For bivariate features, we can use the cross-correlation matrix.</p>
+                    </div>
+                </div>
+            </div>
+            
+        
+        <div class="page-navigation">
+            <a href="./filtering.html" class="nav-button prev">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                    <path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"/>
+                </svg>
+                Previous
+            </a>
+            <a href="./assignment.html" class="nav-button next">
+                Next
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                    <path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"/>
+                </svg>
+            </a></div>
+        
+        <!-- Footer -->
+        <div class="footer">
+            <div>© All materials are copyright scryptIQ 2025</div>
+            <div>Powered by Pyodide</div>
+        </div>
+    </div>
+
+    <!-- JavaScript -->
+    <script src="../assets/main.js"></script>
+    
+    <!-- Pyodide Initialisation Script -->
+    <script>
+
+// Generalisable Pyodide Initialisation Script
+// Variables and state build up naturally as code blocks execute in order
+
+async function main() {
+    // Show loading message for all output elements
+    document.querySelectorAll(".output").forEach(el => {
+        el.textContent = "Loading Pyodide...";
+        el.classList.add("loading-message");
+    });
+    
+    try {
+        // Load Pyodide
+        console.log("Loading Pyodide...");
+        const pyodideStartTime = performance.now();
+        let pyodide = await loadPyodide();
+        const pyodideLoadTime = performance.now() - pyodideStartTime;
+        console.log(`Pyodide loaded in ${pyodideLoadTime.toFixed(2)}ms`);
+        
+        // Load required packages only if specified
+        const lessonPackages = window.LESSON_PACKAGES || [];
+        
+        if (lessonPackages.length > 0) {
+            console.log("Loading required Python packages...");
+            const packagesStartTime = performance.now();
+            
+            // Separate built-in packages from PyPI packages
+            const builtInPackages = lessonPackages.filter(pkg => 
+                ['numpy', 'scipy', 'matplotlib', 'pandas', 'scikit-learn', 'pillow', 'regex'].includes(pkg)
+            );
+            
+            const micropipPackages = lessonPackages.filter(pkg => !builtInPackages.includes(pkg));
+            
+            // Load built-in packages (fast)
+            if (builtInPackages.length > 0) {
+                await pyodide.loadPackage(builtInPackages);
+                console.log(`Loaded built-in packages: ${builtInPackages.join(', ')}`);
+            }
+            
+            // Install PyPI packages (slower)
+            if (micropipPackages.length > 0) {
+                await pyodide.loadPackage(['micropip']);
+                const micropip = pyodide.pyimport('micropip');
+                await micropip.install(micropipPackages);
+                console.log(`Installed PyPI packages: ${micropipPackages.join(', ')}`);
+            }
+            
+            const packagesLoadTime = performance.now() - packagesStartTime;
+            console.log(`Packages loaded in ${packagesLoadTime.toFixed(2)}ms`);
+            console.log(`Total initialisation time: ${(pyodideLoadTime + packagesLoadTime).toFixed(2)}ms`);
+        } else {
+            console.log("No packages to load for this lesson");
+            console.log(`Total initialisation time: ${pyodideLoadTime.toFixed(2)}ms`);
+        }
+
+        // Only set up basic Python environment - no pre-loaded variables
+        await pyodide.runPythonAsync(`
+            import sys
+            from io import StringIO
+        `);
+
+        // Only set up matplotlib if it's in the loaded packages
+        if (lessonPackages.includes('matplotlib')) {
+            await pyodide.runPythonAsync(`
+                # Set up matplotlib for web rendering
+                import matplotlib
+                matplotlib.use('AGG')
+                import matplotlib.pyplot as plt
+                import io
+                import base64
+                
+                def capture_matplotlib():
+                    """Capture current matplotlib figure as HTML img tag"""
+                    buf = io.BytesIO()
+                    plt.savefig(buf, format='png', bbox_inches='tight', dpi=100)
+                    buf.seek(0)
+                    img_base64 = base64.b64encode(buf.read()).decode('utf-8')
+                    plt.close()
+                    return f'<img src="data:image/png;base64,{img_base64}" style="max-width: 100%; height: auto;" />'
+            `);
+            console.log('Matplotlib capture function set up');
+        }
+        
+        console.log("Pyodide loaded successfully");
+        
+        // Load remote files if URLs are specified
+        const lessonFiles = window.LESSON_FILES || [];
+        
+        if (lessonFiles.length > 0) {
+            try {
+                console.log(`Checking for ${lessonFiles.length} remote file(s) to load...`);
+                
+                // Build Python code to load all files dynamically
+                let pythonCode = `
+from pyodide.http import pyfetch
+import os
+
+# Create data directory if it doesn't exist
+os.makedirs('./data', exist_ok=True)
+`;
+                
+                // Add loading code for each file
+                for (const file of lessonFiles) {
+                    if (file.is_binary) {
+                        // Binary files (images, etc.) - use bytes
+                        pythonCode += `
+# Load ${file.filename} (binary)
+try:
+    response = await pyfetch("${file.url}")
+    content = await response.bytes()
+    with open('./data/${file.filename}', 'wb') as f:
+        f.write(bytes(content))
+    print("Loaded: ${file.filename}")
+except Exception as e:
+    print(f"Could not load ${file.filename}: {e}")
+`;
+                    } else {
+                        // Text files (CSV, etc.) - use string
+                        pythonCode += `
+# Load ${file.filename} (text)
+try:
+    response = await pyfetch("${file.url}")
+    content = await response.string()
+    with open('./data/${file.filename}', 'w') as f:
+        f.write(content)
+    print("Loaded: ${file.filename}")
+except Exception as e:
+    print(f"Could not load ${file.filename}: {e}")
+`;
+                    }
+                }
+                
+                await pyodide.runPythonAsync(pythonCode);
+                console.log("Remote files loaded successfully");
+            } catch (error) {
+                console.warn("Error loading remote files (continuing anyway):", error);
+            }
+        } else {
+            console.log("No remote files to load for this lesson");
+        }
+        
+        // Function to execute Python code and capture output
+        async function executePythonCode(code) {
+            try {
+                // Redirect Python stdout to capture print statements
+                await pyodide.runPythonAsync(`
+                    old_stdout = sys.stdout
+                    sys.stdout = mystdout = StringIO()
+                `);
+                
+                // Run the user code
+                const result = await pyodide.runPythonAsync(code);
+                
+                // Get the captured stdout
+                let stdout = await pyodide.runPythonAsync(`
+                    sys.stdout = old_stdout
+                    mystdout.getvalue()
+                `);
+                
+                // Check for matplotlib figures only if matplotlib was loaded
+                const lessonPackages = window.LESSON_PACKAGES || [];
+                if (lessonPackages.includes('matplotlib')) {
+                    const hasFigures = await pyodide.runPythonAsync(`
+                        import matplotlib.pyplot as plt
+                        len(plt.get_fignums()) > 0
+                    `);
+                    
+                    if (hasFigures) {
+                        const figureHtml = await pyodide.runPythonAsync(`capture_matplotlib()`);
+                        if (stdout) stdout += "\n";
+                        stdout += figureHtml;
+                    }
+                }
+                
+                // Combine stdout and result
+                let output = stdout;
+                if (result !== undefined && result !== null && String(result).trim() !== '') {
+                    if (output) output += "\n";
+                    output += String(result);
+                }
+                
+                return { success: true, output: output || "Code executed successfully (no output)" };
+                
+            } catch (error) {
+                return { success: false, output: "Error: " + error.message };
+            }
+        }
+        
+        // Execute all hidden code blocks first (for setup code like imports)
+        const hiddenCodeBlocks = Array.from(document.querySelectorAll('.hidden-code textarea'));
+        console.log(`Found ${hiddenCodeBlocks.length} hidden code blocks`);
+
+        for (const textarea of hiddenCodeBlocks) {
+            const code = textarea.value.trim();
+            if (!code) continue;
+            
+            console.log(`Executing hidden code block: ${textarea.id}`);
+            console.log(`Hidden code content: ${code.substring(0, 100)}...`);
+            const result = await executePythonCode(code);
+            
+            if (!result.success) {
+                console.error(`Error in hidden code block ${textarea.id}:`, result.output);
+            } else {
+                console.log(`Hidden code block ${textarea.id} executed successfully`);
+                console.log(`Result: ${result.output}`);
+            }
+        }
+
+        console.log("All hidden code blocks executed");
+        
+        // Get all fixed code blocks in document order
+        const fixedCodeBlocks = Array.from(document.querySelectorAll('.code-fixed textarea'));
+        
+        // Setup and execute fixed code blocks sequentially
+        for (const textarea of fixedCodeBlocks) {
+            const code = textarea.value.trim();
+            if (!code) continue;
+            
+            // Set up CodeMirror editor (read-only)
+            const editor = CodeMirror.fromTextArea(textarea, {
+                mode: "python",
+                theme: "pastel-on-dark",
+                lineNumbers: true,
+                readOnly: true,
+                viewportMargin: Infinity
+            });
+            
+            // Find corresponding output element
+            const outputId = textarea.id + '-output';
+            const outputElement = document.getElementById(outputId);
+            
+            if (outputElement) {
+                outputElement.textContent = "Running code...";
+                outputElement.classList.add("loading-message");
+                
+                // Execute the code (this maintains state for subsequent blocks)
+                const result = await executePythonCode(code);
+                
+                // Display the output - check if it's HTML
+                const trimmedOutput = result.output.trim();
+                console.log('Output length:', trimmedOutput.length);
+                console.log('Output starts with:', trimmedOutput.substring(0, 100));
+                
+                if (trimmedOutput.includes('<script') && trimmedOutput.includes('Plotly')) {
+                    // It's Plotly HTML output - extract just the body content
+                    console.log('Rendering as Plotly HTML');
+                    const parser = new DOMParser();
+                    const doc = parser.parseFromString(result.output, 'text/html');
+                    // Clear the output element and append the body content
+                    outputElement.innerHTML = '';
+                    
+                    // Find and load external scripts first (like Plotly CDN)
+                    const externalScripts = Array.from(doc.querySelectorAll('script[src]'));
+                    const inlineScripts = Array.from(doc.querySelectorAll('script:not([src])'));
+                    
+                    // Append non-script content first
+                    Array.from(doc.body.children).forEach(child => {
+                        if (child.tagName !== 'SCRIPT') {
+                            outputElement.appendChild(child.cloneNode(true));
+                        }
+                    });
+                    
+                    // Load external scripts sequentially
+                    const loadScript = (src) => {
+                        return new Promise((resolve, reject) => {
+                            const script = document.createElement('script');
+                            script.src = src;
+                            script.onload = resolve;
+                            script.onerror = reject;
+                            document.head.appendChild(script);
+                        });
+                    };
+                    
+                    // Load all external scripts first
+                    Promise.all(externalScripts.map(s => loadScript(s.src)))
+                        .then(() => {
+                            console.log('External scripts loaded, executing inline scripts');
+                            // Now execute inline scripts
+                            inlineScripts.forEach(oldScript => {
+                                const newScript = document.createElement('script');
+                                newScript.textContent = oldScript.textContent;
+                                outputElement.appendChild(newScript);
+                            });
+                            console.log('Output element after processing:', outputElement.children.length, 'children');
+                        })
+                        .catch(err => {
+                            console.error('Failed to load external scripts:', err);
+                            outputElement.textContent = 'Error loading Plotly: ' + err.message;
+                        });
+                } else if (trimmedOutput.startsWith('<!DOCTYPE') || 
+                           trimmedOutput.startsWith('<html') ||
+                            trimmedOutput.startsWith('<div') ||
+                            trimmedOutput.startsWith('<img')) {
+                    console.log('Rendering as generic HTML');
+                    outputElement.innerHTML = result.output;
+                    console.log('Output element after innerHTML:', outputElement.children.length, 'children');
+                } else {
+                    console.log('Rendering as plain text');
+                    outputElement.textContent = result.output;
+                }
+                outputElement.classList.remove("loading-message");
+                if (result.success) {
+                    outputElement.classList.add("success-message");
+                    outputElement.classList.remove("error-message");
+                } else {
+                    outputElement.classList.add("error-message");
+                    outputElement.classList.remove("success-message");
+                }
+            }
+            
+            // Small delay to show progression
+            await new Promise(resolve => setTimeout(resolve, 100));
+        }
+        
+        // Setup all editable code blocks (but don't execute them)
+        document.querySelectorAll('.code-editor textarea').forEach((textarea) => {
+            // Set up CodeMirror editor (editable)
+            const editor = CodeMirror.fromTextArea(textarea, {
+                mode: "python",
+                theme: "pastel-on-dark",
+                lineNumbers: true,
+                viewportMargin: Infinity
+            });
+            
+            // Find corresponding run button and output element
+            const baseId = textarea.id;
+            const runButtonId = 'run-' + baseId;
+            const outputId = baseId + '-output';
+            
+            const runButton = document.getElementById(runButtonId);
+            const outputElement = document.getElementById(outputId);
+            
+            if (runButton && outputElement) {
+                // Set initial state
+                outputElement.textContent = "Ready to run code!";
+                outputElement.classList.remove("loading-message");
+                
+                runButton.addEventListener("click", async () => {
+                    const code = editor.getValue().trim();
+                    if (!code) {
+                        outputElement.textContent = "No code to run";
+                        return;
+                    }
+                    
+                    outputElement.textContent = "Running...";
+                    outputElement.classList.remove("error-message", "success-message");
+                    outputElement.classList.add("loading-message");
+                    
+                    // Execute the code (this also maintains state for future blocks)
+                    const result = await executePythonCode(code);
+                    
+                    // Display the output - check if it's HTML
+                    const trimmedOutput = result.output.trim();
+                    console.log('Output length:', trimmedOutput.length);
+                    console.log('Output starts with:', trimmedOutput.substring(0, 100));
+                    
+                    if (trimmedOutput.includes('<script') && trimmedOutput.includes('Plotly')) {
+                        // It's Plotly HTML output - extract just the body content
+                        console.log('Rendering as Plotly HTML');
+                        const parser = new DOMParser();
+                        const doc = parser.parseFromString(result.output, 'text/html');
+                        // Clear the output element and append the body content
+                        outputElement.innerHTML = '';
+                        
+                        // Find and load external scripts first (like Plotly CDN)
+                        const externalScripts = Array.from(doc.querySelectorAll('script[src]'));
+                        const inlineScripts = Array.from(doc.querySelectorAll('script:not([src])'));
+                        
+                        // Append non-script content first
+                        Array.from(doc.body.children).forEach(child => {
+                            if (child.tagName !== 'SCRIPT') {
+                                outputElement.appendChild(child.cloneNode(true));
+                            }
+                        });
+                        
+                        // Load external scripts sequentially
+                        const loadScript = (src) => {
+                            return new Promise((resolve, reject) => {
+                                const script = document.createElement('script');
+                                script.src = src;
+                                script.onload = resolve;
+                                script.onerror = reject;
+                                document.head.appendChild(script);
+                            });
+                        };
+                        
+                        // Load all external scripts first
+                        Promise.all(externalScripts.map(s => loadScript(s.src)))
+                            .then(() => {
+                                console.log('External scripts loaded, executing inline scripts');
+                                // Now execute inline scripts
+                                inlineScripts.forEach(oldScript => {
+                                    const newScript = document.createElement('script');
+                                    newScript.textContent = oldScript.textContent;
+                                    outputElement.appendChild(newScript);
+                                });
+                                console.log('Output element after processing:', outputElement.children.length, 'children');
+                            })
+                            .catch(err => {
+                                console.error('Failed to load external scripts:', err);
+                                outputElement.textContent = 'Error loading Plotly: ' + err.message;
+                            });
+                    } else if (trimmedOutput.startsWith('<!DOCTYPE') || 
+                               trimmedOutput.startsWith('<html') ||
+                               trimmedOutput.startsWith('<div') ||
+                               trimmedOutput.startsWith('<img')) {
+                        outputElement.innerHTML = result.output;
+                    } else {
+                        outputElement.textContent = result.output;
+                    }
+                    outputElement.classList.remove("loading-message");
+                    if (result.success) {
+                        outputElement.classList.add("success-message");
+                        outputElement.classList.remove("error-message");
+                    } else {
+                        outputElement.classList.add("error-message");
+                        outputElement.classList.remove("success-message");
+                    }
+                });
+            }
+        });
+        
+        console.log("All code blocks initialised successfully");
+
+        // Set flag to indicate Pyodide is fully ready
+        window.pyodideReady = true;
+        console.log("Pyodide fully ready");
+        
+    } catch (error) {
+        console.error("Failed to initialise Pyodide:", error);
+        document.querySelectorAll(".output").forEach(el => {
+            el.textContent = "Error loading Pyodide: " + error.message;
+            el.classList.remove("loading-message");
+            el.classList.add("error-message");
+        });
+    }
+}
+
+// Start the application when DOM is loaded
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', main);
+} else {
+    main();
+}
+    </script>
+</body>
+</html>
+    
