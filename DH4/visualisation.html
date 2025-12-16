@@ -59,7 +59,7 @@
                     Visualisation
                     <span class="toggle-icon">▼</span>
                 </div>
-                <ul class="nested-nav expanded" id="expandable-section-1"><li><a href="#introduction">Introduction</a></li><li><a href="#the-plotting-function">The Plotting Function</a></li><li><a href="#normal-and-pathological-eeg">Normal and Pathological EEG</a></li><li><a href="#display-data-with-offset">Display data with offset</a></li>
+                <ul class="nested-nav expanded" id="expandable-section-1"><li><a href="#introduction">Introduction</a></li><li><a href="#the-plotting-function">The Plotting Function</a></li><li><a href="#normal-and-pathological-eeg">Normal and Pathological EEG</a></li><li><a href="#display-data-with-offset">Display data with offset</a></li><li><a href="#summary">Summary</a></li>
                 </ul>
             </li><li><a href="./filtering.html">Filtering</a></li><li><a href="./analysing.html">Analysis</a></li><li><a href="./assignment.html">Assignment</a></li><li><a href="./feedback.html">Feedback</a></li>
         </ul>
@@ -312,6 +312,15 @@ show()</textarea>
             <div id="code-cell-9-output" class="output"></div>
         </div>
         <p>The variables passed into a function are called its <strong>input arguments</strong>; and the values it returns are termed its <strong>outputs</strong>. A function ordinarily accepts data or variables in the form of one or several such input arguments, processes these, and subsequently produces a specific output.</p><p>A reminder of some of the key points about functions from Python Fundamentals:<ul class="nested-list"><li>The name of a function follows same principles as that of any other variable. It must be in lower-case characters, and it is strongly suggested that its name bears resemblance to the processes it undertakes.</li><br><li>The input arguments of a function, e.g. <code>data</code> and <code>sr</code> in our example, are essentially variables whose scope is confined only to the function. That is, they are only accessible within the function itself, and not from outside the function.</li><br><li>Variables defined inside of a function should not use the same name as variables defined outside. Otherwise they may override each other.</li><br><li>When defining a function, it is important and best practice to write that function to perform only one specific task. As such, it can be used independent of the current context. Try to avoid incorporating separable tasks into a single function.</li><br><li>Once you start creating functions for different purposes you can start to build your own library of ready-to-use functions. This is the primary principle of a popular programming paradigm known as functional programming.</li></ul></p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="module-card" id="summary">
+                <div class="module-body">
+                    <div class="module-section">
+                        <h3>Summary</h3>
+                        <p>By learning to create custom plotting functions that normalise and vertically offset multi-channel time series data, we can effectively visualize complex physiological recordings where standard plotting approaches fall short. Understanding how to structure functions with clear input arguments, proper documentation and reusable outputs enables the development of a personal library of analytical tools tailored to specific research needs. This approach transforms overlapping, difficult-to-interpret traces into clear, separated channels that reveal patterns in datasets such as EEG recordings. Mastering these visualisation techniques facilitates rapid identification of pathological events, comparison across conditions and efficient exploration of large multi-sensor datasets.</p>
                     </div>
                 </div>
             </div>
