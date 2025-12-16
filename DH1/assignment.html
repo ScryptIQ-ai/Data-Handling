@@ -97,7 +97,7 @@
                 <div class="module-body">
                     <div class="module-section">
                         <h3>Assignment Background:</h3>
-                        <p>This short assignment contains three sections of questions that build upon and incorporate methods, techniques and concepts taught and demonstrated in the lesson materials. Each section will explore your understanding of dictionaries, correct methods of importing, and iterations.<br><br>All questions aim to consider biological context. Timely submission will result in your assignment being returned within 14 days of the submission deadline. Marked Jupyter Notebook manuscripts will be returned with comments from your marker If you receive a pass or distinction, your marker will attach the model solutions for this assignment <em>via</em> the open pull request on your lesson&#x27;s GitHub repository.<br><br>This assignment tests your knowledge of basic Pandas syntax, a tabular data format in Python, and Matplotlib, a foundational data visualiser in Python. You will be working with a real world dataset <code>Cervical Cancer</code> that is publicly available <a href="https://www.kaggle.com/datasets/ranzeet013/cervical-cancer-dataset">here</a>.</p>
+                        <p>This short assignment contains three sections of questions that build upon and incorporate methods, techniques and concepts taught and demonstrated in the lesson materials.<br><br>All questions aim to consider biological context. Timely submission will result in your assignment being returned within 14 days of the submission deadline. Marked Jupyter Notebook manuscripts will be returned with comments from your marker If you receive a pass or distinction, your marker will attach the model solutions for this assignment <em>via</em> the open pull request on your lesson&#x27;s GitHub repository.<br><br>This assignment tests your knowledge of basic Pandas syntax, a tabular data format in Python, and Matplotlib, a foundational data visualiser in Python. You will be working with a real world dataset <code>Cervical Cancer</code> that is publicly available <a href="https://www.kaggle.com/datasets/ranzeet013/cervical-cancer-dataset">here</a>.</p>
                     </div>
                 </div>
             </div>
@@ -106,7 +106,7 @@
                 <div class="module-body">
                     <div class="module-section">
                         <h3>Assignment Questions:</h3>
-                        <h4>Question 1</h4><p><strong>A.</strong><br><br>Read the cervical cancer dataset into the workspace. You can find the csv file provided in the <strong>Data</strong> folder.<br><ul class="nested-list"><li>Import Pandas and use the <code>read_csv</code> function</li><br><li>display the first 10 rows using <code>.head()</code></li></ul><em>Hint: You can reference a file without the full path using dots to indicate relative path navigation. Using one <code>.</code> indicates the file/folder is in the same directory you are currently in, while using <code>..</code> indicates the path starts in the parent directory of the one you&#x27;re in.</em><br><br><em>Example: To access the data here use the path &quot;../Data/cervical_cancer.csv&quot;</em><br><strong>B.</strong><br><br>Explore the dataframe to understand the data:<br><ul class="nested-list"><li>Find out how many rows and columns are there? Print the result in a formatted string</li><br><li>How many columns contain floating point numbers? Print your answer</li></ul><em>Hint: Use equivalence <code>==</code> to &#x27;float64&#x27; to obtain a list of True (1) and False (0) values</em></p><h4>Question 2</h4><p><strong>A.</strong><br><br>Analyse the the number of smokers in the dataset:<br><ul class="nested-list"><li>Find out how many of the subjects (rows) are smokers?</li><br><li>Calculate the percentage of smokers.</li></ul>Give both answers as a formatted string.<br><strong>B.</strong><br><br>Investigate the spread of age in the dataset:<br><ul class="nested-list"><li>Plot the age distribution as a histogram using matplotlib, with an instance of 50 bins</li></ul><strong>C.</strong><br><br>Investigate the average number of sexual partners for those who have had at least one diagnosis of an STD:<br><ul class="nested-list"><li>Filter the dataset to only include data where diagnosis of STDs is 1 or more</li><ul class="nested-list"><li>Use the column &quot;STDs: Number of diagnosis&quot; to do this</li></ul></li><br><li>From the filtered dataset calculate the mean and standard deviation of number of sexual partners.</li></ul></p>
+                        <h4>Question 1</h4><p><strong>A.</strong><br><br>Read the cervical cancer dataset into the workspace. You can find the csv file provided in the <strong>Data</strong> folder.<br><ul class="nested-list"><li>Import Pandas and use the <code>read_csv</code> function</li><br><li>display the first 10 rows using <code>.head()</code></li></ul><em>Hint: You can reference a file without the full path using dots to indicate relative path navigation. Using one <code>.</code> indicates the file/folder is in the same directory you are currently in, while using <code>..</code> indicates the path starts in the parent directory of the one you&#x27;re in.</em><br><br><em>Example: To access the data here use the path &quot;../Data/cervical_cancer.csv&quot;</em><br><strong>B.</strong><br><br>Explore the dataframe to understand the data:<br><ul class="nested-list"><li>Find out how many rows and columns are there? Print the result in a formatted string</li><br><li>How many columns contain floating point numbers? Print your answer</li></ul><em>Hint: Use equivalence <code>==</code> to &#x27;float64&#x27; to obtain a list of True (1) and False (0) values</em></p><h4>Question 2</h4><p><strong>A.</strong><br><br>Analyse the number of smokers in the dataset:<br><ul class="nested-list"><li>Find out how many of the subjects (rows) are smokers?</li><br><li>Calculate the percentage of smokers.</li><br><li>Round the answer to 1 decimal place.</li></ul>Give both answers as a formatted string.<br><strong>B.</strong><br><br>Investigate the spread of age in the dataset:<br><ul class="nested-list"><li>Plot the age distribution as a histogram using matplotlib, with an instance of 50 bins</li></ul><strong>C.</strong><br><br>Investigate the average number of sexual partners for those who have had at least one diagnosis of an STD:<br><ul class="nested-list"><li>Filter the dataset to only include data where diagnosis of STDs is 1 or more</li><ul class="nested-list"><li>Use the column &quot;STDs: Number of diagnosis&quot; to do this</li></ul></li><br><li>From the filtered dataset calculate the mean and standard deviation of number of sexual partners.</li></ul></p>
                     </div>
                 </div>
             </div>
@@ -242,8 +242,23 @@ os.makedirs('./data', exist_ok=True)
                 
                 // Add loading code for each file
                 for (const file of lessonFiles) {
-                    pythonCode += `
-# Load ${file.filename}
+                    if (file.is_binary) {
+                        // Binary files (images, etc.) - use bytes
+                        pythonCode += `
+# Load ${file.filename} (binary)
+try:
+    response = await pyfetch("${file.url}")
+    content = await response.bytes()
+    with open('./data/${file.filename}', 'wb') as f:
+        f.write(bytes(content))
+    print("Loaded: ${file.filename}")
+except Exception as e:
+    print(f"Could not load ${file.filename}: {e}")
+`;
+                    } else {
+                        // Text files (CSV, etc.) - use string
+                        pythonCode += `
+# Load ${file.filename} (text)
 try:
     response = await pyfetch("${file.url}")
     content = await response.string()
@@ -253,6 +268,7 @@ try:
 except Exception as e:
     print(f"Could not load ${file.filename}: {e}")
 `;
+                    }
                 }
                 
                 await pyodide.runPythonAsync(pythonCode);
@@ -320,12 +336,14 @@ except Exception as e:
             if (!code) continue;
             
             console.log(`Executing hidden code block: ${textarea.id}`);
+            console.log(`Hidden code content: ${code.substring(0, 100)}...`);
             const result = await executePythonCode(code);
             
             if (!result.success) {
                 console.error(`Error in hidden code block ${textarea.id}:`, result.output);
             } else {
                 console.log(`Hidden code block ${textarea.id} executed successfully`);
+                console.log(`Result: ${result.output}`);
             }
         }
 
@@ -525,7 +543,8 @@ except Exception as e:
                             });
                     } else if (trimmedOutput.startsWith('<!DOCTYPE') || 
                                trimmedOutput.startsWith('<html') ||
-                               trimmedOutput.startsWith('<div')) {
+                               trimmedOutput.startsWith('<div') ||
+                               trimmedOutput.startsWith('<img')) {
                         outputElement.innerHTML = result.output;
                     } else {
                         outputElement.textContent = result.output;

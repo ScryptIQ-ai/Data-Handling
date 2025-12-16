@@ -34,8 +34,8 @@
     <!-- File URLs for this lesson -->
     <script>
         window.LESSON_FILES = [
-            {url: "https://raw.githubusercontent.com/ScryptIQ-ai/lesson-data/refs/heads/main/dh/everleys_data.csv", filename: "everleys_data.csv"},
-            {url: "https://raw.githubusercontent.com/ScryptIQ-ai/lesson-data/refs/heads/main/dh/loan_data.csv", filename: "loan_data.csv"}
+            {url: "https://raw.githubusercontent.com/ScryptIQ-ai/lesson-data/refs/heads/main/dh/everleys_data.csv", filename: "everleys_data.csv", is_binary: false},
+            {url: "https://raw.githubusercontent.com/ScryptIQ-ai/lesson-data/refs/heads/main/dh/loan_data.csv", filename: "loan_data.csv", is_binary: false}
         ];
         window.LESSON_PACKAGES = ['pandas', 'matplotlib'];
     </script>
@@ -348,6 +348,14 @@ show()</textarea>
             </div>
         </div>
         
+        <div class="code-area">
+            <div class="code-container code-editor">
+                <textarea id="code-cell-52"># Write your code here:</textarea>
+            </div>
+            <button id="run-code-cell-52" class="run-button">Run Code</button>
+            <div id="code-cell-52-output" class="output"></div>
+        </div>
+        
                     </div>
                 </div>
             </div>
@@ -491,8 +499,23 @@ os.makedirs('./data', exist_ok=True)
                 
                 // Add loading code for each file
                 for (const file of lessonFiles) {
-                    pythonCode += `
-# Load ${file.filename}
+                    if (file.is_binary) {
+                        // Binary files (images, etc.) - use bytes
+                        pythonCode += `
+# Load ${file.filename} (binary)
+try:
+    response = await pyfetch("${file.url}")
+    content = await response.bytes()
+    with open('./data/${file.filename}', 'wb') as f:
+        f.write(bytes(content))
+    print("Loaded: ${file.filename}")
+except Exception as e:
+    print(f"Could not load ${file.filename}: {e}")
+`;
+                    } else {
+                        // Text files (CSV, etc.) - use string
+                        pythonCode += `
+# Load ${file.filename} (text)
 try:
     response = await pyfetch("${file.url}")
     content = await response.string()
@@ -502,6 +525,7 @@ try:
 except Exception as e:
     print(f"Could not load ${file.filename}: {e}")
 `;
+                    }
                 }
                 
                 await pyodide.runPythonAsync(pythonCode);
@@ -569,12 +593,14 @@ except Exception as e:
             if (!code) continue;
             
             console.log(`Executing hidden code block: ${textarea.id}`);
+            console.log(`Hidden code content: ${code.substring(0, 100)}...`);
             const result = await executePythonCode(code);
             
             if (!result.success) {
                 console.error(`Error in hidden code block ${textarea.id}:`, result.output);
             } else {
                 console.log(`Hidden code block ${textarea.id} executed successfully`);
+                console.log(`Result: ${result.output}`);
             }
         }
 
@@ -774,7 +800,8 @@ except Exception as e:
                             });
                     } else if (trimmedOutput.startsWith('<!DOCTYPE') || 
                                trimmedOutput.startsWith('<html') ||
-                               trimmedOutput.startsWith('<div')) {
+                               trimmedOutput.startsWith('<div') ||
+                               trimmedOutput.startsWith('<img')) {
                         outputElement.innerHTML = result.output;
                     } else {
                         outputElement.textContent = result.output;

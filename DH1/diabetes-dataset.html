@@ -121,7 +121,7 @@
                         <p>Firstly, import the data. This is one of the example datasets from scikit-learn: a Python library used for Machine Learning. It is already included in the Anaconda distribution of Python, and can therefore be directly imported, if you have installed Python this way.</p>
         <div class="code-area">
             <div class="code-container code-fixed">
-                <textarea id="code-cell-52"># First we need to import sklearn
+                <textarea id="code-cell-53"># First we need to import sklearn
 from sklearn import datasets
 
 # And DataFrame from pandas
@@ -130,12 +130,12 @@ from pandas import DataFrame
 # And matplotlib
 from matplotlib.pyplot import subplots, show</textarea>
             </div>
-            <div id="code-cell-52-output" class="output" style="display: none;"></div>
+            <div id="code-cell-53-output" class="output" style="display: none;"></div>
         </div>
         <p>Now let&#x27;s import the dataset and check out the first few rows of data with <code>head()</code>. In some cases, this may take a moment: please be patient, and wait for the numbers to appear as output below your code cell (if you&#x27;re using an IDE).</p>
         <div class="code-area">
             <div class="code-container code-fixed">
-                <textarea id="code-cell-53"># Load in the dataset from sklearn
+                <textarea id="code-cell-54"># Load in the dataset from sklearn
 diabetes = datasets.load_diabetes()
 data = diabetes.data
 columns = diabetes.feature_names
@@ -146,37 +146,37 @@ df_diabetes = DataFrame(data=data, # pass the tabular data to the argument `data
 
 df_diabetes.head()</textarea>
             </div>
-            <div id="code-cell-53-output" class="output"></div>
+            <div id="code-cell-54-output" class="output"></div>
         </div>
         <p>In IDE you can see all the columns by using the cursor to scroll to the right.<br><br>Next, let&#x27;s check the number of columns and rows.</p>
         <div class="code-area">
             <div class="code-container code-fixed">
-                <textarea id="code-cell-54">no_rows = len(df_diabetes)
+                <textarea id="code-cell-55">no_rows = len(df_diabetes)
 no_cols = len(df_diabetes.columns)
 print(&#x27;Rows:&#x27;, no_rows, &#x27;Columns:&#x27;, no_cols)</textarea>
             </div>
-            <div id="code-cell-54-output" class="output"></div>
+            <div id="code-cell-55-output" class="output"></div>
         </div>
         <p>There are 442 rows organised in 10 columns.<br><br>Next lets check for any <code>null</code> values.</p>
         <div class="code-area">
             <div class="code-container code-fixed">
-                <textarea id="code-cell-55">df_diabetes.isnull().any()</textarea>
+                <textarea id="code-cell-56">df_diabetes.isnull().any()</textarea>
             </div>
-            <div id="code-cell-55-output" class="output"></div>
+            <div id="code-cell-56-output" class="output"></div>
         </div>
         <p>The coast is clear so we can continue on!</p><p>In order to obtain an overview, let us extract the mean of each column using the describe and plot all means as a bar chart.</p>
         <div class="code-area">
             <div class="code-container code-fixed">
-                <textarea id="code-cell-56">conc_means = df_diabetes.describe().loc[&#x27;mean&#x27;].tolist()
+                <textarea id="code-cell-57">conc_means = df_diabetes.describe().loc[&#x27;mean&#x27;].tolist()
 print(&#x27;The columns are: &#x27;, list(df_diabetes.columns))
 print(&#x27;The means are: &#x27;, conc_means)</textarea>
             </div>
-            <div id="code-cell-56-output" class="output"></div>
+            <div id="code-cell-57-output" class="output"></div>
         </div>
         <p>The Matplotlib function to plot a bar chart is called bar:</p>
         <div class="code-area">
             <div class="code-container code-fixed">
-                <textarea id="code-cell-57">fig, ax = subplots()
+                <textarea id="code-cell-58">fig, ax = subplots()
 
 ax.bar(range(len(conc_means)), conc_means)
 ax.set_title(&#x27;Mean values for all columns&#x27;)
@@ -187,7 +187,7 @@ ax.set_ylabel(&#x27;Mean value&#x27;)
 
 show()</textarea>
             </div>
-            <div id="code-cell-57-output" class="output"></div>
+            <div id="code-cell-58-output" class="output"></div>
         </div>
         <p>Note how the bars in this plot go up and down. The vertical axis, however, has values ranging from -10(-16) to +10(-16). This means that, for all practical purposes, all means are zero which is not a coincidence. The original values have been normalised to mean zero for the purpose of applying a machine learning algorithm to them.<br><br>In this example, we can clearly observe the importance of checking the data before working with them.</p>
                     </div>
@@ -333,8 +333,23 @@ os.makedirs('./data', exist_ok=True)
                 
                 // Add loading code for each file
                 for (const file of lessonFiles) {
-                    pythonCode += `
-# Load ${file.filename}
+                    if (file.is_binary) {
+                        // Binary files (images, etc.) - use bytes
+                        pythonCode += `
+# Load ${file.filename} (binary)
+try:
+    response = await pyfetch("${file.url}")
+    content = await response.bytes()
+    with open('./data/${file.filename}', 'wb') as f:
+        f.write(bytes(content))
+    print("Loaded: ${file.filename}")
+except Exception as e:
+    print(f"Could not load ${file.filename}: {e}")
+`;
+                    } else {
+                        // Text files (CSV, etc.) - use string
+                        pythonCode += `
+# Load ${file.filename} (text)
 try:
     response = await pyfetch("${file.url}")
     content = await response.string()
@@ -344,6 +359,7 @@ try:
 except Exception as e:
     print(f"Could not load ${file.filename}: {e}")
 `;
+                    }
                 }
                 
                 await pyodide.runPythonAsync(pythonCode);
@@ -411,12 +427,14 @@ except Exception as e:
             if (!code) continue;
             
             console.log(`Executing hidden code block: ${textarea.id}`);
+            console.log(`Hidden code content: ${code.substring(0, 100)}...`);
             const result = await executePythonCode(code);
             
             if (!result.success) {
                 console.error(`Error in hidden code block ${textarea.id}:`, result.output);
             } else {
                 console.log(`Hidden code block ${textarea.id} executed successfully`);
+                console.log(`Result: ${result.output}`);
             }
         }
 
@@ -616,7 +634,8 @@ except Exception as e:
                             });
                     } else if (trimmedOutput.startsWith('<!DOCTYPE') || 
                                trimmedOutput.startsWith('<html') ||
-                               trimmedOutput.startsWith('<div')) {
+                               trimmedOutput.startsWith('<div') ||
+                               trimmedOutput.startsWith('<img')) {
                         outputElement.innerHTML = result.output;
                     } else {
                         outputElement.textContent = result.output;

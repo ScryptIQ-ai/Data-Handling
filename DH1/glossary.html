@@ -116,131 +116,98 @@
             <div class="module-body">
                 
                 <div class="glossary-entry">
-                    <div class="glossary-term">pandas</div>
-                    <div class="glossary-definition"></div>
+                    <strong>pandas</strong>: Pandas is a Python library. Pandas is used to store, manipulate and analyse data inside its proprietary DataFrame, a tabular data structure akin to a spreadsheet.
                 </div>
                 <div class="glossary-entry">
-                    <div class="glossary-term">DataFrame</div>
-                    <div class="glossary-definition"></div>
+                    <strong>DataFrame</strong>: A 2-dimensional labeled data structure with columns of potentially different types. You can think of it like a spreadsheet or SQL table. It is the core data structure in Pandas.
                 </div>
                 <div class="glossary-entry">
-                    <div class="glossary-term">CSV (Comma-Separated Values)</div>
-                    <div class="glossary-definition"></div>
+                    <strong>CSV (Comma-Separated Values)</strong>: A file format that stores tabular data in plain text, where each line represents a row and values are separated by commas. Commonly used for data exchange and can be read with `read_csv()`.
                 </div>
                 <div class="glossary-entry">
-                    <div class="glossary-term">Index</div>
-                    <div class="glossary-definition"></div>
+                    <strong>Index</strong>: The labels on the left side of a DataFrame that identify rows. By default, this is sequential integers starting from 0, but can be customised to use any labels.
                 </div>
                 <div class="glossary-entry">
-                    <div class="glossary-term">Columns</div>
-                    <div class="glossary-definition"></div>
+                    <strong>Columns</strong>: The labels across the top of a DataFrame that serve as headers for each column. They form part of the DataFrame&#x27;s metadata.
                 </div>
                 <div class="glossary-entry">
-                    <div class="glossary-term">shape</div>
-                    <div class="glossary-definition"></div>
+                    <strong>shape</strong>: A DataFrame property that returns a tuple containing the number of rows and columns (rows, columns).
                 </div>
                 <div class="glossary-entry">
-                    <div class="glossary-term">dtypes</div>
-                    <div class="glossary-definition"></div>
+                    <strong>dtypes</strong>: A DataFrame property that shows the data type of each column (e.g., int64, float64, object).
                 </div>
                 <div class="glossary-entry">
-                    <div class="glossary-term">Slicing</div>
-                    <div class="glossary-definition"></div>
+                    <strong>.iloc</strong>: (deprecated) Integer position-based indexing method that uses numerical index positions. As of Pandas 2.2.0, `.loc` is preferred.
                 </div>
                 <div class="glossary-entry">
-                    <div class="glossary-term">.loc</div>
-                    <div class="glossary-definition"></div>
+                    <strong>NaN (Not a Number)</strong>: Python&#x27;s standard way of representing missing or null values in data. Common in real-world datasets.
                 </div>
                 <div class="glossary-entry">
-                    <div class="glossary-term">NaN (Not a Number)</div>
-                    <div class="glossary-definition"></div>
+                    <strong>Series</strong>: A one-dimensional labeled array in Pandas. When you select a single column from a DataFrame or apply methods like `.mean()`, you get a Series.
                 </div>
                 <div class="glossary-entry">
-                    <div class="glossary-term">Series</div>
-                    <div class="glossary-definition"></div>
+                    <strong>drop()</strong>: A DataFrame method used to remove rows or columns. Use `columns=` parameter to specify columns to drop and `inplace=True` to modify the DataFrame directly.
                 </div>
                 <div class="glossary-entry">
-                    <div class="glossary-term">drop()</div>
-                    <div class="glossary-definition"></div>
+                    <strong>Filtering</strong>: The process of selecting rows from a DataFrame that meet specific conditions using boolean expressions (e.g., `df[df[&#x27;column&#x27;] &gt; 10]`).
                 </div>
                 <div class="glossary-entry">
-                    <div class="glossary-term">Filtering</div>
-                    <div class="glossary-definition"></div>
+                    <strong>Boolean indexing</strong>: Using True/False conditions to filter DataFrame rows. The condition returns a boolean Series that acts as a mask.
                 </div>
                 <div class="glossary-entry">
-                    <div class="glossary-term">Boolean indexing</div>
-                    <div class="glossary-definition"></div>
+                    <strong>Matplotlib</strong>: A comprehensive library for creating static, animated, and interactive visualisations in Python. Used extensively for data visualisation.
                 </div>
                 <div class="glossary-entry">
-                    <div class="glossary-term">Matplotlib</div>
-                    <div class="glossary-definition"></div>
+                    <strong>fig</strong>: The overall figure object in Matplotlib that contains all plot elements. Used for figure-level settings like `suptitle()` and `tight_layout()`.
                 </div>
                 <div class="glossary-entry">
-                    <div class="glossary-term">fig</div>
-                    <div class="glossary-definition"></div>
+                    <strong>ax</strong>: The axes object in Matplotlib representing a single plot or coordinate system where data is plotted.
                 </div>
                 <div class="glossary-entry">
-                    <div class="glossary-term">ax</div>
-                    <div class="glossary-definition"></div>
+                    <strong>Boxplot</strong>: A visualisation that displays the distribution of data through quartiles, showing median, 25th/75th percentiles, and outliers.
                 </div>
                 <div class="glossary-entry">
-                    <div class="glossary-term">Boxplot</div>
-                    <div class="glossary-definition"></div>
+                    <strong>Histogram</strong>: A plot that shows the frequency distribution of data by dividing the range into bins and counting values in each bin.
                 </div>
                 <div class="glossary-entry">
-                    <div class="glossary-term">Histogram</div>
-                    <div class="glossary-definition"></div>
+                    <strong>Bins</strong>: The containers or intervals used in a histogram to group data values. The number of bins affects the granularity of the distribution display.
                 </div>
                 <div class="glossary-entry">
-                    <div class="glossary-term">bins</div>
-                    <div class="glossary-definition"></div>
+                    <strong>Alias</strong>: A shorthand name for an imported library (e.g., `import pandas as pd`), making it easier to reference in code.
                 </div>
                 <div class="glossary-entry">
-                    <div class="glossary-term">Alias</div>
-                    <div class="glossary-definition"></div>
+                    <strong>Property</strong>: An attribute of an object that doesn&#x27;t require parentheses to access (e.g., `df.shape`, `df.columns`), as opposed to methods which do.
                 </div>
                 <div class="glossary-entry">
-                    <div class="glossary-term">Property</div>
-                    <div class="glossary-definition"></div>
+                    <strong>Method</strong>: A function that belongs to an object and is called with parentheses (e.g., `df.head()`, `df.describe()`).
                 </div>
                 <div class="glossary-entry">
-                    <div class="glossary-term">Method</div>
-                    <div class="glossary-definition"></div>
+                    <strong>Metadata</strong>: Data about the DataFrame structure (index, column names) that is not part of the actual data values.
                 </div>
                 <div class="glossary-entry">
-                    <div class="glossary-term">Metadata</div>
-                    <div class="glossary-definition"></div>
+                    <strong>Univariate analysis</strong>: Analysis of a single variable/column independently, examining its distribution and characteristics.
                 </div>
                 <div class="glossary-entry">
-                    <div class="glossary-term">Univariate analysis</div>
-                    <div class="glossary-definition"></div>
+                    <strong>Bivariate analysis</strong>: Analysis examining the relationship between two variables/columns.
                 </div>
                 <div class="glossary-entry">
-                    <div class="glossary-term">Bivariate analysis</div>
-                    <div class="glossary-definition"></div>
+                    <strong>Outliers</strong>: Data points that differ significantly from other observations, often visible in boxplots as points beyond the whiskers.
                 </div>
                 <div class="glossary-entry">
-                    <div class="glossary-term">Outliers</div>
-                    <div class="glossary-definition"></div>
+                    <strong>NumPy</strong>: A fundamental Python library for numerical computing that provides support for arrays and mathematical operations. Pandas is built on top of NumPy.
                 </div>
                 <div class="glossary-entry">
-                    <div class="glossary-term">NumPy</div>
-                    <div class="glossary-definition"></div>
+                    <strong>Relative path</strong>: A file path specified relative to the current working directory (e.g., `./data/file.csv`).
                 </div>
                 <div class="glossary-entry">
-                    <div class="glossary-term">Relative path</div>
-                    <div class="glossary-definition"></div>
-                </div>
-                <div class="glossary-entry">
-                    <div class="glossary-term">Absolute path</div>
-                    <div class="glossary-definition"></div>
+                    <strong>Absolute path</strong>: A complete file path from the root directory (e.g., `/Users/username/data/file.csv`).
                 </div>
             </div>
         </div>
 
         <div class="footer">
-            <div>© All materials are copyright scryptIQ 2025</div>
-            <div>Learn to Discover</div>
+            <div>© Built with parchmentIQ copyright of scryptIQ</div>
+            <div>© L2D is copyright UCL 2025</div>
         </div>
     </div>
 </body>
