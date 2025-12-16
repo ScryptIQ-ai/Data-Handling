@@ -107,7 +107,7 @@
                 <div class="module-body">
                     <div class="module-section">
                         <h3>Assignment Background:</h3>
-                        <p>This short assignment contains three sections of questions that build upon and incorporate methods, techniques and concepts taught and demonstrated in the lesson materials. Each section will explore your understanding of dictionaries, correct methods of importing, and iterations.<br><br>All questions aim to consider biological context. Timely submission will result in your assignment being returned within 14 days of the submission deadline. Marked Jupyter Notebook manuscripts will be returned with comments from your marker If you receive a pass or distinction, your marker will attach the model solutions for this assignment <em>via</em> the open pull request on your lesson&#x27;s GitHub repository.<br><br>This assignment tests your knowledge of using Pandas to explore your datasets through plotting and correlation, as a component of multivariate analysis.<br><br><strong>Note:</strong> In case of doubt, try to get help from the respective documentation available for <a href="https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.html">Pandas</a>, <a href="https://numpy.org/doc/stable/reference/generated/numpy.array.html">NumPy</a>, and <a href="https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.bar.html">Matplotlib</a>.</p>
+                        <p>This short assignment contains three sections of questions that build upon and incorporate methods, techniques and concepts taught and demonstrated in the lesson materials.<br><br>All questions aim to consider biological context. Timely submission will result in your assignment being returned within 14 days of the submission deadline. Marked Jupyter Notebook manuscripts will be returned with comments from your marker If you receive a pass or distinction, your marker will attach the model solutions for this assignment <em>via</em> the open pull request on your lesson&#x27;s GitHub repository.<br><br>This assignment tests your knowledge of using Pandas to explore your datasets through plotting and correlation, as a component of multivariate analysis.<br><br><strong>Note:</strong> In case of doubt, try to get help from the respective documentation available for <a href="https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.html">Pandas</a>, <a href="https://numpy.org/doc/stable/reference/generated/numpy.array.html">NumPy</a>, and <a href="https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.bar.html">Matplotlib</a>.</p>
                     </div>
                 </div>
             </div>
@@ -116,7 +116,7 @@
                 <div class="module-body">
                     <div class="module-section">
                         <h3>Assignment Questions:</h3>
-                        <h4>Question 1</h4><p><strong>A.</strong><br><br>Read in the breast cancer data set provided in <a href="../Data/">Data</a> folder. Import this dataset using method <code>read_csv</code>.<br><br>Right click on the breast cancer csv file to copy the path if inside a CodeSpace or use &quot;../Data/breast_cancer.csv&quot; if not.<br><strong>B.</strong><br><br>Get the summary (univariate) statistics of columns 2-10 using <code>describe</code><ul class="nested-list"><li>Use <code>.loc</code> not <code>.iloc</code></li><ul class="nested-list"><li>To do so, use a slice of the column headers in a list</li></ul></li><br><li>Display the DataFrame rounded to 2 decimal places</li></ul></p><h4>Question 2</h4><p><strong>A.</strong><br><br>Plot the means of each column as a bar chart with standard deviations displayed as error bars.<ul class="nested-list"><li>Try to add the standard deviation as an error bar, using the keyword argument <code>yerr</code></li><ul class="nested-list"><li>Get the standard deviation from the describe dataframe</li></ul></li><br><li>For better visibility:</li><ul class="nested-list"><li>Rotate the x-axis labels with: <code>ax.tick_params(axis=&#x27;x&#x27;, labelrotation=-45)</code></li><br><li>Set the y axis to log scale: <code>ax.set_yscale(&#x27;log&#x27;)</code></li></ul></ul></p><h4>Question 3</h4><p><strong>A.</strong><br><br>Extract the values of the original dataframe as a NumPy array<ul class="nested-list"><li>Use the <code>to_numpy</code> method</li><br><li>Print the shape of the array</li></ul><strong>B.</strong><br><br>Calculate the correlation matrix using <code>corrcoef</code> from NumPy, and plot it as a heatmap.<ul class="nested-list"><li>The shape of the matrix should be (31, 31)</li><br><li>Use <code>fill_diagonal</code> to set the diagonal elements to 0</li><br><li>Include a colour bar in your plot with appropriate settings</li></ul></p><h4>Question 4</h4><p><strong>B.</strong><br><br>Calculate the average column correlation (absolute values) and plot it as a bar chart.<ul class="nested-list"><li>Give the plot an appropriate title</li></ul><strong>B.</strong><br><br>Calculate the average correlation strength of the dataset.<ul class="nested-list"><li>Round to 3 decimal places</li></ul></p>
+                        <h4>Question 1</h4><p><strong>A.</strong><br><br>Read in the breast cancer data set provided in the <a href="../data/">data</a> folder. Import this dataset using method <code>read_csv</code>.<br><br>Right click on the breast cancer csv file to copy the path if inside a CodeSpace or use &quot;../Data/breast_cancer.csv&quot; if not.<br><strong>B.</strong><br><br>Get the summary (univariate) statistics of columns 2-10 using <code>describe</code><ul class="nested-list"><li>Use <code>.loc</code> not <code>.iloc</code></li><ul class="nested-list"><li>To do so, use a slice of the column headers in a list</li></ul></li><br><li>Display the DataFrame rounded to 2 decimal places</li></ul></p><h4>Question 2</h4><p><strong>A.</strong><br><br>Plot the means of each column as a bar chart with standard deviations displayed as error bars.<ul class="nested-list"><li>Try to add the standard deviation as an error bar, using the keyword argument <code>yerr</code></li><ul class="nested-list"><li>Get the standard deviation from the describe dataframe</li></ul></li><br><li>For better visibility:</li><ul class="nested-list"><li>Rotate the x-axis labels with: <code>ax.tick_params(axis=&#x27;x&#x27;, labelrotation=-45)</code></li><br><li>Set the y axis to log scale: <code>ax.set_yscale(&#x27;log&#x27;)</code></li></ul></ul></p><h4>Question 3</h4><p><strong>A.</strong><br><br>Extract the values of the original dataframe as a NumPy array<ul class="nested-list"><li>Use the <code>to_numpy</code> method</li><br><li>Print the shape of the array</li></ul><strong>B.</strong><br><br>Calculate the correlation matrix using <code>corrcoef</code> from NumPy, and plot it as a heatmap.<ul class="nested-list"><li>The shape of the matrix should be (31, 31)</li><br><li>Use <code>fill_diagonal</code> to set the diagonal elements to 0</li><br><li>Include a colour bar in your plot with appropriate settings</li></ul></p><h4>Question 4</h4><p><strong>A.</strong><br><br>Calculate the average column correlation (absolute values) and plot it as a bar chart.<ul class="nested-list"><li>Give the plot an appropriate title</li></ul><strong>B.</strong><br><br>Calculate the average correlation strength of the dataset.<ul class="nested-list"><li>Round to 3 decimal places</li></ul></p>
                     </div>
                 </div>
             </div>
@@ -252,8 +252,23 @@ os.makedirs('./data', exist_ok=True)
                 
                 // Add loading code for each file
                 for (const file of lessonFiles) {
-                    pythonCode += `
-# Load ${file.filename}
+                    if (file.is_binary) {
+                        // Binary files (images, etc.) - use bytes
+                        pythonCode += `
+# Load ${file.filename} (binary)
+try:
+    response = await pyfetch("${file.url}")
+    content = await response.bytes()
+    with open('./data/${file.filename}', 'wb') as f:
+        f.write(bytes(content))
+    print("Loaded: ${file.filename}")
+except Exception as e:
+    print(f"Could not load ${file.filename}: {e}")
+`;
+                    } else {
+                        // Text files (CSV, etc.) - use string
+                        pythonCode += `
+# Load ${file.filename} (text)
 try:
     response = await pyfetch("${file.url}")
     content = await response.string()
@@ -263,6 +278,7 @@ try:
 except Exception as e:
     print(f"Could not load ${file.filename}: {e}")
 `;
+                    }
                 }
                 
                 await pyodide.runPythonAsync(pythonCode);
@@ -330,12 +346,14 @@ except Exception as e:
             if (!code) continue;
             
             console.log(`Executing hidden code block: ${textarea.id}`);
+            console.log(`Hidden code content: ${code.substring(0, 100)}...`);
             const result = await executePythonCode(code);
             
             if (!result.success) {
                 console.error(`Error in hidden code block ${textarea.id}:`, result.output);
             } else {
                 console.log(`Hidden code block ${textarea.id} executed successfully`);
+                console.log(`Result: ${result.output}`);
             }
         }
 
@@ -535,7 +553,8 @@ except Exception as e:
                             });
                     } else if (trimmedOutput.startsWith('<!DOCTYPE') || 
                                trimmedOutput.startsWith('<html') ||
-                               trimmedOutput.startsWith('<div')) {
+                               trimmedOutput.startsWith('<div') ||
+                               trimmedOutput.startsWith('<img')) {
                         outputElement.innerHTML = result.output;
                     } else {
                         outputElement.textContent = result.output;

@@ -34,8 +34,8 @@
     <!-- File URLs for this lesson -->
     <script>
         window.LESSON_FILES = [
-            {url: "https://raw.githubusercontent.com/ScryptIQ-ai/lesson-data/refs/heads/main/dh/everleys_data.csv", filename: "everleys_data.csv"},
-            {url: "https://raw.githubusercontent.com/ScryptIQ-ai/lesson-data/refs/heads/main/dh/patients.csv", filename: "patients.csv"}
+            {url: "https://raw.githubusercontent.com/ScryptIQ-ai/lesson-data/refs/heads/main/dh/everleys_data.csv", filename: "everleys_data.csv", is_binary: false},
+            {url: "https://raw.githubusercontent.com/ScryptIQ-ai/lesson-data/refs/heads/main/dh/patients.csv", filename: "patients.csv", is_binary: false}
         ];
         window.LESSON_PACKAGES = ['pandas', 'matplotlib'];
     </script>
@@ -203,14 +203,14 @@ corr_matrix</textarea>
             </div>
             <div id="code-cell-14-output" class="output"></div>
         </div>
-        <p>However, the NumPy version of corrcoef doesn&#x27;t like <code>NaN</code> values on the array. We therefore need to remove them first, repeating what we learned in <a href="../PF1/data-features.html"><strong>PF1</strong></a>.</p>
+        <p>However, the NumPy version of <code>corrcoef</code> doesn&#x27;t like <code>NaN</code> values on the array. We therefore need to remove them first, repeating what we learned in <strong>PF1</strong>.</p>
         <div class="code-area">
             <div class="code-container code-fixed">
                 <textarea id="code-cell-15">replacement_values = {&quot;calcium&quot; : 0, &quot;sodium&quot; : 0}
 df_everley = df_everley.fillna(value = replacement_values)
 everley_numpy = df_everley.to_numpy()</textarea>
             </div>
-            <div id="code-cell-15-output" class="output"></div>
+            <div id="code-cell-15-output" class="output" style="display: none;"></div>
         </div>
         
         <div class="code-area">
@@ -284,7 +284,7 @@ cov_matrix</textarea>
                 allowfullscreen>
             </iframe>
         </div>
-        <p>If we have more than two columns of data, we can obtain a Pearson correlation coefficient for each pair. In general, for N columns, we get $N^2$ pairwise values. We will omit the correlations of each column relative to itself, of which there are $N$, which means we are left with <strong>N x (N-1)</strong> pairs. Since each value appears twice, due to the symmetry of the calculation, we can ignore half of them, leaving us with <strong>N x (N-1) / 2</strong> coefficients for <strong>N</strong> columns.</p><p>Here is an example using the &#x27;patients&#x27; data:</p>
+        <p>If we have more than two columns of data, we can obtain a Pearson correlation coefficient for each pair. In general, for N columns, we get N-squared pairwise values. We will omit the correlations of each column relative to itself, of which there are <strong>N</strong>, which means we are left with <strong>N x (N-1)</strong> pairs. Since each value appears twice, due to the symmetry of the calculation, we can ignore half of them, leaving us with <strong>N x (N-1) / 2</strong> coefficients for <strong>N</strong> columns.</p><p>Here is an example using the &#x27;patients&#x27; data:</p>
         <div class="code-area">
             <div class="code-container code-fixed">
                 <textarea id="code-cell-20">df = read_csv(&#x27;./data/patients.csv&#x27;)
@@ -302,7 +302,7 @@ patients_numpy.shape</textarea>
             </div>
             <div id="code-cell-21-output" class="output"></div>
         </div>
-        <p>Next, we can try to calculate the correlation matrix for the first five columns (dropping smoker) of this data array. If we do this directly to the array, we get an AttributeError: &#x27;float&#x27; object has no attribute &#x27;shape&#x27;.<br><br>This is amended by converting the array to a floating point prior to using the <code>corrcoef</code> function. For this, we can convert the data type using the method <code>astype(float)</code>:</p>
+        <p>Next, we can try to calculate the correlation matrix for the first five columns (dropping smoker) of this data array. If we do this directly to the array, we get an:<br><pre class="markdown-code-block"><code>AttributeError: &#x27;float&#x27; object has no attribute &#x27;shape&#x27;</code></pre><br><br>This is amended by converting the array to a floating point prior to using the <code>corrcoef</code> function. For this, we can convert the data type using the method <code>astype(float)</code>:</p>
         <div class="code-area">
             <div class="code-container code-fixed">
                 <textarea id="code-cell-22">cols = 5
@@ -316,7 +316,7 @@ patients_corr</textarea>
             </div>
             <div id="code-cell-22-output" class="output"></div>
         </div>
-        <p>The result is called the <strong>correlation matrix</strong>. It contains all the bivariate comparisons possible for the five chosen columns.<br><br>In the calculation above, we used the $PCC$ in order to calculate the matrix. In general, any bivariate measure can be used to obtain a matrix of the same shape.</p>
+        <p>The result is called the <strong>correlation matrix</strong>. It contains all the bivariate comparisons possible for the five chosen columns.<br><br>In the calculation above, we used the <strong>PCC</strong> in order to calculate the matrix. In general, any bivariate measure can be used to obtain a matrix of the same shape.</p>
                     </div>
                 </div>
             </div>
@@ -404,7 +404,7 @@ show()</textarea>
                 <div class="module-body">
                     <div class="module-section">
                         <h3>Analysis of the Correlation matrix</h3>
-                        <p>To analyse the correlations in a dataset, we are only interested in the <strong>N x (N-1)/2</strong> unduplicated correlation coefficients. Here is a way to extract them and assign them to a variable.<br><br>Firstly, we must import the function <code>triu_indices</code>. It provides the indices of a matrix with specified size. The required size is obtained from our correlation matrix, using <code>len</code>. It is identical to the number of columns for which we calculated the $CCs$.<br><br>We also need to specify that we do not want the diagonal to be included. For this, there is an offset parameter &#x27;k&#x27;, which collects the indices excluding the diagonal, provided it is set to 1. (To include the indices of the diagonal, it would have to be set to 0).</p>
+                        <p>To analyse the correlations in a dataset, we are only interested in the <strong>N x (N-1)/2</strong> unduplicated correlation coefficients. Here is a way to extract them and assign them to a variable.<br><br>Firstly, we must import the function <code>triu_indices</code>. It provides the indices of a matrix with specified size. The required size is obtained from our correlation matrix, using <code>len</code>. It is identical to the number of columns for which we calculated the <strong>CCs</strong>.<br><br>We also need to specify that we do not want the diagonal to be included. For this, there is an offset parameter &#x27;k&#x27;, which collects the indices excluding the diagonal, provided it is set to 1. (To include the indices of the diagonal, it would have to be set to 0).</p>
         <div class="code-area">
             <div class="code-container code-fixed">
                 <textarea id="code-cell-27"># FIXED WITH NO OUTPUT
@@ -629,8 +629,23 @@ os.makedirs('./data', exist_ok=True)
                 
                 // Add loading code for each file
                 for (const file of lessonFiles) {
-                    pythonCode += `
-# Load ${file.filename}
+                    if (file.is_binary) {
+                        // Binary files (images, etc.) - use bytes
+                        pythonCode += `
+# Load ${file.filename} (binary)
+try:
+    response = await pyfetch("${file.url}")
+    content = await response.bytes()
+    with open('./data/${file.filename}', 'wb') as f:
+        f.write(bytes(content))
+    print("Loaded: ${file.filename}")
+except Exception as e:
+    print(f"Could not load ${file.filename}: {e}")
+`;
+                    } else {
+                        // Text files (CSV, etc.) - use string
+                        pythonCode += `
+# Load ${file.filename} (text)
 try:
     response = await pyfetch("${file.url}")
     content = await response.string()
@@ -640,6 +655,7 @@ try:
 except Exception as e:
     print(f"Could not load ${file.filename}: {e}")
 `;
+                    }
                 }
                 
                 await pyodide.runPythonAsync(pythonCode);
@@ -707,12 +723,14 @@ except Exception as e:
             if (!code) continue;
             
             console.log(`Executing hidden code block: ${textarea.id}`);
+            console.log(`Hidden code content: ${code.substring(0, 100)}...`);
             const result = await executePythonCode(code);
             
             if (!result.success) {
                 console.error(`Error in hidden code block ${textarea.id}:`, result.output);
             } else {
                 console.log(`Hidden code block ${textarea.id} executed successfully`);
+                console.log(`Result: ${result.output}`);
             }
         }
 
@@ -912,7 +930,8 @@ except Exception as e:
                             });
                     } else if (trimmedOutput.startsWith('<!DOCTYPE') || 
                                trimmedOutput.startsWith('<html') ||
-                               trimmedOutput.startsWith('<div')) {
+                               trimmedOutput.startsWith('<div') ||
+                               trimmedOutput.startsWith('<img')) {
                         outputElement.innerHTML = result.output;
                     } else {
                         outputElement.textContent = result.output;
