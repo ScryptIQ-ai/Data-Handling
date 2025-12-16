@@ -47,7 +47,7 @@
 
         <h3>Content</h3>
         <ul>
-            <li><a href="./introduction.html" class="active">Introduction</a></li><li><a href="./reading-images.html">Reading Images</a></li><li><a href="./filtering-images.html">Filtering Images</a></li><li><a href="./large-images.html">Large Images</a></li><li><a href="./3D-images.html">3D Images</a></li><li><a href="./assignment.html">Assignment</a></li><li><a href="./feedback.html">Feedback</a></li>
+            <li><a href="./introduction.html" class="active">Introduction</a></li><li><a href="./reading-images.html">Reading Images</a></li><li><a href="./filtering-images.html">Filtering Images</a></li><li><a href="./large-images.html">Large Images</a></li><li><a href="./3D-images.html">3-D Images</a></li><li><a href="./assignment.html">Assignment</a></li><li><a href="./feedback.html">Feedback</a></li>
         </ul>
 
         <h3 class="collapsible-header collapsed">
@@ -121,7 +121,7 @@
 <tbody>
 <tr>
 <td><strong>Images as Arrays</strong></td>
-<td>Builds on DH1 NumPy arrays; extends to 2D and 3D spatial data</td>
+<td>Builds on DH1 NumPy arrays; extends to 2-D and 3-D spatial data</td>
 <td><code>imread()</code>, <code>.shape</code>, <code>type()</code></td>
 <td>Understand that images are N-dimensional arrays of pixel/voxel intensity values</td>
 <td>Confusing pixel coordinates with array indexing; forgetting images use (height, width) not (x, y)</td>
@@ -142,7 +142,7 @@
 </tr>
 <tr>
 <td><strong>RGB Color Images</strong></td>
-<td>Extends 2D arrays to 3D with channel dimension; builds on array slicing from DH1</td>
+<td>Extends 2-D arrays to 3-D with channel dimension; builds on array slicing from DH1</td>
 <td><code>img[:, :, 0]</code>, <code>img[:, :, 1]</code>, <code>img[:, :, 2]</code></td>
 <td>Work with 3-channel color images where each pixel has R, G, B intensity values</td>
 <td>Forgetting third dimension is channels not depth; mixing up channel order (0=red, 1=green, 2=blue)</td>
@@ -205,16 +205,16 @@
 </tr>
 <tr>
 <td><strong>Voxels</strong></td>
-<td>3D extension of pixels; volume elements in 3D images</td>
-<td><code>img_data[x, y, z]</code>, <code>img_data.shape</code> (returns 3D dimensions)</td>
-<td>Access and manipulate 3D volume elements in medical images</td>
+<td>3-D extension of pixels; volume elements in 3-D images</td>
+<td><code>img_data[x, y, z]</code>, <code>img_data.shape</code> (returns 3-D dimensions)</td>
+<td>Access and manipulate 3-D volume elements in medical images</td>
 <td>Confusing voxel coordinates across different anatomical planes</td>
 </tr>
 <tr>
-<td><strong>3D Image Slicing</strong></td>
+<td><strong>3-D Image Slicing</strong></td>
 <td>Applies DH1 slicing to three dimensions; visualize planes through volumes</td>
 <td><code>img[:, :, z]</code> (transverse), <code>img[:, y, :]</code> (coronal), <code>img[x, :, :]</code> (sagittal)</td>
-<td>Extract 2D slices from 3D volumes across different anatomical planes</td>
+<td>Extract 2-D slices from 3-D volumes across different anatomical planes</td>
 <td>Forgetting to use <code>.T</code> for proper orientation; confusing which dimension to fix</td>
 </tr>
 </tbody>

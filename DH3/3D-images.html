@@ -29,7 +29,7 @@
     <!-- Meta Tags -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>L2D - DH3 - 3D Images</title>
+    <title>L2D - DH3 - 3-D Images</title>
     
     <!-- File URLs for this lesson -->
     <script>
@@ -55,10 +55,10 @@
             <li><a href="./introduction.html" class="">Introduction</a></li><li><a href="./reading-images.html">Reading Images</a></li><li><a href="./filtering-images.html">Filtering Images</a></li><li><a href="./large-images.html">Large Images</a></li>
             <li>
                 <div class="nav-toggle active" data-target="expandable-section-4">
-                    3D Images
+                    3-D Images
                     <span class="toggle-icon">▼</span>
                 </div>
-                <ul class="nested-nav expanded" id="expandable-section-4"><li><a href="#introduction">Introduction</a></li><li><a href="#installing-nibabel">Installing Nibabel</a></li><li><a href="#loading-3d-images">Loading 3D images</a></li><li><a href="#augmenting-3d-images">Augmenting 3D images</a></li><li><a href="#summary">Summary</a></li>
+                <ul class="nested-nav expanded" id="expandable-section-4"><li><a href="#introduction">Introduction</a></li><li><a href="#installing-nibabel">Installing Nibabel</a></li><li><a href="#loading-3-d-images">Loading 3-D images</a></li><li><a href="#augmenting-3-d-images">Augmenting 3-D images</a></li><li><a href="#summary">Summary</a></li>
                 </ul>
             </li><li><a href="./assignment.html">Assignment</a></li><li><a href="./feedback.html">Feedback</a></li>
         </ul>
@@ -110,22 +110,22 @@
         
             <div class="module-card" id="introduction">
                 <div class="module-header">
-                    3D Images <span class="module-tag">DH3</span>
+                    3-D Images <span class="module-tag">DH3</span>
                 </div>
                 <div class="module-body">
                     <h3>Learning Objectives</h3>
                     <div class="learning-outcomes">
                         <div class="outcome-item">
                     <span class="outcome-number">1</span>
-                    <span class="outcome-text">How to load 3D images wtih nibabel</span>
+                    <span class="outcome-text">How to load 3-D images wtih nibabel</span>
                 </div>
 <div class="outcome-item">
                     <span class="outcome-number">2</span>
-                    <span class="outcome-text">How to plot and slice through 3D images</span>
+                    <span class="outcome-text">How to plot and slice through 3-D images</span>
                 </div>
 <div class="outcome-item">
                     <span class="outcome-number">3</span>
-                    <span class="outcome-text">How to adjust the contrast of 3D images</span>
+                    <span class="outcome-text">How to adjust the contrast of 3-D images</span>
                 </div>
                     </div>
                     <h3>Introduction</h3>
@@ -142,10 +142,10 @@
                 </div>
             </div>
             
-            <div class="module-card" id="loading-3d-images">
+            <div class="module-card" id="loading-3-d-images">
                 <div class="module-body">
                     <div class="module-section">
-                        <h3>Loading 3D images</h3>
+                        <h3>Loading 3-D images</h3>
                         <p>The package is now available for use. To shorten how we call on the nibabel package in our code, we can use the above import statement, using the alias nib to refer to <code>nibabel</code>. Thus we can call on any function in <code>nibabel</code>, by using <code>nib</code> followed by a dot and the function name, as follows:</p>
         <div class="code-area">
             <div class="code-container code-fixed">
@@ -194,10 +194,10 @@ show()</textarea>
                 </div>
             </div>
             
-            <div class="module-card" id="augmenting-3d-images">
+            <div class="module-card" id="augmenting-3-d-images">
                 <div class="module-body">
                     <div class="module-section">
-                        <h3>Augmenting 3D images</h3>
+                        <h3>Augmenting 3-D images</h3>
                         <p>The <code>vmin</code> and <code>vmax</code> parameters in matplotlib define the data range that the colormap (in our case the <code>grey</code> map) covers; thus they control the range of data values indicated by the colormap in use. By default, the colormap covers the complete value range of the supplied data. For instance, in many images this will typically be somewhere between 0 and 255. If we want to brighten up the darker shades of grey in our example MRI slices, for example, we can reduce the value of the <code>vmax</code> parameter.</p><p>Expanding upon the previouis code:</p>
         <div class="code-area">
             <div class="code-container code-fixed">
@@ -250,7 +250,7 @@ show()</textarea>
                 </div>
             </div>
             
-            <div class="module-card" id="augmenting-3d-images">
+            <div class="module-card" id="augmenting-3-d-images">
                 <div class="module-body">
                     <div class="module-section">
                         
@@ -283,7 +283,7 @@ show()</textarea>
                 <div class="module-body">
                     <div class="module-section">
                         <h3>Summary</h3>
-                        <p>Working with 3D images is similar to working with 2D colour images, with the exception that each layer is a direction rather than a different channel. Getting to grips with slicing from all directions will give you complete control over your data. Whilst nibabel is specific for neuroimaging 3D images, you will find the skills needed to augment the data are very similar to other tools in this space.</p>
+                        <p>Working with 3-D images is similar to working with 2-D colour images, with the exception that each layer is a direction rather than a different channel. Getting to grips with slicing from all directions will give you complete control over your data. Whilst nibabel is specific for neuroimaging 3-D images, you will find the skills needed to augment the data are very similar to other tools in this space.</p>
                     </div>
                 </div>
             </div>
