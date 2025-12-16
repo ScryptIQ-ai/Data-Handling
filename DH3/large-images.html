@@ -58,7 +58,7 @@
                     Large Images
                     <span class="toggle-icon">▼</span>
                 </div>
-                <ul class="nested-nav expanded" id="expandable-section-3"><li><a href="#introduction">Introduction</a></li><li><a href="#dealing-with-large-images">Dealing with Large Images</a></li><li><a href="#summary">Summary</a></li>
+                <ul class="nested-nav expanded" id="expandable-section-3"><li><a href="#introduction">Introduction</a></li><li><a href="#dealing-with-large-images">Dealing with Large Images</a></li><li><a href="#importing-from-urls">Importing from URLs</a></li><li><a href="#rescaling--downsizing">Rescaling (downsizing)</a></li><li><a href="#patching">Patching</a></li><li><a href="#summary">Summary</a></li>
                 </ul>
             </li><li><a href="./3D-images.html">3D Images</a></li><li><a href="./assignment.html">Assignment</a></li><li><a href="./feedback.html">Feedback</a></li>
         </ul>
@@ -154,7 +154,16 @@ url = &quot;https://media.githubusercontent.com/media/L2D-Assets/Assets/refs/hea
             </div>
             <div id="code-cell-28-output" class="output" style="display: none;"></div>
         </div>
-        <p>Next, we must bypass the validation of the server&#x27;s certificate, for ease. SSL stands for Secure Sockets Layer, which is a standard way of providing an encrypted connection between a server and a client. As this is an instructional material, we are disabling this, as we trust the issuing author of the source file (ourselves).</p>
+        
+                    </div>
+                </div>
+            </div>
+            
+            <div class="module-card" id="importing-from-urls">
+                <div class="module-body">
+                    <div class="module-section">
+                        <h3>Importing from URLs</h3>
+                        <p>Next, we must bypass the validation of the server&#x27;s certificate, for ease. SSL stands for Secure Sockets Layer, which is a standard way of providing an encrypted connection between a server and a client. As this is an instructional material, we are disabling this, as we trust the issuing author of the source file (ourselves).</p>
         <div class="code-area">
             <div class="code-container code-fixed">
                 <textarea id="code-cell-29">import ssl
@@ -264,7 +273,16 @@ show()</textarea>
             </div>
             <div id="code-cell-35-output" class="output"></div>
         </div>
-        <p>Although now we can plot this image, it does still consist of over 300 million pixels, which could run us into memory problems when attempting to process it. One approach is simply to reduce the resolution by importing the image using the Image module from the PIL library: which we imported in the code given, above. This library gives us a wealth of tools to process images, including methods to decrease an image&#x27;s resolution. PIL is a very rich library with a multitude of useful tools. As always, having a look at the official <a href="https://pillow.readthedocs.io/en/stable/">documentation</a> and playing around with it yourself is highly encouraged.<br><br>We can make use of the <code>resize</code> method to downsample the image, providing the desired width and height as numerical arguments, as follows:</p>
+        
+                    </div>
+                </div>
+            </div>
+            
+            <div class="module-card" id="rescaling--downsizing">
+                <div class="module-body">
+                    <div class="module-section">
+                        <h3>Rescaling (downsizing)</h3>
+                        <p>Although now we can plot this image, it does still consist of over 300 million pixels, which could run us into memory problems when attempting to process it. One approach is simply to reduce the resolution by importing the image using the Image module from the PIL library: which we imported in the code given, above. This library gives us a wealth of tools to process images, including methods to decrease an image&#x27;s resolution. PIL is a very rich library with a multitude of useful tools. As always, having a look at the official <a href="https://pillow.readthedocs.io/en/stable/">documentation</a> and playing around with it yourself is highly encouraged.<br><br>We can make use of the <code>resize</code> method to downsample the image, providing the desired width and height as numerical arguments, as follows:</p>
         <div class="code-area">
             <div class="code-container code-fixed">
                 <textarea id="code-cell-36"># Open the remotely hosted image:
@@ -303,7 +321,16 @@ print(type(img_numpy))</textarea>
             </div>
             <div id="code-cell-39-output" class="output"></div>
         </div>
-        <p>Despite the above, it is often desired to keep images in their full resolution, as resizing effectively results in a loss of information. A commonly used, alternative approach to such downsampling is to <strong>patch</strong> the images. Patching an image essentially divides the picture up into smaller chunks that are termed patches.<br><br>For this, we can implement functionality from the <a href="https://scikit-learn.org/stable/">Scikit-Learn</a> machine learning library.</p>
+        
+                    </div>
+                </div>
+            </div>
+            
+            <div class="module-card" id="patching">
+                <div class="module-body">
+                    <div class="module-section">
+                        <h3>Patching</h3>
+                        <p>Despite the above, it is often desired to keep images in their full resolution, as resizing effectively results in a loss of information. A commonly used, alternative approach to such downsampling is to <strong>patch</strong> the images. Patching an image essentially divides the picture up into smaller chunks that are termed patches.<br><br>For this, we can implement functionality from the <a href="https://scikit-learn.org/stable/">Scikit-Learn</a> machine learning library.</p>
         <div class="code-area">
             <div class="code-container code-fixed">
                 <textarea id="code-cell-40">from sklearn.feature_extraction.image import extract_patches_2d</textarea>
