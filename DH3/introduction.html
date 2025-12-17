@@ -190,13 +190,6 @@
 <td>Confusing PIL Image objects with NumPy arrays; forgetting to convert back to array</td>
 </tr>
 <tr>
-<td><strong>Downsampling/Resizing</strong></td>
-<td>Reduces resolution to decrease memory footprint; trade-off between size and detail</td>
-<td><code>img_pil.resize((width, height))</code></td>
-<td>Decrease image resolution to manageable size for processing</td>
-<td>Losing fine details; not maintaining aspect ratio; irreversible information loss</td>
-</tr>
-<tr>
 <td><strong>Remote Image Loading</strong></td>
 <td>Combines URL handling with image I/O; extends file operations from PF4</td>
 <td><code>urlopen(url)</code>, <code>BytesIO()</code>, <code>imread(remote_image)</code></td>

@@ -149,33 +149,33 @@
                         <p>The package is now available for use. To shorten how we call on the nibabel package in our code, we can use the above import statement, using the alias nib to refer to <code>nibabel</code>. Thus we can call on any function in <code>nibabel</code>, by using <code>nib</code> followed by a dot and the function name, as follows:</p>
         <div class="code-area">
             <div class="code-container code-fixed">
-                <textarea id="code-cell-45">import nibabel as nib</textarea>
+                <textarea id="code-cell-46">import nibabel as nib</textarea>
             </div>
-            <div id="code-cell-45-output" class="output"></div>
+            <div id="code-cell-46-output" class="output"></div>
         </div>
         
         <div class="code-area">
             <div class="code-container code-fixed">
-                <textarea id="code-cell-46">img_3d = nib.load(&#x27;./data/brain.nii&#x27;)
+                <textarea id="code-cell-47">img_3d = nib.load(&#x27;./data/brain.nii&#x27;)
 
 img_data = img_3d.get_fdata()
 
 print(type(img_data))
 print(img_data.shape)</textarea>
             </div>
-            <div id="code-cell-46-output" class="output"></div>
+            <div id="code-cell-47-output" class="output"></div>
         </div>
         <p>We can see that the .shape attribute reveals that this image has three dimensions, and a total of 256 x 256 x 124 volume pixels (or voxels). To visualise our image, we can plot one slice at a time. The example below shows three different slices, in the transverse direction (from chin to the top of the head). To access an image across the transverse orientation, a single value is selected from the third dimension of the image, as follows. As always, the colons indicate that all data on the remaining two axes is selected and visualised:</p>
         <div class="code-area">
             <div class="code-container code-fixed">
-                <textarea id="code-cell-47">from matplotlib.pyplot import subplots, show</textarea>
+                <textarea id="code-cell-48">from matplotlib.pyplot import subplots, show</textarea>
             </div>
-            <div id="code-cell-47-output" class="output" style="display: none;"></div>
+            <div id="code-cell-48-output" class="output" style="display: none;"></div>
         </div>
         
         <div class="code-area">
             <div class="code-container code-fixed">
-                <textarea id="code-cell-48">fig, ax = subplots(ncols=3, figsize=(25, 15))
+                <textarea id="code-cell-49">fig, ax = subplots(ncols=3, figsize=(25, 15))
 
 p1 = ax[0].imshow(img_data[:, :, 60], cmap=&#x27;gray&#x27;)
 p2 = ax[1].imshow(img_data[:, :, 75], cmap=&#x27;gray&#x27;)
@@ -187,7 +187,7 @@ fig.colorbar(p3, ax=ax[2], shrink=0.4);
 
 show()</textarea>
             </div>
-            <div id="code-cell-48-output" class="output"></div>
+            <div id="code-cell-49-output" class="output"></div>
         </div>
         <p>These look fairly dark. We can improve the contrast, by adjusting the intensity range. This requires intentionally overriding the default values, and specifying our own for the keyword arguments <code>vmin</code> and <code>vmax</code>.</p>
                     </div>
@@ -201,7 +201,7 @@ show()</textarea>
                         <p>The <code>vmin</code> and <code>vmax</code> parameters in matplotlib define the data range that the colormap (in our case the <code>grey</code> map) covers; thus they control the range of data values indicated by the colormap in use. By default, the colormap covers the complete value range of the supplied data. For instance, in many images this will typically be somewhere between 0 and 255. If we want to brighten up the darker shades of grey in our example MRI slices, for example, we can reduce the value of the <code>vmax</code> parameter.</p><p>Expanding upon the previouis code:</p>
         <div class="code-area">
             <div class="code-container code-fixed">
-                <textarea id="code-cell-49">fig, ax = subplots(ncols=3, figsize=(25, 15))
+                <textarea id="code-cell-50">fig, ax = subplots(ncols=3, figsize=(25, 15))
 
 p1 = ax[0].imshow(img_data[:, :, 60], cmap=&#x27;gray&#x27;, vmin=0, vmax=150)
 p2 = ax[1].imshow(img_data[:, :, 75], cmap=&#x27;gray&#x27;, vmin=0, vmax=150)
@@ -213,12 +213,12 @@ fig.colorbar(p3, ax=ax[2], shrink=0.4);
 
 show()</textarea>
             </div>
-            <div id="code-cell-49-output" class="output"></div>
+            <div id="code-cell-50-output" class="output"></div>
         </div>
         <p>What about the other dimensions? We can also plot coronal and sagittal slices. However take note that, in this case, the respective slices have different pixel resolutions. Let us expand our code even further, to display all three desired viewing planes in our MRI scan, as follows:</p>
         <div class="code-area">
             <div class="code-container code-fixed">
-                <textarea id="code-cell-50">fig, ax = subplots(nrows=3, ncols=5, figsize=(26, 18))
+                <textarea id="code-cell-51">fig, ax = subplots(nrows=3, ncols=5, figsize=(26, 18))
 
 t1 = ax[0, 0].imshow(img_data[:, :, 45].T, cmap=&#x27;gray&#x27;, vmin=0, vmax=150, origin=&#x27;lower&#x27;)
 t2 = ax[0, 1].imshow(img_data[:, :, 60].T, cmap=&#x27;gray&#x27;, vmin=0, vmax=150, origin=&#x27;lower&#x27;)
@@ -243,7 +243,7 @@ fig.tight_layout(pad=1.0, h_pad=0)
 
 show()</textarea>
             </div>
-            <div id="code-cell-50-output" class="output"></div>
+            <div id="code-cell-51-output" class="output"></div>
         </div>
         <p>The result is that we have clearly visualised slices of our 3-D image, representing all three viewing planes in this 3-dimensional brain scan.</p>
                     </div>
@@ -261,18 +261,18 @@ show()</textarea>
             </div>
             <div class="box-content">
                 <p><strong>1.</strong></p>
-                <p>PLay around with the code above to get a feel for how to access different slices of the image.</p>
+                <p>Play around with the code above to get a feel for how to access different slices of the image.</p>
             </div>
         </div>
         
         <div class="code-area">
             <div class="code-container code-editor">
-                <textarea id="code-cell-51"># Write your code here
+                <textarea id="code-cell-52"># Write your code here
 
 </textarea>
             </div>
-            <button id="run-code-cell-51" class="run-button">Run Code</button>
-            <div id="code-cell-51-output" class="output"></div>
+            <button id="run-code-cell-52" class="run-button">Run Code</button>
+            <div id="code-cell-52-output" class="output"></div>
         </div>
         
                     </div>

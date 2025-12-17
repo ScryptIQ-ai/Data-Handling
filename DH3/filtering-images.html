@@ -152,42 +152,42 @@
         
         <div class="code-area">
             <div class="code-container code-fixed">
-                <textarea id="code-cell-17"># Setup our workspace
+                <textarea id="code-cell-18"># Setup our workspace
 
 from matplotlib.image import imread
 from matplotlib.pyplot import subplots, show
 
 img = imread(&#x27;data/axon_slice.jpg&#x27;)</textarea>
             </div>
-            <div id="code-cell-17-output" class="output" style="display: none;"></div>
+            <div id="code-cell-18-output" class="output" style="display: none;"></div>
         </div>
         
         <div class="code-area">
             <div class="code-container code-fixed">
-                <textarea id="code-cell-18">fig, ax = subplots(figsize=(10, 5))
+                <textarea id="code-cell-19">fig, ax = subplots(figsize=(10, 5))
 
 ax.imshow(img, cmap=&#x27;gray&#x27;);
 
 show()</textarea>
             </div>
-            <div id="code-cell-18-output" class="output"></div>
+            <div id="code-cell-19-output" class="output"></div>
         </div>
         <p>As an initial approach, we can plot a histogram of the intensity values that comprise an image. We can make use of the <code>.flatten()</code> method to turn the original 2300 x 3040 array into a one-dimensional array with 6,992,000 values. This rearrangement allows the numbers within the image to be represented by a single column inside a matrix or DataFrame.<br><br>The histogram plot shows how several instances of each intensity make up this image:</p>
         <div class="code-area">
             <div class="code-container code-fixed">
-                <textarea id="code-cell-19">fig, ax = subplots(figsize=(10, 4))
+                <textarea id="code-cell-20">fig, ax = subplots(figsize=(10, 4))
 
 ax.hist(img.flatten(), bins = 50)
 ax.set_xlabel(&quot;Pixel intensity&quot;, fontsize=16);
 
 show()</textarea>
             </div>
-            <div id="code-cell-19-output" class="output"></div>
+            <div id="code-cell-20-output" class="output"></div>
         </div>
         <p>The histogram is a distribution, with intensities mostly lying between values of 50 and 250.<br><br>The image displays a slice through an axon bundle. For the sake of example, let&#x27;s say that we are now interested in the myelin sheath surrounding the axons (the dark rings). We can create a <strong>mask</strong> that isolates pixels whose intensity value is below a certain threshold (because darker pixels have lower intensity values). Everything below this threshold can be assigned to, for instance, a value of 1 (representing True), and everything above will be assigned a value of 0 (representing False). This is called a binary or Boolean mask.<br><br>Based on the histogram above, we might want to try adjusting that threshold somewhere between 100 and 200. Let&#x27;s see what we get with a threshold set to 125. Firstly, we must implement a conditional statement in order to create the mask. It is then possible to apply this mask to the image. We can then plot both the mask and the masked image.<br><br><em>Try playing around with the threshold value to see how it affects the mask.</em></p>
         <div class="code-area">
             <div class="code-container code-editor">
-                <textarea id="code-cell-20">threshold = 125
+                <textarea id="code-cell-21">threshold = 125
 
 mask = img &lt; threshold
 
@@ -202,13 +202,13 @@ ax[1].set_title(&#x27;Masked image&#x27;, fontsize=16)
 
 show()</textarea>
             </div>
-            <button id="run-code-cell-20" class="run-button">Run Code</button>
-            <div id="code-cell-20-output" class="output"></div>
+            <button id="run-code-cell-21" class="run-button">Run Code</button>
+            <div id="code-cell-21-output" class="output"></div>
         </div>
         <p>The left subplot shows the binary mask itself. White represents values where our condition is true, and black where our condition is false. The right image shows the original image after we have applied the binary mask, showing the original pixel intensities in regions where the mask value is <code>True</code>.<br><br>Note that applying the mask means that the intensities where the condition is true are left unchanged. The intensities where the condition is false are multiplied by zero, and therefore set to zero.<br><br>Let&#x27;s have a look at the resulting image histograms.</p>
         <div class="code-area">
             <div class="code-container code-fixed">
-                <textarea id="code-cell-21">threshold = 125
+                <textarea id="code-cell-22">threshold = 125
 mask = img &lt; threshold
 img_masked = img * mask
 
@@ -225,7 +225,7 @@ ax[1].set_xlabel(&quot;Pixel intensity&quot;, fontsize=16)
 
 show()</textarea>
             </div>
-            <div id="code-cell-21-output" class="output"></div>
+            <div id="code-cell-22-output" class="output"></div>
         </div>
         <p>The left subplot displays the values for the masked image. Note that there is a large peak at zero, as a large part of the image is masked. The right subplot histogram, however, displays only the non-zero pixel intensities. From this, we can see that our mask has worked as expected, where only values up to 125 are found. This is because our threshold causes a sharp cut-off at a pixel intensity of 125.</p>
                     </div>
@@ -239,25 +239,25 @@ show()</textarea>
                         <p>The same process can be applied to colour images, except this time we will be filtering based on the intensities of one channel (red, green, or blue) and applying this to all of the channels.<br><br>For this demonstration, we will be using a rat brain slice we used in the previous lesson.</p>
         <div class="code-area">
             <div class="code-container code-fixed">
-                <textarea id="code-cell-22">rat_brain = imread(&#x27;./data/rat_brain_low_res.jpg&#x27;)</textarea>
+                <textarea id="code-cell-23">rat_brain = imread(&#x27;./data/rat_brain_low_res.jpg&#x27;)</textarea>
             </div>
-            <div id="code-cell-22-output" class="output" style="display: none;"></div>
+            <div id="code-cell-23-output" class="output" style="display: none;"></div>
         </div>
         
         <div class="code-area">
             <div class="code-container code-fixed">
-                <textarea id="code-cell-23">fig, ax = subplots(figsize=(10, 6))
+                <textarea id="code-cell-24">fig, ax = subplots(figsize=(10, 6))
 
 ax.imshow(rat_brain);
 
 show()</textarea>
             </div>
-            <div id="code-cell-23-output" class="output"></div>
+            <div id="code-cell-24-output" class="output"></div>
         </div>
-        <p>The sample is labeled for Hoechst stain (blue), the Inositol trisphosphate (IP3) receptor (green) and Glial fibrillary acidic protein (GFAP) (red).</p><h4>Splitting the channels</h4><p>Once again we seperate the image by each channel to see the fluorescence signal. Rather than artifically colour it through cmap, as we did preiously, we will leave the colour scale grey so we can more easily compare the intensity in differeing sections. From these images it is clear the IP3 stain (green)is clearly demarking the Purkinje cell layer, above the granular cell layer highlighted in blue by the Hoechst stain..</p>
+        <p>The sample is labeled for Hoechst stain (blue), the Inositol trisphosphate (IP3) receptor (green) and Glial fibrillary acidic protein (GFAP) (red).</p><h4>Splitting the channels</h4><p>Once again we seperate the image by each channel to see the fluorescence signal. Rather than artifically colour it with the cmap parameter, as we did previously, we will leave the colour scale grey so we can more easily compare the intensity in differing sections.<br><br>From these images it is clear the IP3 stain (green) is clearly demarking the Purkinje cell layer, above the granular cell layer highlighted in blue by the Hoechst stain..</p>
         <div class="code-area">
             <div class="code-container code-fixed">
-                <textarea id="code-cell-24">red, green, blue = 0, 1, 2
+                <textarea id="code-cell-25">red, green, blue = 0, 1, 2
 
 fig, ax = subplots(ncols=3, figsize=(20,10))
 
@@ -270,12 +270,12 @@ ax[1].set_title(&#x27;Green Channel&#x27;)
 ax[2].imshow(rat_brain[:, :, blue], cmap=&#x27;gray&#x27;);
 ax[2].set_title(&#x27;Blue Channel&#x27;);</textarea>
             </div>
-            <div id="code-cell-24-output" class="output"></div>
+            <div id="code-cell-25-output" class="output"></div>
         </div>
         <p>Plotting a histogram of the pixel intensities in the green channel show a clear bimodal distribution, separated by a trough at around the 50 mark.</p>
         <div class="code-area">
             <div class="code-container code-fixed">
-                <textarea id="code-cell-25">fig, ax = subplots()
+                <textarea id="code-cell-26">fig, ax = subplots()
 
 image_green = rat_brain[:, :, green]
 
@@ -283,12 +283,12 @@ image_green_flattened = image_green.flatten()
 
 ax.hist(image_green_flattened, bins=60);</textarea>
             </div>
-            <div id="code-cell-25-output" class="output"></div>
+            <div id="code-cell-26-output" class="output"></div>
         </div>
-        <p>In this instance we are interested in areas with high intensity values, as they indicate the purkinje cells. We will create a mask that is True only when the pixels are higher than the threshold. Multiplying the image by the mask will keep all the values above the threshold at the <strong>same</strong> value, those below will become <code>0</code>.<br><br>We can see this effect clearly when comparing the boolean mask image, which is either black or white, with the image being imaged where the white portions have some variation.<br><br><em>Try playing around with the threshold value to see how it affects the mask.</em></p>
+        <p>In this instance we are interested in areas with high intensity values, as they indicate the purkinje cells. We will create a mask that is True only when the pixels are higher than the threshold. Multiplying the image by the mask will keep all the values above the threshold at the <strong>same</strong> value, those below will become <code>0</code>.<br><br>We can see this effect clearly when comparing the boolean mask image, which is either black or white, with the masked image where the white portions have some variation.<br><br><em>Try playing around with the threshold value to see how it affects the mask.</em></p>
         <div class="code-area">
             <div class="code-container code-editor">
-                <textarea id="code-cell-26">threshold = 60
+                <textarea id="code-cell-27">threshold = 60
 
 mask = image_green &gt; threshold
 
@@ -310,17 +310,17 @@ ax[2].axis(&quot;off&quot;);
 
 fig.tight_layout()</textarea>
             </div>
-            <button id="run-code-cell-26" class="run-button">Run Code</button>
-            <div id="code-cell-26-output" class="output"></div>
+            <button id="run-code-cell-27" class="run-button">Run Code</button>
+            <div id="code-cell-27-output" class="output"></div>
         </div>
-        <p>Now we have our mask we need to apply it to the other channels and recompose our image with all <strong>three</strong> channels. To do so we actually need to flip the boolean mask, changing the Trues to False and the False to True. We can do this using the <code>~</code> operator.<br><br>We do this because we want to zero out the pixels that are not above the threshold, by setting them to 0 through assignment. Here our mask tells the assignment value where to set the values to 0 and where to leave them, with the former being True and the latter being False. We therefore want the pixels below the threshold to be True and not False as they were before. Take some time to think about this, as it can feel unintuitive at first.<br><br><em>Run the cell with differing thresholds to see how well you can isolate the purkinje cells.</em></p>
+        <p>Now we have our mask we need to apply it to the other channels and recompose our image with all <strong>three</strong> channels. To do so we actually need to flip the boolean mask, changing True to False and False to True. We can do this using the <code>~</code> operator.<br><br>We do this because we want to zero out the pixels that are not above the threshold, by setting them to 0 through assignment. Here our mask tells the assignment value where to set the values to 0 and where to leave them, with the former being True and the latter being False in the boolean mask. We therefore want the pixels below the threshold to be True and not False as they were before. Take some time to think about this, as it can feel unintuitive at first.<br><br><em>Run the cell with differing thresholds to see how well you can isolate the purkinje cells.</em></p>
         <div class="code-area">
             <div class="code-container code-editor">
-                <textarea id="code-cell-27"># Copy the orignal image incase of change
+                <textarea id="code-cell-28"># Copy the orignal image incase of change
 img_masked = rat_brain.copy()
 
 # Recreate the mask
-background = 0
+background = 0 # Change this to 250 to make the background white
 threshold = 60
 mask = image_green &gt; threshold
 
@@ -332,8 +332,8 @@ fig, ax = subplots()
 ax.imshow(img_masked)
 ax.axis(&quot;off&quot;);</textarea>
             </div>
-            <button id="run-code-cell-27" class="run-button">Run Code</button>
-            <div id="code-cell-27-output" class="output"></div>
+            <button id="run-code-cell-28" class="run-button">Run Code</button>
+            <div id="code-cell-28-output" class="output"></div>
         </div>
         <p>We now have a full colour image, where the pixel intensities are only present where the co-locate with pixels higher than our threshold in the green channel. Removing the background creates a clear distinction between the purkinje cells and their surroundings. You could then proceed to obtain statistics on the size of the layer by extrating its volume.</p>
                     </div>
