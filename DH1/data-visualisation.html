@@ -213,7 +213,7 @@ show()</textarea>
             </div>
             <div id="code-cell-45-output" class="output"></div>
         </div>
-        <p>Note how we define the title of the plot by referring to the same coordinate system <code>ax</code>.<br><br>The value of subplots becomes apparent when it is used to generate more than one plot as part of a single figure: one of its many useful features.<br><br>Here is an example whereby we create two boxplots adjacent to each other. The keyword arguments to use is &#x27;ncols&#x27; which is the number of figures per row. &#x27;ncols=2&#x27; indicates that you are plotting two plots adjacent to each other.</p>
+        <p>Note how we define the title of the plot by referring to the same coordinate system <code>ax</code>.<br><br>The value of subplots becomes apparent when it is used to generate more than one plot as part of a single figure: one of its many useful features.<br><br>Here is an example whereby we create two boxplots adjacent to each other. The keyword arguments to use is <code>ncols</code> which is the number of figures per row. <code>ncols=2</code> indicates that you are plotting two plots adjacent to each other.</p>
         <div class="code-area">
             <div class="code-container code-fixed">
                 <textarea id="code-cell-46">fig, ax = subplots(ncols=2)
@@ -232,7 +232,7 @@ show()</textarea>
             </div>
             <div id="code-cell-46-output" class="output"></div>
         </div>
-        <p>Each of these subplots must now be referred to using indexing the coordinate system &#x27;ax&#x27;. This figure gives a good overview of the Everley&#x27;s data.<br><br>If you prefer to have the boxplots of both columns in a single figure, this can also be done:</p>
+        <p>Each of these subplots must now be referred to using indexing the coordinate system <code>ax</code>. This figure gives a good overview of the Everley&#x27;s data.<br><br>If you prefer to have the boxplots of both columns in a single figure, this can also be done:</p>
         <div class="code-area">
             <div class="code-container code-fixed">
                 <textarea id="code-cell-47">fig, ax = subplots(ncols=1, nrows=1)
