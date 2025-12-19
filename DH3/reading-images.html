@@ -59,7 +59,7 @@
                     Reading Images
                     <span class="toggle-icon">▼</span>
                 </div>
-                <ul class="nested-nav expanded" id="expandable-section-1"><li><a href="#introduction">Introduction</a></li><li><a href="#image-example">Image Example</a></li><li><a href="#reading-and-plotting-a-2-dimensional-image">Reading and Plotting a 2-Dimensional Image</a></li><li><a href="#colour-images">Colour Images</a></li><li><a href="#summary">Summary</a></li>
+                <ul class="nested-nav expanded" id="expandable-section-1"><li><a href="#introduction">Introduction</a></li><li><a href="#image-example">Image Example</a></li><li><a href="#reading-and-plotting-a-2-dimensional-image">Reading and Plotting a 2-Dimensional Image</a></li><li><a href="#pixel-values">Pixel values</a></li><li><a href="#colour-images">Colour Images</a></li><li><a href="#summary">Summary</a></li>
                 </ul>
             </li><li><a href="./filtering-images.html">Filtering Images</a></li><li><a href="./large-images.html">Large Images</a></li><li><a href="./3D-images.html">3-D Images</a></li><li><a href="./assignment.html">Assignment</a></li><li><a href="./feedback.html">Feedback</a></li>
         </ul>
@@ -229,10 +229,31 @@ show()</textarea>
             </div>
             <div id="code-cell-8-output" class="output"></div>
         </div>
-        <p>By using <code>img[:50, :70]</code> we can select the first 50 values from the first dimension, and the first 70 values from the second dimension. Note that using a colon denotes &#x27;all&#x27;, where <code>:50</code> is inclusive of every number up to 50, for example. Thus, the image above shows a very small part of the upper left corner of our original image. As we are now zoomed in quite close to that corner, we can easily see the individual pixels here.</p><p><em>Have a practice slicing the same image in the cell below:</em></p>
+        <p>By using <code>img[:50, :70]</code> we can select the first 50 values from the first dimension, and the first 70 values from the second dimension. Note that using a colon denotes &#x27;all&#x27;, where <code>:50</code> is inclusive of every number up to 50, for example. Thus, the image above shows a very small part of the upper left corner of our original image. As we are now zoomed in quite close to that corner, we can easily see the individual pixels here.</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="module-card" id="reading-and-plotting-a-2-dimensional-image">
+                <div class="module-body">
+                    <div class="module-section">
+                        
+        <div class="info-box practice-exercise-box">
+            <div class="box-title">
+                <span class="box-icon"></span>
+                PRACTICE EXERCISE
+            </div>
+            <div class="box-content">
+                <p><strong>1.</strong></p>
+                <p>Have a practice slicing the same image in the cell below:</p>
+            </div>
+        </div>
+        
         <div class="code-area">
             <div class="code-container code-editor">
-                <textarea id="code-cell-9">fig, ax = subplots(figsize=(10, 14))
+                <textarea id="code-cell-9"># Edit the slice in the code below:
+
+fig, ax = subplots(figsize=(10, 14))
 
 # Add you values to the slice here: 
 ax.imshow(img[:, :], cmap=&#x27;gray&#x27;);
@@ -242,7 +263,16 @@ show()</textarea>
             <button id="run-code-cell-9" class="run-button">Run Code</button>
             <div id="code-cell-9-output" class="output"></div>
         </div>
-        <p>Next, lets zoom in even further:</p>
+        
+                    </div>
+                </div>
+            </div>
+            
+            <div class="module-card" id="pixel-values">
+                <div class="module-body">
+                    <div class="module-section">
+                        <h3>Pixel values</h3>
+                        <p>Next, lets zoom in even further:</p>
         <div class="code-area">
             <div class="code-container code-fixed">
                 <textarea id="code-cell-10">fig, ax = subplots(figsize=(8, 6))
