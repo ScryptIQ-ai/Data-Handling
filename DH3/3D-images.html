@@ -1,6 +1,21 @@
 <!DOCTYPE html>
 <html>
 <head>
+    <!-- MathJax for mathematical notation -->
+    <script>
+    MathJax = {
+        tex: {
+            inlineMath: [['$', '$']],
+            displayMath: [['$$', '$$']],
+            processEscapes: true
+        },
+        svg: {
+            fontCache: 'global'
+        }
+    };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
+    
     <!-- Pyodide and CodeMirror -->
     <script src="https://cdn.jsdelivr.net/pyodide/v0.24.1/full/pyodide.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/codemirror.min.css">
@@ -273,8 +288,7 @@ fig, ax = subplots(figsize=(5, 5))
 
 ax.imshow(img_data[:, :, 45].T, cmap=&#x27;gray&#x27;, vmin=0, vmax=150, origin=&#x27;lower&#x27;)
 
-show()
-</textarea>
+show()</textarea>
             </div>
             <button id="run-code-cell-50" class="run-button">Run Code</button>
             <div id="code-cell-50-output" class="output"></div>
