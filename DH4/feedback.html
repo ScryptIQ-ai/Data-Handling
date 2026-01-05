@@ -474,6 +474,11 @@ except Exception as e:
             await new Promise(resolve => setTimeout(resolve, 100));
         }
         
+        // Set flag to indicate all FIXED cells have been executed
+        // This is used by PDF generation to ensure all outputs are ready
+        window.allCellsExecuted = true;
+        console.log("All FIXED cells executed successfully");
+        
         // Setup all editable code blocks (but don't execute them)
         document.querySelectorAll('.code-editor textarea').forEach((textarea) => {
             // Set up CodeMirror editor (editable)
